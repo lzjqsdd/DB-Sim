@@ -10,4 +10,21 @@ calculate evacuation time faster and  more accurately
 - [ ] data driven model integration
 - [ ] Experiment
 
+
+# Usage
+## Settings
+- `config` privoid traffic network and evacuation demand with xml.
+- `src` do simulation
+    - `core` core code for simulation
+    - `utils` some userdefined or 3rd necessary tools ,example parse xml toos
+- `test` some test case for this project
+
+## build
+```bash
+cd ${PROJECT_DIR}
+mkdir bulid
+cmake ..
+make
+```
+
 # Reference
