@@ -17,7 +17,6 @@ private:
     double lane_num; //count of lanes
     double capacity; //count of outflow per unit
     priority_queue<Agent> wait_queue;
-    
 };
 
 #endif 
