@@ -5,10 +5,15 @@ A data driven and  queue-based simulation tool for FastETE
 calculate evacuation time faster and  more accurately
 
 # Methods
-- [ ] build basic iterator model[FETE Framework]
-- [ ] build ml model
-- [ ] data driven model integration
-- [ ] Experiment
+-  build basic iterator model[FETE Framework]
+-  build ml model
+-  data driven model integration
+-  Experiment
+
+# TODOLISTS
+- [ ] parse xml from config
+- [ ] basic iterator develop
+- [ ] import ml model
 
 
 # Usage
@@ -22,7 +27,8 @@ calculate evacuation time faster and  more accurately
 ## build
 ```bash
 cd ${PROJECT_DIR}
-mkdir bulid
+mkdir build
+cd build
 cmake ..
 make
 ```

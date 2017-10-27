@@ -3,6 +3,7 @@
 
 #include "agent.h"
 
+#include <stdint.h>
 #include <queue>
 using namespace std;
 
@@ -16,6 +17,8 @@ private:
     double length; //length of link
     double lane_num; //count of lanes
     double capacity; //count of outflow per unit
+    double poolnum;
+    double buffernum;
     priority_queue<Agent> wait_queue;
 };
 

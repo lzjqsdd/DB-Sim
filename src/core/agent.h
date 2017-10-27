@@ -2,6 +2,7 @@
 #define __AGENT_H__
 
 #include <utility>
+#include <stdint.h>
 using namespace std;
 
 class Agent{
