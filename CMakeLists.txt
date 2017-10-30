@@ -11,7 +11,6 @@ if(CMAKE_BUILD_TYPE STREQUAL Debug)
 endif()
 
 #设置第三方库
-#set(LIB_CONFIG_MODULE "/usr/local/libconfig/lib/libconfig++.so")
 set(CONFIG_MODULE_INCLUDE "/usr/local/libconfig/include")
 file(GLOB_RECURSE LIBCONFIG_MODULE_LIB "/usr/local/libconfig/lib/*.so")
 
@@ -19,7 +18,6 @@ set(BOOST_MODULE_INCLUDE "/usr/include/boost")
 
 #设置头文件查找路径
 include_directories(
-#    "/usr/local/libconfig/include"
     ${CONFIG_MODULE_INCLUDE}
     "/usr/inclde/boost"
 )
