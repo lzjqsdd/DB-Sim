@@ -15,7 +15,7 @@ calculate evacuation time faster and  more accurately
 - [ ] boost library support
 - [ ] logging support
 - [ ] basic iterator develop
-- [ ] import ml model
+- [ ] import ml model(trained by python and predict by c++)
 
 
 # Usage
@@ -25,6 +25,7 @@ calculate evacuation time faster and  more accurately
     - `core` core code for simulation
     - `utils` some userdefined or 3rd necessary tools ,example parse xml tools
 - `test` some test case for this project
+- `data` train and test data
 
 ## build
 ```bash
@@ -36,4 +37,4 @@ make
 ```
 
 # Reference
-Papers To be add.
+- Papers To be add.

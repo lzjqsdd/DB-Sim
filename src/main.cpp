@@ -13,29 +13,11 @@
 using namespace std;
 using namespace tinyxml2;
 
-
-//初始化数据
-void init(){
-
-}
-
-
-//加载Paths
-void LoadPath(){
-
-}
-
-//加载Nodes
-void LoadNodes(){
-
-}
-
-
 int main()
 {
     cout << "FETE starting ..." << endl;
 
-    FETE fete;
+    FETE fete; //主要处理类
     fete.init();
     //load config
     //build network
