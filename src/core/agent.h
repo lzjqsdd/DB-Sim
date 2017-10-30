@@ -7,8 +7,10 @@ using namespace std;
 
 class Agent{
     public:
-        Agent(){}
-        ~Agent(){};
+        Agent();
+        Agent(const Agent& agent);
+        Agent& operator=(const Agent& agent);
+        ~Agent();
         bool operator<(const Agent& agent) const{
             return agent.arrival_time < arrival_time;
         }

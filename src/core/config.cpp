@@ -7,12 +7,16 @@ Config::Config(){
 Config::Config(const Config& config){
     timestep = config.timestep;
     config_path = config.config_path;
+    pathdir = config.pathdir;
+    nodedir = config.nodedir;
 }
 
-Config& Config::Operator=(const Config& config){
+Config& Config::operator=(const Config& config){
     if(this!=&config){
         timestep = config.timestep;
         config_path = config.config_path;
+        pathdir = config.pathdir;
+        nodedir = config.nodedir;
     }
     return *this;
 }

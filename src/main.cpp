@@ -5,31 +5,39 @@
 #include "./core/link.h"
 #include "./core/node.h"
 #include "./core/config.h"
+#include "./core/fete.h"
 
 #include "./utils/tinyxml2.h"
+#include "./utils/manager.h"
 
 using namespace std;
 using namespace tinyxml2;
 
+
+//初始化数据
+void init(){
+
+}
+
+
+//加载Paths
+void LoadPath(){
+
+}
+
+//加载Nodes
+void LoadNodes(){
+
+}
+
+
 int main()
 {
-    cout << "fight!!!" << endl;
+    cout << "FETE starting ..." << endl;
 
+    FETE fete;
+    fete.init();
     //load config
-    XMLDocument doc;
-    doc.LoadFile("../config/path.xml");
-
-    XMLElement * pathListElement = doc.FirstChildElement("pathlist");
-
-    XMLElement * pathElement= pathListElement->FirstChildElement("path");
-
-    XMLElement *linkElement = pathElement->FirstChildElement("link");
-
-    XMLElement *speedElement = linkElement->FirstChildElement("maxspeed");
-
-    XMLText* speedNode = speedElement->FirstChild()->ToText();
-
-    printf("speed is : %s\n",speedNode->Value());
     //build network
     //init evacuation demand
     //do simulation per step

@@ -27,4 +27,6 @@ Agent& Agent::operator=(const Agent& agent){
     return *this;
 }
 
-
+Agent::~Agent(){
+    
+}

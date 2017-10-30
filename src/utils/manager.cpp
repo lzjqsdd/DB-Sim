@@ -1,0 +1,128 @@
+#include "manager.h"
+#include "../utils/tinyxml2.h"
+
+#include<iomanip>
+#include<iostream>
+#include<cstdlib>
+#include<string>
+
+#include<boost/algorithm/string.hpp>
+#include<boost/lexical_cast.hpp>
+
+using namespace tinyxml2;
+using namespace boost::algorithm;
+
+Manager * Manager::_manager = new Manager();
+
+Manager::Manager(){
+#ifdef DEBUG
+    cout << "build singleton manager instance ..." << endl;
+#endif
+}
+
+Manager * Manager::getManager(){
+    return _manager;
+}
+
+
+//gconfig: global config
+void Manager::loadConfig(const string&path, Config& gconfig){
+    //使用Libconfig来加载config
+    gconfig.config_path = path; //self hold value;
+
+    libconfig::Config mconfig;
+    try{
+        mconfig.readFile(path.c_str());
+    }catch(const libconfig::FileIOException &fioex){
+        std::cerr << "can't read config file!" << std::endl;
+    }
+
+    try{
+        double timestep = 3.0F;
+        string pathdir;
+        string nodedir;
+        if(mconfig.lookupValue("global.timestep",timestep)){
+            gconfig.timestep = timestep;
+        }
+        if(mconfig.lookupValue("global.pathdir",pathdir)){
+            gconfig.pathdir = pathdir;
+        }
+        if(mconfig.lookupValue("global.nodedir",nodedir)){
+            gconfig.nodedir = nodedir;
+        }
+    }catch(...){
+
+    }
+}
+
+void Manager::loadLinks(const string& path, vector<Link*>& links){
+    //遍历path.xml填充links
+    //load config
+    XMLDocument doc;
+    doc.LoadFile("../config/path.xml");
+    XMLElement * pathListElement = doc.FirstChildElement("pathlist");
+    XMLElement * pathElement= pathListElement->FirstChildElement("path");
+
+    while(pathElement){
+        XMLElement *linkElement = pathElement->FirstChildElement("link");
+        vector<Link*> path;
+        while(linkElement){
+            int id;
+            double length,maxspeed;
+            linkElement->QueryAttribute("id",&id);
+            XMLElement *speedElement = linkElement->FirstChildElement("maxspeed");
+            XMLElement *lengthElement = linkElement->FirstChildElement("length");
+            XMLText* speedNode = speedElement->FirstChild()->ToText();
+            XMLText* lengthNode = lengthElement->FirstChild()->ToText();
+#ifdef DEBUG
+            cout << "linkid is :" << id 
+                << ",length is : " << lengthNode->Value()
+                << ",maxspeed is: " << speedNode->Value() << endl;
+#endif
+            length = atof(lengthNode->Value());
+            maxspeed = atof(speedNode->Value());
+
+            Link* mlink = new Link(id,length,maxspeed);
+            links.push_back(mlink);
+
+            linkElement = linkElement->NextSiblingElement();
+        }
+        pathElement = pathElement->NextSiblingElement();
+    }
+}
+
+void Manager::loadNodes(const string& path, vector<Node*>& nodes){
+    //遍历node.xml填充nodes
+    XMLDocument doc;
+    doc.LoadFile(path.c_str());
+
+    XMLElement * nodesElement = doc.FirstChildElement("nodes");
+    XMLElement * nodeElement = nodesElement->FirstChildElement("node");
+
+    while(nodeElement){
+        int id;
+        vector<int> flinks; //存储的是汇入link的编号
+        vector<int> tlinks; //流出link的编号
+
+        nodeElement->QueryAttribute("id", &id);
+        XMLElement * flinksElement = nodeElement->FirstChildElement("flinks");
+        XMLElement * tlinksElement = nodeElement->FirstChildElement("tlinks");
+        
+        string flinks_s,tlinks_s;
+        if(!flinksElement->NoChildren()) flinks_s = flinksElement->GetText();
+        if(!tlinksElement->NoChildren()) tlinks_s = tlinksElement->GetText();
+        vector<string> flinks_v,tlinks_v;
+        if(flinks_s!="") split(flinks_v, flinks_s , is_any_of(" "));
+        if(tlinks_s!="") split(tlinks_v, tlinks_s , is_any_of(" "));
+
+        vector<int> flinks_id, tlinks_id;
+        for(vector<string>::iterator it = flinks_v.begin();it!=flinks_v.end();++it) flinks_id.push_back(boost::lexical_cast<int>(*it));
+        for(vector<string>::iterator it = tlinks_v.begin();it!=tlinks_v.end();++it) tlinks_id.push_back(boost::lexical_cast<int>(*it));
+        
+#ifdef DEBUG
+        cout << "flinks num: " << flinks_v.size() << endl;
+#endif
+        nodes.push_back(new Node(id, flinks_id, tlinks_id));
+        nodeElement = nodeElement->NextSiblingElement();
+    }
+}

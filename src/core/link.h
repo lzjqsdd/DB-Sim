@@ -7,14 +7,20 @@
 #include <queue>
 using namespace std;
 
+class Agent;
 class Link{
 public:
-    Link(){}
-    ~Link(){}
+    Link();
+    Link(const Link& link);
+    Link(int32_t id , double length , double maxspeed);
+    Link& operator=(const Link& link);
+
+    ~Link();
 
 private:
-    int32_t lid;
+    int32_t id;
     double length; //length of link
+    double maxspeed; //max speed limit
     double lane_num; //count of lanes
     double capacity; //count of outflow per unit
     double poolnum;

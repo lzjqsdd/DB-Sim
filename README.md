@@ -11,7 +11,9 @@ calculate evacuation time faster and  more accurately
 -  Experiment
 
 # TODOLISTS
-- [ ] parse xml from config
+- [x] parse xml from config
+- [ ] boost library support
+- [ ] logging support
 - [ ] basic iterator develop
 - [ ] import ml model
 
@@ -21,7 +23,7 @@ calculate evacuation time faster and  more accurately
 - `config` privoid traffic network and evacuation demand with xml.
 - `src` do simulation
     - `core` core code for simulation
-    - `utils` some userdefined or 3rd necessary tools ,example parse xml toos
+    - `utils` some userdefined or 3rd necessary tools ,example parse xml tools
 - `test` some test case for this project
 
 ## build
@@ -34,3 +36,4 @@ make
 ```
 
 # Reference
+Papers To be add.
