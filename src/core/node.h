@@ -17,6 +17,7 @@ class Node{
         int id; //node id
         vector<int> flinks;
         vector<int> tlinks;
+        bool isOrigin; //标示是否是起点
 };
 
 #endif
