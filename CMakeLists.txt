@@ -10,16 +10,24 @@ if(CMAKE_BUILD_TYPE STREQUAL Debug)
     add_definitions(-D_DEBUG)
 endif()
 
-#设置第三方库
-set(CONFIG_MODULE_INCLUDE "/usr/local/libconfig/include")
-file(GLOB_RECURSE LIBCONFIG_MODULE_LIB "/usr/local/libconfig/lib/*.so")
 
-set(BOOST_MODULE_INCLUDE "/usr/include/boost")
+#设置第三方库根目录
+set(INCLUDE_DIR "./include")
+set(LIB_DIR "./lib")
+
+#设置第三方库
+#libconfig
+set(LIBCONFIG_MODULE_INCLUDE "${INCLUDE_DIR}/libconfig")
+file(GLOB_RECURSE LIBCONFIG_MODULE_LIB "${LIB_DIR}/libconfig/*.so")
+
+#boost
+set(BOOST_MODULE_INCLUDE "/usr/include")
+
 
 #设置头文件查找路径
 include_directories(
-    ${CONFIG_MODULE_INCLUDE}
-    "/usr/inclde/boost"
+    ${LIBCONFIG_MODULE_INCLUDE}
+    ${BOOST_MODULE_INCLUDE}
 )
 
 
@@ -44,6 +52,5 @@ add_executable(fete ${SRC_LIST})
 #链接第三方库
 target_link_libraries(fete
     ${LIBCONFIG_MODULE_LIB}
-    boost_system
     stdc++
 )
