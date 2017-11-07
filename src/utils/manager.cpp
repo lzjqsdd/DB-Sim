@@ -1,5 +1,6 @@
 #include "manager.h"
-#include "../utils/tinyxml2.h"
+#include "tinyxml2.h"
+#include "../core/type.h"
 
 #include<iomanip>
 #include<iostream>
@@ -41,6 +42,7 @@ void Manager::loadConfig(const string&path, Config& gconfig){
         double timestep = 3.0F;
         string pathdir;
         string nodedir;
+        string loglevel;
         if(mconfig.lookupValue("global.timestep",timestep)){
             gconfig.timestep = timestep;
         }
@@ -49,6 +51,9 @@ void Manager::loadConfig(const string&path, Config& gconfig){
         }
         if(mconfig.lookupValue("global.nodedir",nodedir)){
             gconfig.nodedir = nodedir;
+        }
+        if(mconfig.lookupValue("global.loglevel",loglevel)){
+            gconfig.log_level = str2enum(loglevel);
         }
     }catch(...){
 

@@ -16,6 +16,7 @@ class FETE{
         void doUpdateOld(); //采用ceil's方法迭代
         void start(); //启动模拟
         void check(); //检查限制条件
+        Config getConfig();
     private:
         Config _config; //从配置文件.conf中读取文件
         Manager * _manager;

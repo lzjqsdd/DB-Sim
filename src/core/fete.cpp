@@ -30,6 +30,11 @@ void FETE::init(){
     //加载路网
     loadNetwork();
 }
+
+Config FETE::getConfig(){
+    return _config;
+} 
+
 void FETE::doUpdate(){ 
 
 }

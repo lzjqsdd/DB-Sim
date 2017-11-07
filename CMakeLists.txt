@@ -7,8 +7,9 @@ set(CMAKE_BUILD_TYPE Release)
 
 #添加自定义宏
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
-    add_definitions(-D_DEBUG)
+    add_definitions(-DDEBUG)
 endif()
+add_definitions(-DBOOST_LOG_DYN_LINK)
 
 
 #设置第三方库根目录
@@ -23,6 +24,12 @@ file(GLOB_RECURSE LIBCONFIG_MODULE_LIB "${LIB_DIR}/libconfig/*.so")
 #boost
 set(BOOST_MODULE_INCLUDE "/usr/include")
 
+
+#查找库
+find_package(Boost)
+if(Boost_FOUND)
+    set(BOOST_MODULE_INCLUDE ${Boost_MODULE_DIR})
+endif()
 
 #设置头文件查找路径
 include_directories(
@@ -52,5 +59,6 @@ add_executable(fete ${SRC_LIST})
 #链接第三方库
 target_link_libraries(fete
     ${LIBCONFIG_MODULE_LIB}
-    stdc++
+    boost_log
+    pthread
 )

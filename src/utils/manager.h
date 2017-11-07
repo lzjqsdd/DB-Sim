@@ -6,6 +6,7 @@
 #include <string>
 #include <libconfig.h++>
 
+#include "../core/type.h"
 #include "../core/link.h"
 #include "../core/node.h"
 #include "../core/config.h"

@@ -1,9 +1,10 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
+#include "type.h"
+
 #include<iostream>
 using namespace std;
-
 
 class Config{
     public:
@@ -15,6 +16,7 @@ class Config{
         string config_path;
         string pathdir;
         string nodedir;
+        logging::trivial::severity_level log_level;
 };
 
 #endif
