@@ -5,7 +5,7 @@ FETE::FETE(){
 }
 
 FETE::FETE(const Config &config){ 
-
+    _config = config;
 }
 
 FETE& FETE::operator=(const FETE& fete){
@@ -23,10 +23,6 @@ void FETE::loadNetwork(){
 }
 
 void FETE::init(){
-    //加载配置文件
-    _manager = Manager::getManager();
-    _manager->loadConfig("../config/config.conf",_config);
-    cout << "Timestep is " << _config.timestep << endl;
     //加载路网
     loadNetwork();
 }

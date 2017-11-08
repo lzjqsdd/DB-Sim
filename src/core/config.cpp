@@ -24,3 +24,12 @@ Config& Config::operator=(const Config& config){
     return *this;
 }
 
+//非成员函数
+ostream& operator<<(ostream& os, const Config& config){
+    os << "Current Config is :" << endl
+        << "{ " << endl
+        << "    Timestep is " << config.timestep << endl
+        << "}";
+    return os;
+}
+

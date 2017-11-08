@@ -7,10 +7,10 @@
 #include <boost/log/sources/global_logger_storage.hpp>
 
 // the logs are also written to LOGFILE
-#define LOGFILE "log.txt"
+#define LOGFILE "logfile.log"
 
 // just log messages with severity >= SEVERITY_THRESHOLD are written
-#define SEVERITY_THRESHOLD logging::trivial::debug
+#define SEVERITY_THRESHOLD logging::trivial::trace
 
 // register a global logger
 BOOST_LOG_GLOBAL_LOGGER(logger, boost::log::sources::severity_logger_mt<boost::log::trivial::severity_level>)
@@ -25,14 +25,5 @@ BOOST_LOG_GLOBAL_LOGGER(logger, boost::log::sources::severity_logger_mt<boost::l
 #define LOG_WARNING LOG(warning)
 #define LOG_ERROR   LOG(error)
 #define LOG_FATAL   LOG(fatal)
-
-//Another log macros
-
-//#define TRACELOG(msg) LOG_TRACE << msg
-//#define DEBUGLOG(msg) LOG_DEBUG << msg
-//#define INFOLOG(msg) LOG_INFO << msg
-//#define WARNINGLOG(msg) LOG_WARNING << msg
-//#define ERRORLOG(msg) LOG_ERROR << msg
-//#define FATALLOG(msg) LOG_FATAL << msg
 
 #endif

@@ -8,4 +8,5 @@ using namespace std;
 namespace logging = boost::log;
 
 extern enum logging::trivial::severity_level str2enum(const string& loglevel);
+
 #endif

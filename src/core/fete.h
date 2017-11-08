@@ -10,6 +10,7 @@ class FETE{
         FETE(const Config &config);
         FETE& operator=(const FETE& fete);
 
+
         void loadNetwork(); //从xml中加载路网
         void init(); //初始化需求
         void doUpdate(); //迭代

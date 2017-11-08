@@ -11,6 +11,7 @@ class Config{
         Config();
         Config(const Config& config);
         Config& operator=(const Config& config);
+        friend ostream& operator<<(ostream& os, const Config& config);
 
         int timestep; //example 30seconds per iteration
         string config_path;
