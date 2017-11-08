@@ -1,9 +1,9 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0)
 project (FETE)
 
 #设置工程类型
-#set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
+#set(CMAKE_BUILD_TYPE Release)
 
 #添加自定义宏
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
@@ -26,7 +26,12 @@ set(BOOST_MODULE_INCLUDE "/usr/include")
 
 
 #查找库
-find_package(Boost)
+find_package(Boost REQUIRED COMPONENTS
+        system
+        log
+        log_setup
+        thread)
+
 if(Boost_FOUND)
     set(BOOST_MODULE_INCLUDE ${Boost_MODULE_DIR})
 endif()
@@ -49,16 +54,22 @@ aux_source_directory(./src/utils SRC_UTILS)
 #设置编译文件
 set(SRC_LIST 
     ${SRC_CORE}
-    ${SRC_UTILS}
+    #${SRC_UTILS}
     src/main.cpp
     )
 
+add_subdirectory(./src/utils)
 #生成可执行文件
 add_executable(fete ${SRC_LIST})
 
 #链接第三方库
 target_link_libraries(fete
     ${LIBCONFIG_MODULE_LIB}
+    stdc++
+    boost_system
     boost_log
+    boost_thread
     pthread
+    tinyxml2
+    simpleLogger
 )

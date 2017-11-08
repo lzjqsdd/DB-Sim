@@ -1,17 +1,22 @@
 #include "manager.h"
-#include "tinyxml2.h"
+#include "../utils/tinyxml2.h"
 #include "../core/type.h"
 
 #include<iomanip>
 #include<iostream>
 #include<cstdlib>
 #include<string>
+#include<sstream>
 
 #include<boost/algorithm/string.hpp>
 #include<boost/lexical_cast.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/core.hpp>
+#include <boost/log/expressions.hpp>
 
 using namespace tinyxml2;
 using namespace boost::algorithm;
+namespace logging = boost::log;
 
 Manager * Manager::_manager = new Manager();
 
@@ -80,9 +85,15 @@ void Manager::loadLinks(const string& path, vector<Link*>& links){
             XMLText* speedNode = speedElement->FirstChild()->ToText();
             XMLText* lengthNode = lengthElement->FirstChild()->ToText();
 #ifdef DEBUG
-            cout << "linkid is :" << id 
+            ostringstream os;
+            os << "linkid is :" << id
                 << ",length is : " << lengthNode->Value()
-                << ",maxspeed is: " << speedNode->Value() << endl;
+                << ",maxspeed is: " << speedNode->Value();
+
+            logging::core::get()->set_filter(
+                    logging::trivial::severity >= logging::trivial::error
+            );
+            BOOST_LOG_TRIVIAL(trace) << os.str();
 #endif
             length = atof(lengthNode->Value());
             maxspeed = atof(speedNode->Value());

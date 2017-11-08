@@ -2,7 +2,7 @@
 #define __FETE_H__
 
 #include "config.h"
-#include "../utils/manager.h"
+#include "manager.h"
 
 class FETE{
     public:
