@@ -26,4 +26,5 @@ int main()
     //创建推演对象
     FETE fete(config); //主要处理类
     fete.init();
+    fete.start();
 }

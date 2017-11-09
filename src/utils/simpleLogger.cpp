@@ -31,7 +31,7 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(logger, src::severity_logger_mt) {
 
     // add attributes
     logger.add_attribute("LineID", attrs::counter<unsigned int>(1));     // lines are sequentially numbered
-    logger.add_attribute("TimeStamp", attrs::local_clock());             // each log line gets a timestamp
+    //logger.add_attribute("TimeStamp", attrs::local_clock());             // each log line gets a timestamp
 
     // add a text sink
     typedef sinks::synchronous_sink<sinks::text_ostream_backend> text_sink;
@@ -48,7 +48,7 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(logger, src::severity_logger_mt) {
         << std::setw(7) << std::setfill('0') << line_id << std::setfill(' ') << " | "
         << expr::format_date_time(timestamp, "%Y-%m-%d, %H:%M:%S.%f") << " "
         << "[" << logging::trivial::severity << "]"
-        << " - " << expr::smessage;
+        << " | " << expr::smessage;
     sink->set_formatter(formatter);
 
     // only messages with severity >= SEVERITY_THRESHOLD are written

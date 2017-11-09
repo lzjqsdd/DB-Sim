@@ -17,7 +17,6 @@ public:
 
     ~Link();
 
-private:
     int32_t id;
     double length; //length of link
     double maxspeed; //max speed limit

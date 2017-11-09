@@ -26,7 +26,7 @@ class FETE{
         Manager * _manager;
         vector<Link*> links;
         vector<Node*> nodes;
-        int totalTime; //ETE
+        int totaltime; //ETE
         bool Finished; //判断是否终止模拟
 };
 

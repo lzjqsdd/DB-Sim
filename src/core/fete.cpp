@@ -1,4 +1,5 @@
 #include "fete.h"
+#include "../utils/simpleLogger.h"
 
 FETE::FETE(){
     Finished = false;
@@ -26,6 +27,7 @@ void FETE::loadNetwork(){
 void FETE::init(){
     //加载路网
     loadNetwork();
+    totaltime = 0;
 }
 
 Config FETE::getConfig(){
@@ -39,18 +41,20 @@ void FETE::doUpdate(){
 void FETE::start(){
     while(!Finished){
         if(Finished) return;
-        TotalTime += _config.timestep;
+        totaltime += _config.timestep;
+        LOG_FATAL << to_string(totaltime).c_str();
         doUpdate();
         isClean(); //每次判断是否为空了
     }
 }
-void FETE::check(){
 
+void FETE::check(){
+    
 }
 
 bool FETE::isClean(){
 
-    for(auto plink : _links){
+    for(auto plink : links){
         if(plink->wait_queue.size() != 0){
             return false;
         }
