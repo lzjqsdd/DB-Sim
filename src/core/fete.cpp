@@ -1,15 +1,16 @@
 #include "fete.h"
 
 FETE::FETE(){
-    
+    Finished = false;
 }
 
 FETE::FETE(const Config &config){ 
     _config = config;
+    Finished = false;
 }
 
 FETE& FETE::operator=(const FETE& fete){
-    
+    //暂未处理
 }
 
 
@@ -32,12 +33,29 @@ Config FETE::getConfig(){
 } 
 
 void FETE::doUpdate(){ 
-
+    //计算每个增量
+    //更新队列
 }
 void FETE::start(){
-
+    while(!Finished){
+        if(Finished) return;
+        TotalTime += _config.timestep;
+        doUpdate();
+        isClean(); //每次判断是否为空了
+    }
 }
 void FETE::check(){
 
+}
+
+bool FETE::isClean(){
+
+    for(auto plink : _links){
+        if(plink->wait_queue.size() != 0){
+            return false;
+        }
+    }
+    Finished = true;
+    return true;
 }
 
