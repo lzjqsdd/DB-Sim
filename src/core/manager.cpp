@@ -1,7 +1,6 @@
 #include "manager.h"
 #include "../utils/tinyxml2.h"
 #include "../core/type.h"
-#include "../utils/simpleLogger.h"
 
 #include<iomanip>
 #include<iostream>
@@ -22,9 +21,6 @@ namespace logging = boost::log;
 Manager * Manager::_manager = new Manager();
 
 Manager::Manager(){
-#ifdef DEBUG
-    cout << "build singleton manager instance ..." << endl;
-#endif
 }
 
 Manager * Manager::getManager(){
@@ -90,11 +86,7 @@ void Manager::loadLinks(const string& path, vector<Link*>& links){
             os << "linkid is :" << id
                 << ",length is : " << lengthNode->Value()
                 << ",maxspeed is: " << speedNode->Value();
-
-            logging::core::get()->set_filter(
-                    logging::trivial::severity >= logging::trivial::error
-            );
-            LOG_TRACE << os.str();
+            LOG_DEBUG(os.str());
 #endif
             length = atof(lengthNode->Value());
             maxspeed = atof(speedNode->Value());
@@ -135,8 +127,6 @@ void Manager::loadNodes(const string& path, vector<Node*>& nodes){
         vector<int> flinks_id, tlinks_id;
         for(vector<string>::iterator it = flinks_v.begin();it!=flinks_v.end();++it) flinks_id.push_back(boost::lexical_cast<int>(*it));
         for(vector<string>::iterator it = tlinks_v.begin();it!=tlinks_v.end();++it) tlinks_id.push_back(boost::lexical_cast<int>(*it));
-
-        LOG_TRACE << "flinks num:" << flinks_v.size();
 
         nodes.push_back(new Node(id, flinks_id, tlinks_id));
         nodeElement = nodeElement->NextSiblingElement();

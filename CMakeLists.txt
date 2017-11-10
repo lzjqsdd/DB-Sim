@@ -71,5 +71,4 @@ target_link_libraries(fete
     boost_thread
     pthread
     tinyxml2
-    simpleLogger
 )
