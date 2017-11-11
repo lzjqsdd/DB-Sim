@@ -7,16 +7,17 @@ Link::Link(){
     maxspeed = 0;
     lane_num = 0;
     capacity = 0;
+    poolnum  = 0;
 }
 
 
-Link::Link(int32_t id , double length , double maxspeed, int poolnum){
+Link::Link(int32_t id , double length , double maxspeed, int totalnum){
     id = id;
     length = length;
     maxspeed = maxspeed;
     lane_num = 1; //defalut value
     capacity = 100;
-    poolnum = poolnum;
+    totalnum = totalnum;
 }
 
 Link::Link(const Link& link){
@@ -26,6 +27,8 @@ Link::Link(const Link& link){
     lane_num = link.lane_num;
     capacity = link.capacity;
     wait_queue = link.wait_queue;
+    poolnum = link.poolnum;
+    totalnum = link.totalnum;
 }
 
 Link& Link::operator=(const Link& link){
@@ -36,6 +39,8 @@ Link& Link::operator=(const Link& link){
         lane_num = link.lane_num;
         capacity = link.capacity;
         wait_queue = link.wait_queue;
+        poolnum = link.poolnum;
+        totalnum = link.totalnum;
     }
     return *this;
 }

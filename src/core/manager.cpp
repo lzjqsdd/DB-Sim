@@ -62,7 +62,7 @@ void Manager::loadConfig(const string&path, Config& gconfig){
     }
 }
 
-void Manager::loadLinks(const string& path, map<int, Link*>& links, vector<vector<int>> paths){
+void Manager::loadLinks(const string& path, map<int, Link*>& links, vector<vector<int>>& paths){
     //遍历path.xml填充links
     //load config
     XMLDocument doc;
@@ -74,25 +74,26 @@ void Manager::loadLinks(const string& path, map<int, Link*>& links, vector<vecto
         XMLElement *linkElement = pathElement->FirstChildElement("link");
         vector<int> path;
         while(linkElement){
-            int id,poolnum;
+            int id,totalnum;
             double length,maxspeed;
             linkElement->QueryAttribute("id",&id);
             XMLElement *speedElement = linkElement->FirstChildElement("maxspeed");
             XMLElement *lengthElement = linkElement->FirstChildElement("length");
             XMLText* speedNode = speedElement->FirstChild()->ToText();
             XMLText* lengthNode = lengthElement->FirstChild()->ToText();
+
+            length = atof(lengthNode->Value());
+            maxspeed = atof(speedNode->Value());
+            totalnum = length * 1 / CARLEN; //每个车３米,默认都是１个lane
 #ifdef DEBUG
             ostringstream os;
             os << "linkid is :" << id
                 << ",length is : " << lengthNode->Value()
-                << ",maxspeed is: " << speedNode->Value();
+                << ",maxspeed is: " << speedNode->Value()
+                << ",totalnum is: " << totalnum;
             LOG_DEBUG(os.str());
 #endif
-            length = atof(lengthNode->Value());
-            maxspeed = atof(speedNode->Value());
-            poolnum = length * 1 / 3; //每个车３米,默认都是１个lane
-
-            Link* mlink = new Link(id,length,maxspeed,poolnum);
+            Link* mlink = new Link(id,length,maxspeed,totalnum);
             links[id] = mlink;
             path.push_back(id);
 

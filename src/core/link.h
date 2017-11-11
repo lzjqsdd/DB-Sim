@@ -23,8 +23,9 @@ public:
     double lane_num; //count of lanes
     double capacity; //count of outflow per unit
     double poolnum;
+    double totalnum; //总可以容纳的车辆数
     double buffernum;
-    priority_queue<Agent> wait_queue;
+    priority_queue<Agent*> wait_queue;
 };
 
 #endif 

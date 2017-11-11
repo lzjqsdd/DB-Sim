@@ -8,6 +8,7 @@ using namespace std;
 class Agent{
     public:
         Agent();
+        Agent(int id, int linkid);
         Agent(const Agent& agent);
         Agent& operator=(const Agent& agent);
         ~Agent();
@@ -15,7 +16,6 @@ class Agent{
             return agent.arrival_time < arrival_time;
         }
 
-    private:
         int32_t id;
         int32_t linkid; //the agent on which link
         double cur_speed; //show per time step the agent speed
