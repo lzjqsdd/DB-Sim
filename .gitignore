@@ -33,3 +33,7 @@
 
 
 build/*
+.idea/*
+.vscode/*
+data/*
+.cmaketools.json

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstdio>
+#include<sstream>
+
 
 #include "./core/type.h"
 #include "./core/agent.h"
@@ -20,9 +22,12 @@ int main()
     Config config;
     Manager * manager = Manager::getManager();
     manager->loadConfig("../config/config.conf",config);
-    cout << config << endl;
+    ostringstream os; os << config; LOG_DEBUG(os.str());
 
+    //初始化日志等级
     initlog(config.log_level);
+
+
     //创建推演对象
     FETE fete(config); //主要处理类
     fete.init();

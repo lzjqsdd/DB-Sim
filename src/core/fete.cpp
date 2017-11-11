@@ -20,7 +20,7 @@ FETE& FETE::operator=(const FETE& fete){
 
 void FETE::loadNetwork(){
     //加载links和nodes
-    _manager->loadLinks(_config.pathdir, links);
+    _manager->loadLinks(_config.pathdir, links, paths);
     _manager->loadNodes(_config.nodedir, nodes);
 }
 
@@ -37,6 +37,10 @@ Config FETE::getConfig(){
 
 void FETE::doUpdate(){ 
     //计算每个增量
+    for(auto mlink : links){
+        //判断当前link是否是起点
+
+    }
     //更新队列
 }
 void FETE::start(){
@@ -54,9 +58,8 @@ void FETE::check(){
 }
 
 bool FETE::isClean(){
-
-    for(auto plink : links){
-        if(plink->wait_queue.size() != 0){
+    for(auto mlink : links){
+        if(mlink.second->wait_queue.size() != 0){
             return false;
         }
     }

@@ -24,10 +24,14 @@ class FETE{
     private:
         Config _config; //从配置文件.conf中读取文件
         Manager * _manager;
-        vector<Link*> links;
-        vector<Node*> nodes;
+        map<int, Link*> links; //全局唯一实际的数据存储
+        map<int, Node*> nodes; //方便直接从id检索所有的信息
         int totaltime; //ETE
         bool Finished; //判断是否终止模拟
+
+        vector<int> startIds; //记录集合点
+        vector<int> endIds; //记录安置点
+        vector<vector<int>> paths; //以id形式记录path
 };
 
 #endif

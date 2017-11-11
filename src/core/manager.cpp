@@ -62,7 +62,7 @@ void Manager::loadConfig(const string&path, Config& gconfig){
     }
 }
 
-void Manager::loadLinks(const string& path, vector<Link*>& links){
+void Manager::loadLinks(const string& path, map<int, Link*>& links, vector<vector<int>> paths){
     //遍历path.xml填充links
     //load config
     XMLDocument doc;
@@ -72,9 +72,9 @@ void Manager::loadLinks(const string& path, vector<Link*>& links){
 
     while(pathElement){
         XMLElement *linkElement = pathElement->FirstChildElement("link");
-        vector<Link*> path;
+        vector<int> path;
         while(linkElement){
-            int id;
+            int id,poolnum;
             double length,maxspeed;
             linkElement->QueryAttribute("id",&id);
             XMLElement *speedElement = linkElement->FirstChildElement("maxspeed");
@@ -90,17 +90,20 @@ void Manager::loadLinks(const string& path, vector<Link*>& links){
 #endif
             length = atof(lengthNode->Value());
             maxspeed = atof(speedNode->Value());
+            poolnum = length * 1 / 3; //每个车３米,默认都是１个lane
 
-            Link* mlink = new Link(id,length,maxspeed);
-            links.push_back(mlink);
+            Link* mlink = new Link(id,length,maxspeed,poolnum);
+            links[id] = mlink;
+            path.push_back(id);
 
             linkElement = linkElement->NextSiblingElement();
         }
+        paths.push_back(path);
         pathElement = pathElement->NextSiblingElement();
     }
 }
 
-void Manager::loadNodes(const string& path, vector<Node*>& nodes){
+void Manager::loadNodes(const string& path, map<int, Node*>& nodes){
     //遍历node.xml填充nodes
     XMLDocument doc;
     doc.LoadFile(path.c_str());
@@ -128,7 +131,9 @@ void Manager::loadNodes(const string& path, vector<Node*>& nodes){
         for(vector<string>::iterator it = flinks_v.begin();it!=flinks_v.end();++it) flinks_id.push_back(boost::lexical_cast<int>(*it));
         for(vector<string>::iterator it = tlinks_v.begin();it!=tlinks_v.end();++it) tlinks_id.push_back(boost::lexical_cast<int>(*it));
 
-        nodes.push_back(new Node(id, flinks_id, tlinks_id));
+        Node * pnode = new Node(id, flinks_id, tlinks_id);
+        nodes[id] = pnode;
+
         nodeElement = nodeElement->NextSiblingElement();
     }
 }

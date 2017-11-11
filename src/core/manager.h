@@ -21,8 +21,8 @@ class Manager{
         void init();
 
         void loadConfig(const string& path, Config& config);
-        void loadLinks(const string& path, vector<Link*>& links);
-        void loadNodes(const string& path, vector<Node*>& nodes);
+        void loadLinks(const string& path, map<int, Link*>& links, vector<vector<int>> paths);
+        void loadNodes(const string& path, map<int, Node*>& nodes);
 
     protected:
         Manager();

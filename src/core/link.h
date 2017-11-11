@@ -12,7 +12,7 @@ class Link{
 public:
     Link();
     Link(const Link& link);
-    Link(int32_t id , double length , double maxspeed);
+    Link(int32_t id , double length , double maxspeed, int poolnum);
     Link& operator=(const Link& link);
 
     ~Link();

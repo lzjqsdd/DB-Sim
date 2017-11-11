@@ -10,12 +10,13 @@ Link::Link(){
 }
 
 
-Link::Link(int32_t id , double length , double maxspeed){
+Link::Link(int32_t id , double length , double maxspeed, int poolnum){
     id = id;
     length = length;
     maxspeed = maxspeed;
-    lane_num = 0;
-    capacity = 0;
+    lane_num = 1; //defalut value
+    capacity = 100;
+    poolnum = poolnum;
 }
 
 Link::Link(const Link& link){
