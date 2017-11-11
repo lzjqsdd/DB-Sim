@@ -4,6 +4,9 @@
 #include "config.h"
 #include "manager.h"
 
+#include <map>
+#include <set>
+
 class FETE{
     public:
         FETE();
@@ -29,9 +32,9 @@ class FETE{
         int totaltime; //ETE
         bool Finished; //判断是否终止模拟
 
-        vector<int> startIds; //记录集合点
-        vector<int> endIds; //记录安置点
-        vector<vector<int>> paths; //以id形式记录path
+		std::set<int> startIds; //记录集合点
+		std::set<int> endIds; //记录安置点
+		std::vector<std::vector<int>> paths; //以id形式记录path
 };
 
 #endif

@@ -1,6 +1,8 @@
 #include "fete.h"
 #include "type.h"
 
+#include <set>
+
 FETE::FETE(){
     Finished = false;
 }
@@ -22,6 +24,12 @@ void FETE::loadNetwork(){
     //加载links和nodes
     _manager->loadLinks(_config.pathdir, links, paths);
     _manager->loadNodes(_config.nodedir, nodes);
+
+    //处理起终点
+    for(auto path:paths){
+        startIds.insert(path.front());
+        endIds.insert(path.back());
+    }
 }
 
 void FETE::init(){
