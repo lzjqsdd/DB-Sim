@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 project (FETE)
 
+add_definitions(-std=c++11)
 #设置工程类型
 set(CMAKE_BUILD_TYPE Debug)
 #set(CMAKE_BUILD_TYPE Release)
@@ -44,8 +45,8 @@ include_directories(
 
 
 #设置编译选项
-set(CMAKE_C_FLAGS_DEBUG "-std=c++11 -g -Wall -o0")
-set(CMAKe_C_FLAGS_RELEASE "-std=c++11 -g -Wall -02")
+set(CMAKE_C_FLAGS_DEBUG "-g -Wall -o0")
+set(CMAKe_C_FLAGS_RELEASE "-g -Wall -02")
 
 #添加编译子目录
 aux_source_directory(./src/core SRC_CORE)
