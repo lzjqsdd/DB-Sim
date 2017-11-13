@@ -1,5 +1,6 @@
 #include "type.h"
 
+#include <sstream>
 //提供从str到枚举的转换
 enum logging::trivial::severity_level str2enum(const std::string& loglevel)
 {
@@ -19,3 +20,4 @@ void initlog(logging::trivial::severity_level severity)
         logging::trivial::severity >= severity
     );
 }
+

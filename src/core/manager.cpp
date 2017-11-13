@@ -91,7 +91,7 @@ void Manager::loadLinks(const string& path, map<int, Link*>& links, vector<vecto
                 << ",length is : " << lengthNode->Value()
                 << ",maxspeed is: " << speedNode->Value()
                 << ",totalnum is: " << totalnum;
-            LOG_DEBUG(os.str());
+            LOG_TRACE(os.str());
 #endif
             Link* mlink = new Link(id,length,maxspeed,totalnum);
             links[id] = mlink;

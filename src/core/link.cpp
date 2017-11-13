@@ -18,6 +18,7 @@ Link::Link(int32_t id , double length , double maxspeed, int totalnum){
     lane_num = 1; //defalut value
     capacity = 100;
     totalnum = totalnum;
+	poolnum = 0;
 }
 
 Link::Link(const Link& link){

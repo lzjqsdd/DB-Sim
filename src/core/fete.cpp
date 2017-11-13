@@ -1,5 +1,6 @@
 #include "fete.h"
 #include "type.h"
+#include "../utils/tool.hpp"
 
 #include <set>
 
@@ -34,7 +35,7 @@ void FETE::loadNetwork(){
 
 void FETE::init(){
     //加载路网
-    LOG_DEBUG("init fete ...");
+    LOG_TRACE("init fete ...");
     loadNetwork();
     curtime = 0;
     curnum = 0;
@@ -47,17 +48,19 @@ Config FETE::getConfig(){
 void FETE::doUpdate(){ 
     //计算每个增量
     for(auto mlink : links){
+		LOG_DEBUG(my2string("linkid is : " ,mlink.second->id));
         //判断当前link是否是起点
         if(startIds.find(mlink.first) != startIds.end()){
-            LOG_DEBUG(std::to_string(mlink.first));
+            LOG_DEBUG(my2string("startpoint: " , mlink.first));
             //如果是起点,判断是否有空闲空间
             auto link = mlink.second;
             while(link->totalnum > link->poolnum){
                 Agent * agent = new Agent(++curnum, link->id);
                 //当前进入的车辆的到达时间，等于 （当前时间点 + 队列最后的车辆到达的时间 + 自由时间)
-                agent->arrival_time = curtime + link->length / CARLEN; //先简单处理，按照全自由的时间
+                agent->arrival_time = curtime + link->length * 1.0 / CARLEN; //先简单处理，按照全自由的时间
                 link->poolnum --;
-                LOG_DEBUG("curnum is : " + std::to_string(curnum));
+				link->totalnum ++;
+				//LOG_DEBUG(my2string("linkid is: ", link->id , "\t curnum is : ", curnum));
             }
         }
         else{
@@ -70,9 +73,10 @@ void FETE::start(){
     while(!Finished){
         if(Finished) return;
         curtime += _config.timestep;
-        LOG_DEBUG(to_string(curtime).c_str());
+        LOG_DEBUG(my2string(curtime));
         doUpdate();
         isClean(); //每次判断是否为空了
+		Finished = true;
     }
 }
 
@@ -83,7 +87,7 @@ void FETE::check(){
 bool FETE::isClean(){
     for(auto mlink : links){
         if(mlink.second->wait_queue.size() != 0){
-            return false;
+            return false; 
         }
     }
     Finished = true;
