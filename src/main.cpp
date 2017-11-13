@@ -22,7 +22,7 @@ int main()
     Config config;
     Manager * manager = Manager::getManager();
     manager->loadConfig("../config/config.conf",config);
-    ostringstream os; os << config; LOG_DEBUG(os.str());
+    LOG_TRACE(config);
 
     //初始化日志等级
     initlog(config.log_level);

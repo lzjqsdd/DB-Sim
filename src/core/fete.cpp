@@ -9,8 +9,8 @@ FETE::FETE(){
 }
 
 FETE::FETE(const Config &config){ 
-    _config = config;
-    Finished = false;
+    this->_config = config;
+    this->Finished = false;
 }
 
 FETE& FETE::operator=(const FETE& fete){
@@ -48,7 +48,6 @@ Config FETE::getConfig(){
 void FETE::doUpdate(){ 
     //计算每个增量
     for(auto mlink : links){
-		LOG_DEBUG(my2string("linkid is : " ,mlink.second->id));
         //判断当前link是否是起点
         if(startIds.find(mlink.first) != startIds.end()){
             LOG_DEBUG(my2string("startpoint: " , mlink.first));
@@ -58,9 +57,8 @@ void FETE::doUpdate(){
                 Agent * agent = new Agent(++curnum, link->id);
                 //当前进入的车辆的到达时间，等于 （当前时间点 + 队列最后的车辆到达的时间 + 自由时间)
                 agent->arrival_time = curtime + link->length * 1.0 / CARLEN; //先简单处理，按照全自由的时间
-                link->poolnum --;
-				link->totalnum ++;
-				//LOG_DEBUG(my2string("linkid is: ", link->id , "\t curnum is : ", curnum));
+                link->poolnum ++;
+		LOG_DEBUG(my2string("linkid is: ", link->id , "\t curnum is : ", curnum));
             }
         }
         else{
@@ -76,7 +74,7 @@ void FETE::start(){
         LOG_DEBUG(my2string(curtime));
         doUpdate();
         isClean(); //每次判断是否为空了
-		Finished = true;
+	Finished = true;
     }
 }
 

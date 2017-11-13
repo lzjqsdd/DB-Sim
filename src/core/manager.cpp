@@ -1,5 +1,6 @@
 #include "manager.h"
 #include "../utils/tinyxml2.h"
+#include "../utils/tool.hpp"
 #include "../core/type.h"
 
 #include<iomanip>
@@ -85,14 +86,9 @@ void Manager::loadLinks(const string& path, map<int, Link*>& links, vector<vecto
             length = atof(lengthNode->Value());
             maxspeed = atof(speedNode->Value());
             totalnum = length * 1 / CARLEN; //每个车３米,默认都是１个lane
-#ifdef DEBUG
-            ostringstream os;
-            os << "linkid is :" << id
-                << ",length is : " << lengthNode->Value()
-                << ",maxspeed is: " << speedNode->Value()
-                << ",totalnum is: " << totalnum;
-            LOG_TRACE(os.str());
-#endif
+
+            LOG_TRACE(my2string("linkid is :" ,id , ", length is : " , lengthNode->Value() , ", maxspeed is: " , speedNode->Value() , ", totalnum is: " , totalnum));
+
             Link* mlink = new Link(id,length,maxspeed,totalnum);
             links[id] = mlink;
             path.push_back(id);
