@@ -85,7 +85,7 @@ void Manager::loadLinks(const string& path, map<int, Link*>& links, vector<vecto
 
             length = atof(lengthNode->Value());
             maxspeed = atof(speedNode->Value());
-            totalnum = length * 1 / CARLEN; //每个车３米,默认都是１个lane
+            totalnum = length * 1 / CARLEN; //每个车7.5米,默认都是１个lane
 
             LOG_TRACE(my2string("linkid is :" ,id , ", length is : " , lengthNode->Value() , ", maxspeed is: " , speedNode->Value() , ", totalnum is: " , totalnum));
 

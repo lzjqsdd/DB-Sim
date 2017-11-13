@@ -4,13 +4,30 @@
 #include <string>
 #include <sstream>
 #include <boost/log/core.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/sinks/sync_frontend.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/support/date_time.hpp>
+#include <boost/log/attributes/mutable_constant.hpp>
+
+
 namespace logging = boost::log;
+namespace src = boost::log::sources;
+namespace sinks = boost::log::sinks;
+namespace expr = boost::log::expressions;
+namespace keywords = boost::log::keywords;
+namespace attrs    = boost::log::attributes;
 
 extern enum logging::trivial::severity_level str2enum(const std::string& loglevel);
 extern void initlog(logging::trivial::severity_level severity);
-
 
 //macro for log
 #define LOG_TRACE(msg) BOOST_LOG_TRIVIAL(trace) << msg;

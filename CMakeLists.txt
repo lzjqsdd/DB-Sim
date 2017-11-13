@@ -10,7 +10,7 @@ set(CMAKE_BUILD_TYPE Debug)
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
     add_definitions(-DDEBUG)
 endif()
-add_definitions(-DBOOST_LOG_DYN_LINK)
+add_definitions(-DBOOST_ALL_DYN_LINK)
 
 
 #设置第三方库根目录
@@ -69,6 +69,7 @@ target_link_libraries(fete
     stdc++
     boost_system
     boost_log
+    boost_log_setup
     boost_thread
     pthread
     tinyxml2
