@@ -20,9 +20,10 @@ class Manager{
         static Manager* getManager();
         void init();
 
-        void loadConfig(const string& path, Config& config);
-        void loadLinks(const string& path, map<int, Link*>& links, vector<vector<int>>& paths);
-        void loadNodes(const string& path, map<int, Node*>& nodes);
+        void loadConfig(const string& filepath, Config& config);
+        void loadLinks(const string& filepath, map<int, Link*>& links, vector<vector<int>>& paths);
+        void loadNodes(const string& filepath, map<int, Node*>& nodes);
+		void fillLinks(const vector<vector<int>>& paths,map<int, Link*>& links);
 
     protected:
         Manager();

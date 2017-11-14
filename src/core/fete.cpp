@@ -26,6 +26,9 @@ void FETE::loadNetwork(){
     _manager->loadLinks(_config.pathdir, links, paths);
     _manager->loadNodes(_config.nodedir, nodes);
 
+	//建立link的前后关系
+	_manager->fillLinks(paths,links);
+
     //处理起终点
     for(auto path:paths){
         startIds.insert(path.front());
@@ -63,6 +66,7 @@ void FETE::doUpdate(){
         }
         else{
             //如果不是起点，根据目标link限制条件来处理。
+			//查找link的前后关系
         }
     }
     //更新队列

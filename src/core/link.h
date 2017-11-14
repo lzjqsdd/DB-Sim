@@ -5,6 +5,7 @@
 
 #include <stdint.h>
 #include <queue>
+#include <set>
 using namespace std;
 
 class Agent;
@@ -18,6 +19,8 @@ public:
     ~Link();
 
     int32_t id;
+	set<int32_t> nids; //next link ids
+	set<int32_t> pids; //previous link ids
     double length; //length of link
     double maxspeed; //max speed limit
     double lane_num; //count of lanes

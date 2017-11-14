@@ -63,7 +63,7 @@ void Manager::loadConfig(const string&path, Config& gconfig){
     }
 }
 
-void Manager::loadLinks(const string& path, map<int, Link*>& links, vector<vector<int>>& paths){
+void Manager::loadLinks(const string& filepath, map<int, Link*>& links, vector<vector<int>>& paths){
     //遍历path.xml填充links
     //load config
     XMLDocument doc;
@@ -133,4 +133,16 @@ void Manager::loadNodes(const string& path, map<int, Node*>& nodes){
 
         nodeElement = nodeElement->NextSiblingElement();
     }
+}
+
+void Manager::fillLinks(const vector<vector<int>>& paths , map<int, Link*>& links){
+	//遍历path中的每个link，来处理link的前后关系
+	for(auto path : paths){
+		for(int i = 1; i<path.size(); ++i){
+			int32_t pid = path[i-1];
+			int32_t cid = path[i];
+			links[pid]->nids.insert(cid);
+			links[cid]->pids.insert(pid);
+		}
+	}
 }
