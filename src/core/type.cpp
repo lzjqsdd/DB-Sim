@@ -15,6 +15,17 @@ enum logging::trivial::severity_level str2enum(const std::string& loglevel)
 
 void initlog(logging::trivial::severity_level severity)
 {
+    logging::add_file_log(
+		keywords::file_name="fete_%N.log",
+		keywords::rotation_size=10*1024*1024,
+        keywords::format = 
+        (
+            expr::stream
+                << "[" << boost::log::trivial::severity << "] "
+                << boost::log::expressions::smessage
+        )
+    );
+
     logging::add_console_log(
         std::cout,
         boost::log::keywords::format = 

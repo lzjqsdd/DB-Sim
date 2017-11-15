@@ -32,6 +32,7 @@ class FETE{
         int curtime; //当前模拟的时间轴
         bool Finished; //判断是否终止模拟
         int curnum; //当前已经有的人数，也用作编号
+		int total_num; //总车数
 
 		std::set<int> startIds; //记录集合点
 		std::set<int> endIds; //记录安置点
