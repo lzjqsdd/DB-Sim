@@ -42,7 +42,7 @@ void FETE::loadNetwork(){
 	}
 
 	//totalnum
-	total_num = 1000;
+	total_num = 500;
 }
 
 void FETE::init(){
@@ -66,7 +66,7 @@ void FETE::generate(){
         while(total_num > curnum && link->totalnum > link->poolnum){
             Agent * agent = new Agent(++curnum, link->id);
             //当前进入的车辆的到达时间，等于 （当前时间点 + 队列最后的车辆到达的时间 + 自由时间)
-            agent->arrival_time = curtime + link->length * 1.0 / CARLEN; //先简单处理，按照全自由的时间
+            agent->arrival_time = curtime + link->length * 1.0 / 40;//先简单处理，按照全自由的时间(这里没有速度啊)
             LOG_DEBUG(my2string("Agent",agent->id," comes in link", link->id));
             link->wait_queue.push(agent); //加入到当前队列中
             link->poolnum ++;
@@ -89,12 +89,10 @@ void FETE::doUpdate(){
 
 		if(endIds.find(mlink.first) != endIds.end()){
 			//如果是终点,按照量给出
-			int delta = 10; //每个delta可以出的车数
+			int delta = 20; //每个delta可以出的车数
 			int min_num = std::min(delta,int(link->poolnum));
 			while(min_num--)
 			{
-				LOG_DEBUG("running ...")
-
 				auto agent = link->wait_queue.top();
                 if(agent->arrival_time <= curtime){
                     LOG_DEBUG(my2string("Agent", agent->id, " leaves scene..."));
@@ -120,9 +118,11 @@ void FETE::doUpdate(){
 					link->poolnum--;
 
 					//计算进入下一个队列末尾的时间
-					agent->arrival_time = curtime + nlink->length * 1.0 / CARLEN; //先简单处理，按照全自由的时间
+					agent->arrival_time = curtime + nlink->length * 1.0 / 40; //先简单处理，按照全自由的时间
 					nlink->wait_queue.push(agent);
 					nlink->poolnum ++;
+
+                    LOG_DEBUG(my2string("Agent",agent->id," from link",link->id ," move to link",nlink->id));
 				}
 			}
         }
@@ -131,7 +131,7 @@ void FETE::doUpdate(){
 }
 void FETE::start(){
     while(!Finished){
-        LOG_DEBUG(my2string("Current Time is : " , curtime));
+        LOG_DEBUG(my2string("==============Current Time is : " , curtime, "========================="));
         if(Finished) return;
         curtime += _config.timestep;
         doUpdate();

@@ -21,7 +21,7 @@ class Agent{
         double cur_speed; //show per time step the agent speed
         double type; //different agent type
         double length; //car length
-        int arrival_time; //the time when arrival the link end
+        double arrival_time; //the time when arrival the link end
 };
 
 #endif
