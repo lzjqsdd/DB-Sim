@@ -15,6 +15,7 @@ class FETE{
 
         void loadNetwork(); //从xml中加载路网
         void init(); //初始化需求
+		void generate(); //从场景里放人
         void doUpdate(); //迭代
         void doUpdateOld(); //采用ceil's方法迭代
         void start(); //启动模拟

@@ -1,3 +1,6 @@
+#ifndef __TOOL_HPP_
+#define __TOOL_HPP_
+
 inline void print(std::ostringstream &os){
 	return;
 }
@@ -15,3 +18,5 @@ inline std::string my2string(Args... rest){
 	print(os,rest...);
 	return std::move(os.str());
 }
+
+#endif

@@ -42,7 +42,7 @@ void FETE::loadNetwork(){
 	}
 
 	//totalnum
-	total_num = 5;
+	total_num = 1000;
 }
 
 void FETE::init(){
@@ -55,55 +55,67 @@ void FETE::init(){
 
 Config FETE::getConfig(){
     return _config;
-} 
+}
+
+
+void FETE::generate(){
+    //根据起点的link进入场景
+    for(auto sid : startIds){
+        auto link = links[sid];
+        //如果是起点,并且当前的人还没全部进入场景，判断是否有空闲空间
+        while(total_num > curnum && link->totalnum > link->poolnum){
+            Agent * agent = new Agent(++curnum, link->id);
+            //当前进入的车辆的到达时间，等于 （当前时间点 + 队列最后的车辆到达的时间 + 自由时间)
+            agent->arrival_time = curtime + link->length * 1.0 / CARLEN; //先简单处理，按照全自由的时间
+            LOG_DEBUG(my2string("Agent",agent->id," comes in link", link->id));
+            link->wait_queue.push(agent); //加入到当前队列中
+            link->poolnum ++;
+            //LOG_DEBUG(my2string("linkid is: ", link->id , "\t curnum is : ", curnum));
+        }
+    }
+}
 
 //以下实现的是grawon's的模型
 void FETE::doUpdate(){ 
     //计算每个增量
+
+    generate();
+
     for(auto mlink : links){
         //判断当前link是否是起点
-		auto link = mlink.second;
-        if(startIds.find(mlink.first) != startIds.end()){
-            LOG_TRACE(my2string("startpoint: " , mlink.first));
-            //如果是起点,判断是否有空闲空间
-            while(total_num > curnum && link->totalnum > link->poolnum){
-                Agent * agent = new Agent(++curnum, link->id);
-                //当前进入的车辆的到达时间，等于 （当前时间点 + 队列最后的车辆到达的时间 + 自由时间)
-                agent->arrival_time = curtime + link->length * 1.0 / CARLEN; //先简单处理，按照全自由的时间
-				LOG_DEBUG(my2string("Agent",agent->id," comes in link", link->id));
-				link->wait_queue.push(agent); //加入到当前队列中
-                link->poolnum ++;
-				//LOG_DEBUG(my2string("linkid is: ", link->id , "\t curnum is : ", curnum));
-            }
-        }
-		else if(endIds.find(mlink.first) != endIds.end()){
+        auto link = mlink.second;
+        if(link->wait_queue.empty()) continue; //和poolnum对应
+
+
+		if(endIds.find(mlink.first) != endIds.end()){
 			//如果是终点,按照量给出
 			int delta = 10; //每个delta可以出的车数
 			int min_num = std::min(delta,int(link->poolnum));
 			while(min_num--)
 			{
 				LOG_DEBUG("running ...")
-				if(link->wait_queue.empty()) break; //和poolnum对应
+
 				auto agent = link->wait_queue.top();
-				LOG_DEBUG(my2string("Agent", agent->id, " leaves scene..."));
-				link->wait_queue.pop(); //直接出场景了
-				link->poolnum --;
+                if(agent->arrival_time <= curtime){
+                    LOG_DEBUG(my2string("Agent", agent->id, " leaves scene..."));
+                    link->wait_queue.pop(); //直接出场景了
+                    link->poolnum --;
+                }
+                else break;
 			}
 		}
         else{
-            //如果不是起点，根据目标link限制条件来处理。
+            //如果不是终点，根据目标link限制条件来处理。（这里的link包含了起点link和其他的link）
 			//查找link的前后关系
 			for(auto nid : link->nids){
 				auto nlink = links[nid];
 				//当前队列头到达末尾的时间超过了当前时间轴，
 				//并且目标队列由空间，则进入目标队列
 				//当前为贪心策略，使劲服务其中一个
-				if(link->wait_queue.empty()) break;
 				auto agent = link->wait_queue.top();
-				while(agent->arrival_time > curtime
+				while(agent->arrival_time <= curtime
 					&&  nlink->totalnum > nlink->poolnum){
 
-					LOG_DEBUG("end ...")
 					link->wait_queue.pop();
 					link->poolnum--;
 
@@ -119,6 +131,7 @@ void FETE::doUpdate(){
 }
 void FETE::start(){
     while(!Finished){
+        LOG_DEBUG(my2string("Current Time is : " , curtime));
         if(Finished) return;
         curtime += _config.timestep;
         doUpdate();
@@ -139,4 +152,3 @@ bool FETE::isClean(){
     Finished = true;
     return true;
 }
-

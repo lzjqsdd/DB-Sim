@@ -16,5 +16,5 @@ message(status "** Boost Libraries: ${Boost_LIBRARIES}")
 #add_library(simpleLogger simpleLogger.cpp)
 #target_link_libraries(simpleLogger ${Boost_LIBRARIES} pthread)
 
-add_library(tinyxml2 tinyxml2.cpp)
+add_library(tinyxml2 SHARED tinyxml2.cpp)
 target_link_libraries(tinyxml2 stdc++)

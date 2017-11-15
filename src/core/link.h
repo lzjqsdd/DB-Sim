@@ -8,6 +8,14 @@
 #include <set>
 using namespace std;
 
+
+/****************************************/
+struct cmp{
+	bool operator()(Agent *a, Agent*b){
+		return a->arrival_time < b->arrival_time;
+	}
+};
+
 class Agent;
 class Link{
 public:
@@ -28,7 +36,7 @@ public:
     double poolnum;
     double totalnum; //总可以容纳的车辆数
     double buffernum;
-    priority_queue<Agent*> wait_queue;
+    priority_queue<Agent*, vector<Agent *>,  cmp> wait_queue;
 };
 
 #endif 

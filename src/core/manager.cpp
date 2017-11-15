@@ -58,6 +58,7 @@ void Manager::loadConfig(const string&path, Config& gconfig){
         if(mconfig.lookupValue("global.loglevel",loglevel)){
             gconfig.log_level = str2enum(loglevel);
         }
+
     }catch(...){
 
     }

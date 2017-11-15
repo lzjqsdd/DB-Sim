@@ -11,6 +11,9 @@ Config::Config(const Config& config){
     this->pathdir = config.pathdir;
     this->nodedir = config.nodedir;
     this->log_level = config.log_level;
+    for(auto demand : config.demands){
+        this->demands[demand.first] = demand.second;
+    }
 }
 
 Config& Config::operator=(const Config& config){
@@ -20,6 +23,9 @@ Config& Config::operator=(const Config& config){
         this->pathdir = config.pathdir;
         this->nodedir = config.nodedir;
         this->log_level = config.log_level;
+        for(auto demand : config.demands){
+            this->demands[demand.first] = demand.second;
+        }
     }
     return *this;
 }

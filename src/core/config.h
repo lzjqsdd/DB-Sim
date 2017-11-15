@@ -4,6 +4,7 @@
 #include "type.h"
 
 #include<iostream>
+#include<map>
 using namespace std;
 
 class Config{
@@ -18,6 +19,7 @@ class Config{
         string pathdir;
         string nodedir;
         logging::trivial::severity_level log_level;
+        map<int,int> demands;
 };
 
 #endif
