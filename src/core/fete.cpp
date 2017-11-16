@@ -66,7 +66,7 @@ void FETE::generate(){
         while(total_num > curnum && link->totalnum > link->poolnum){
             Agent * agent = new Agent(++curnum, link->id);
             //当前进入的车辆的到达时间，等于 （当前时间点 + 队列最后的车辆到达的时间 + 自由时间)
-            agent->arrival_time = curtime + link->length * 1.0 / 40;//先简单处理，按照全自由的时间(这里没有速度啊)
+            agent->arrival_time = curtime + link->length * 1.0 / 1000.0 / link->maxspeed * 3600;//先简单处理，按照全自由的时间(这里没有速度啊)
             LOG_DEBUG(my2string("Agent",agent->id," comes in link", link->id));
             link->wait_queue.push(agent); //加入到当前队列中
             link->poolnum ++;
@@ -118,7 +118,7 @@ void FETE::doUpdate(){
 					link->poolnum--;
 
 					//计算进入下一个队列末尾的时间
-					agent->arrival_time = curtime + nlink->length * 1.0 / 40; //先简单处理，按照全自由的时间
+					agent->arrival_time = curtime + link->length * 1.0 / 1000.0 / link->maxspeed * 3600; //先简单处理，按照全自由的时间
 					nlink->wait_queue.push(agent);
 					nlink->poolnum ++;
 

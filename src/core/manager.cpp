@@ -35,13 +35,10 @@ void Manager::loadConfig(const string&path, Config& gconfig){
     gconfig.config_path = path; //self hold value;
 
     libconfig::Config mconfig;
-    try{
-        mconfig.readFile(path.c_str());
-    }catch(const libconfig::FileIOException &fioex){
-        std::cerr << "can't read config file!" << std::endl;
-    }
 
     try{
+        mconfig.readFile(path.c_str());
+
         double timestep = 3.0F;
         string pathdir;
         string nodedir;
@@ -59,8 +56,29 @@ void Manager::loadConfig(const string&path, Config& gconfig){
             gconfig.log_level = str2enum(loglevel);
         }
 
-    }catch(...){
+        const libconfig::Setting &demands = mconfig.lookup("demands");
+        int count = demands.getLength();
 
+        for(int i=0;i<count;++i){
+            int linkid,demand;
+            if(!demands[i].lookupValue("linkid",linkid) ||
+                    !demands[i].lookupValue("demand",demand)){
+                std::cerr << "lookup linkid or demand value error!" << std::endl;
+            }else{
+                gconfig.demands[linkid] = demand;
+            }
+
+        }
+
+    }catch(const libconfig::FileIOException &fioex){
+        std::cerr << "can't read config file!" << std::endl;
+        return;
+    }
+    catch(const libconfig::ParseException &pex)
+    {
+        std::cerr << "Parse error at" << pex.getFile() << ":" << pex.getLine()
+                  << "-" << pex.getError() << std::endl;
+        return;
     }
 }
 
