@@ -41,8 +41,10 @@ void FETE::loadNetwork(){
 		LOG_DEBUG(my2string("link",link.first, " previous id num is " ,link.second->pids.size()));
 	}
 
-	//totalnum
-	total_num = 500;
+	//初始化每个起点的需求
+	for(auto sid: startIds)
+		pcurnum[sid] = 0;
+	
 }
 
 void FETE::init(){
@@ -63,13 +65,15 @@ void FETE::generate(){
     for(auto sid : startIds){
         auto link = links[sid];
         //如果是起点,并且当前的人还没全部进入场景，判断是否有空闲空间
-        while(total_num > curnum && link->totalnum > link->poolnum){
+        while(pcurnum[sid] < _config.demands[sid] && link->totalnum > link->poolnum){
             Agent * agent = new Agent(++curnum, link->id);
             //当前进入的车辆的到达时间，等于 （当前时间点 + 队列最后的车辆到达的时间 + 自由时间)
-            agent->arrival_time = curtime + link->length * 1.0 / 1000.0 / link->maxspeed * 3600;//先简单处理，按照全自由的时间(这里没有速度啊)
+            agent->arrival_time = curtime + link->length * 1.0 / 1000.0 / link->maxspeed * 3600 ;//先简单处理，按照全自由的时间(这里没有速度啊)
             LOG_DEBUG(my2string("Agent",agent->id," comes in link", link->id));
             link->wait_queue.push(agent); //加入到当前队列中
             link->poolnum ++;
+
+			pcurnum[sid] ++;
             //LOG_DEBUG(my2string("linkid is: ", link->id , "\t curnum is : ", curnum));
         }
     }
@@ -89,7 +93,7 @@ void FETE::doUpdate(){
 
 		if(endIds.find(mlink.first) != endIds.end()){
 			//如果是终点,按照量给出
-			int delta = 20; //每个delta可以出的车数
+			int delta = 5; //每个delta可以出的车数
 			int min_num = std::min(delta,int(link->poolnum));
 			while(min_num--)
 			{
@@ -137,6 +141,7 @@ void FETE::start(){
         doUpdate();
         isClean(); //每次判断是否为空了
     }
+	LOG_FATAL(my2string("Total time is : " , curtime));
 }
 
 void FETE::check(){

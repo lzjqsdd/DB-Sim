@@ -38,6 +38,7 @@ class FETE{
 		std::set<int> startIds; //记录集合点
 		std::set<int> endIds; //记录安置点
 		std::vector<std::vector<int>> paths; //以id形式记录path
+		std::map<int,int> pcurnum; //curnum of every path
 };
 
 #endif
