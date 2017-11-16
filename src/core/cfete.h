@@ -1,5 +1,5 @@
-#ifndef __FETE_H__
-#define __FETE_H__
+#ifndef __CFETE_H__
+#define __CFETE_H__
 
 #include "bfete.h"
 #include "config.h"
@@ -8,12 +8,12 @@
 #include <map>
 #include <set>
 
-//Grawron's model
-class FETE: public FETEIf {
+//Ceil's model
+class CFETE: public FETEIf {
     public:
-        FETE();
-        FETE(const Config &config);
-        FETE& operator=(const FETE& fete);
+        CFETE();
+        CFETE(const Config &config);
+        CFETE& operator=(const CFETE& fete);
 
         void loadNetwork(); //从xml中加载路网
         void init(); //初始化需求

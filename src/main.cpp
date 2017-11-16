@@ -8,6 +8,8 @@
 #include "./core/link.h"
 #include "./core/node.h"
 #include "./core/config.h"
+#include "./core/bfete.h"
+#include "./core/cfete.h"
 #include "./core/fete.h"
 
 #include "./utils/tinyxml2.h"
@@ -29,7 +31,10 @@ int main()
 
 
     //创建推演对象
-    FETE fete(config); //主要处理类
-    fete.init();
-    fete.start();
+    CFETE fete(config); //主要处理类
+	FETEIf &f = fete;
+	f.init();
+	f.start();
+    //fete.init();
+    //fete.start();
 }

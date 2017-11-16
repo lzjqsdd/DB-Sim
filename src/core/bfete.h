@@ -1,30 +1,23 @@
-#ifndef __FETE_H__
-#define __FETE_H__
+#ifndef __FETEIF_H__
+#define __FETEIF_H__
 
-#include "bfete.h"
 #include "config.h"
 #include "manager.h"
 
 #include <map>
 #include <set>
 
-//Grawron's model
-class FETE: public FETEIf {
+//定义抽闲基类
+class FETEIf{
     public:
-        FETE();
-        FETE(const Config &config);
-        FETE& operator=(const FETE& fete);
-
-        void loadNetwork(); //从xml中加载路网
-        void init(); //初始化需求
-		void generate(); //从场景里放人
-        void doUpdate(); //迭代
-        void start(); //启动模拟
-        void check(); //检查限制条件
-
-        bool isClean();//判断路网是否已经空了
-
-        Config getConfig();
+        virtual void loadNetwork() = 0; //从xml中加载路网
+        virtual void init() = 0; //初始化需求
+		virtual void generate() = 0; //从场景里放人
+        virtual void doUpdate() = 0; //迭代
+        virtual void start() = 0; //启动模拟
+        virtual void check() = 0; //检查限制条件
+        virtual bool isClean() = 0;//判断路网是否已经空了
+        virtual Config getConfig() = 0;
 
     private:
         Config _config; //从配置文件.conf中读取文件
