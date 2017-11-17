@@ -11,6 +11,7 @@
 #include "./core/bfete.h"
 #include "./core/cfete.h"
 #include "./core/fete.h"
+#include "./core/preprocess.h"
 
 #include "./utils/tinyxml2.h"
 #include "./core/manager.h"
@@ -29,9 +30,15 @@ int main()
     //初始化日志等级
     initlog(config.log_level);
 
+	//采样
+	if(config.sample){
+		LOG_TRACE("sample ...");
+		PProcess processor(config.data_path,"car",config.timestep,config.data_path);
+		processor.doSample();
+	}
 
     //创建推演对象
-    CFETE fete(config); //主要处理类
+    FETE fete(config); //主要处理类
 	FETEIf &f = fete;
 	f.init();
 	f.start();

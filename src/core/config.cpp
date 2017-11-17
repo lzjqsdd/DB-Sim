@@ -1,8 +1,11 @@
 #include "config.h"
 
-Config::Config(){
-    this->config_path = "./config.conf";
-    this->log_level = logging::trivial::trace;
+Config::Config():
+	config_path("../config"),
+	log_level(logging::trivial::trace),
+	sample(false),
+	data_path("../data")
+{
 }
 
 Config::Config(const Config& config){
@@ -14,6 +17,8 @@ Config::Config(const Config& config){
     for(auto demand : config.demands){
         this->demands[demand.first] = demand.second;
     }
+	this->sample = config.sample;
+	this->data_path = config.data_path;
 }
 
 Config& Config::operator=(const Config& config){
@@ -26,6 +31,8 @@ Config& Config::operator=(const Config& config){
         for(auto demand : config.demands){
             this->demands[demand.first] = demand.second;
         }
+		this->sample = config.sample;
+		this->data_path = config.data_path;
     }
     return *this;
 }
@@ -34,11 +41,13 @@ Config& Config::operator=(const Config& config){
 ostream& operator<<(ostream& os, const Config& config){
     os << endl << "Current Config is :" << endl
         << "{ " << endl
-        << "    Timestep is " << config.timestep << endl
+		<< "\tSample is " << config.sample << endl
+        << "\tTimestep is " << config.timestep << endl
+        << "\tDataPath is " << config.data_path<< endl
         << "}";
     os << std::endl << "demand : "<< endl << "{" << endl;
     for(auto demand: config.demands){
-        os << demand.first << ":" << demand.second << endl;
+        os << "\t" << demand.first << ":" << demand.second << endl;
     }
     os << "}";
     return os;

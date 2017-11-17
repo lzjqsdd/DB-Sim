@@ -15,9 +15,11 @@ class Config{
         friend ostream& operator<<(ostream& os, const Config& config);
 
         int timestep; //example 30seconds per iteration
+		bool sample; //是否采样
         string config_path;
         string pathdir;
         string nodedir;
+		string data_path;
         logging::trivial::severity_level log_level;
         map<int,int> demands;
 };

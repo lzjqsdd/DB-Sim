@@ -38,7 +38,7 @@ void initlog(logging::trivial::severity_level severity)
 
     logging::core::get()->set_filter
     (
-        logging::trivial::severity >= severity
+        logging::trivial::severity <= severity
     );
 }
 

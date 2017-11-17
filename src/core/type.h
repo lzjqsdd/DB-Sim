@@ -18,6 +18,7 @@
 #include <boost/log/support/date_time.hpp>
 #include <boost/log/attributes/mutable_constant.hpp>
 
+#include "../utils/tool.hpp"
 
 namespace logging = boost::log;
 namespace src = boost::log::sources;

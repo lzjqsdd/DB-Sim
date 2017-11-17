@@ -14,7 +14,8 @@ calculate evacuation time faster and  more accurately
 - [x] parse xml from config
 - [x] boost library support
 - [x] logging support
-- [ ] basic iterator develop
+- [x] basic iterator develop
+- [ ] sample for every link
 - [ ] import ml model(trained by python and predict by c++)
 
 

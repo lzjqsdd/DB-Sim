@@ -29,6 +29,7 @@ set(BOOST_MODULE_INCLUDE "/usr/include")
 #查找库
 find_package(Boost REQUIRED COMPONENTS
         system
+		filesystem
         log
         log_setup
         thread)
@@ -55,11 +56,13 @@ aux_source_directory(./src/utils SRC_UTILS)
 #设置编译文件
 set(SRC_LIST 
     ${SRC_CORE}
-    #${SRC_UTILS}
     src/main.cpp
     )
 
+#添加编译子项目
 add_subdirectory(./src/utils)
+add_subdirectorY(./test)
+
 #生成可执行文件
 add_executable(fete ${SRC_LIST})
 
@@ -71,6 +74,7 @@ target_link_libraries(fete
     boost_log
     boost_log_setup
     boost_thread
+	boost_filesystem
     pthread
     tinyxml2
 )

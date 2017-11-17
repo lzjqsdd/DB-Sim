@@ -40,11 +40,19 @@ void Manager::loadConfig(const string&path, Config& gconfig){
         mconfig.readFile(path.c_str());
 
         double timestep = 3.0F;
+		bool sample = false;
         string pathdir;
         string nodedir;
         string loglevel;
+		string data_path;
         if(mconfig.lookupValue("global.timestep",timestep)){
             gconfig.timestep = timestep;
+        }
+        if(mconfig.lookupValue("global.sample",sample)){
+            gconfig.sample= sample;
+        }
+        if(mconfig.lookupValue("global.data_path",data_path)){
+			gconfig.data_path = data_path;
         }
         if(mconfig.lookupValue("global.pathdir",pathdir)){
             gconfig.pathdir = pathdir;
