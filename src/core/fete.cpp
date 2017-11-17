@@ -122,7 +122,7 @@ void FETE::doUpdate(){
 					link->poolnum--;
 
 					//计算进入下一个队列末尾的时间
-					agent->arrival_time = curtime + link->length * 1.0 / 1000.0 / link->maxspeed * 3600; //先简单处理，按照全自由的时间
+					agent->arrival_time = curtime + nlink->length * 1.0 / 1000.0 / nlink->maxspeed * 3600; //先简单处理，按照全自由的时间
 					nlink->wait_queue.push(agent);
 					nlink->poolnum ++;
 
