@@ -22,7 +22,8 @@ vector<string> PProcess::getFilelist(const string& dirpath,const string& pattern
 	if(bf::exists(dirpath)){
 		if(bf::is_directory(dirpath)){
 			for(auto&& x : bf::directory_iterator(dirpath)){
-				string filename = x.path().filename().string();
+				//string filename = x.path().filename().string();
+				string filename = x.path().string();
 				if(filename.find(pattern) != string::npos) 
 					filelist.push_back(filename); 
 			}
@@ -43,10 +44,19 @@ void PProcess::readFile(const string& path){
 			int frame,num;
 			istringstream is(line);
 			is >> frame >> num;
-			LOG_DEBUG(my2string("frame:",frame, " num:" ,num));
+			//LOG_TRACE(my2string("frame:",frame, " num:" ,num));
 
-			for(int i = 0; i < num; ++i)
+            int carid,type,linkid;
+            double x,y,zh;
+			for(int i = 0; i < num; ++i){
 				std::getline(fin,line);
+                istringstream is(line);
+                is >> carid >> x >> y >> type >> linkid >> zh;
+                LOG_TRACE(my2string("carid:",carid,"\tposx: ",x,"\tposy: ",y));
+                if(magent.find(carid) == magent.end()){
+                    magent[carid] = new Agent(carid, linkid);
+                }
+            }
 		}
 	}catch(...){
 		LOG_FATAL("can't read file content!!!");
