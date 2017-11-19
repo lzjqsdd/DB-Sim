@@ -59,6 +59,9 @@ Config CFETE::getConfig(){
     return _config;
 }
 
+vector<vector<int>> CFETE::getPaths(){
+    return paths;
+}
 
 void CFETE::generate(){
 	LOG_DEBUG("Todo ...");

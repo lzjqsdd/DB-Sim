@@ -6,6 +6,7 @@
 
 #include <map>
 #include <set>
+#include <vector>
 
 //定义抽闲基类
 class FETEIf{
@@ -18,8 +19,9 @@ class FETEIf{
         virtual void check() = 0; //检查限制条件
         virtual bool isClean() = 0;//判断路网是否已经空了
         virtual Config getConfig() = 0;
+        virtual vector<vector<int>> getPaths() = 0;
 
-    private:
+    protected:
         Config _config; //从配置文件.conf中读取文件
         Manager * _manager;
         map<int, Link*> links; //全局唯一实际的数据存储

@@ -30,17 +30,20 @@ int main()
     //初始化日志等级
     initlog(config.log_level);
 
-	//采样
-	if(config.sample){
-		LOG_TRACE("sample ...");
-		PProcess processor(config.data_path,"car",config.timestep,config.data_path);
-		processor.doSample();
-	}
-
     //创建推演对象
     FETE fete(config); //主要处理类
 	FETEIf &f = fete;
 	f.init();
+
+	//采样
+	if(config.sample){
+		LOG_TRACE("sample ...");
+		PProcess processor(config.data_path,"car",config.timestep,config.data_path,f.getPaths());
+		processor.init();
+		processor.doSample();
+	}
+
+
 	f.start();
     //fete.init();
     //fete.start();

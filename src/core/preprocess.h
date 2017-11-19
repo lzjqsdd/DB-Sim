@@ -22,7 +22,7 @@ using namespace std;
 
 class PProcess{
 	public:
-		PProcess(const string& inpath,const string& pattern,const int &interval,const string& outpath);
+		PProcess(const string& inpath,const string& pattern,const int &interval,const string& outpath,const vector<vector<int>>& paths);
 		void doSample(); //采样函数
 		void init(); //初始化各个link的数量
 		vector<string> getFilelist(const string& dirpath,const string& pattern);
@@ -32,7 +32,7 @@ class PProcess{
 		string pattern; //查找通配置文件
 		int interval; //采样间隔
 		string outpath; //output_path
-		vector<vector<int>> path;
+		vector<vector<int>> paths;
 		map<int,Link*> mslink; //记录采样统计，<id,slink>
 		map<int,Agent*> magent; //记录每一时刻Agent的信息
 };

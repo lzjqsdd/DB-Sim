@@ -25,7 +25,9 @@ class FETE: public FETEIf {
         bool isClean();//判断路网是否已经空了
 
         Config getConfig();
+        vector<vector<int>> getPaths();
 
+        /*
     private:
         Config _config; //从配置文件.conf中读取文件
         Manager * _manager;
@@ -40,6 +42,7 @@ class FETE: public FETEIf {
 		std::set<int> endIds; //记录安置点
 		std::vector<std::vector<int>> paths; //以id形式记录path
 		std::map<int,int> pcurnum; //curnum of every path
+        */
 };
 
 #endif

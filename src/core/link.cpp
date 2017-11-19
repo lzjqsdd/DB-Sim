@@ -8,6 +8,8 @@ Link::Link(){
     this->lane_num = 0;
     this->capacity = 0;
     this->poolnum  = 0;
+    this->inflow = 0;
+    this->outflow = 0;
 }
 
 

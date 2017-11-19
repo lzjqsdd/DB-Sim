@@ -59,6 +59,10 @@ Config FETE::getConfig(){
     return _config;
 }
 
+vector<vector<int>> FETE::getPaths(){
+    return paths;
+}
+
 
 void FETE::generate(){
     //根据起点的link进入场景

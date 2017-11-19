@@ -37,6 +37,11 @@ public:
     double totalnum; //总可以容纳的车辆数
     double buffernum;
     priority_queue<Agent*, vector<Agent *>,  cmp> wait_queue;
+
+
+    //for data sampling
+    double inflow;
+    double outflow;
 };
 
 #endif 
