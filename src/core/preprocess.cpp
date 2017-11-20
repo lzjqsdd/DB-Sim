@@ -198,22 +198,20 @@ void PProcess::sampleByNode(const string& path,const int& node_id){
 
 				ofstream ofile;
 				string outfile = outpath + "/" + std::to_string(node_id) + "_node_sample.txt";
+				ofile.open(outfile.c_str(),std::ios::app);
 
 				ofile << frame;
-				ofile << "fnum:"<< flinks.size();
 				for(auto link_id : flinks){
-					ofile.open(outfile.c_str(),std::ios::app);
 					auto slink = mslink[link_id];
-					ofile << " " << slink->poolnum << " " << slink->outflow << endl;
+					ofile << " " << slink->poolnum << " " << slink->outflow;
 				}
 
-				ofile << "tnum:" << tlinks.size();
 				for(auto link_id : tlinks){
-					ofile.open(outfile.c_str(),std::ios::app);
 					auto slink = mslink[link_id];
-					ofile << " " << slink->poolnum << " " << slink->outflow << endl;
+					ofile << " " << slink->poolnum << " " << slink->outflow;
 				}
 
+				ofile << endl;
 				ofile.flush();
 				ofile.close();
             }
