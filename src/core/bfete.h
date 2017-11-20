@@ -21,9 +21,7 @@ class FETEIf{
         virtual Config getConfig() = 0;
         virtual vector<vector<int>> getPaths() = 0;
 
-    protected:
         Config _config; //从配置文件.conf中读取文件
-        Manager * _manager;
         map<int, Link*> links; //全局唯一实际的数据存储
         map<int, Node*> nodes; //方便直接从id检索所有的信息
         int curtime; //当前模拟的时间轴
@@ -35,6 +33,9 @@ class FETEIf{
 		std::set<int> endIds; //记录安置点
 		std::vector<std::vector<int>> paths; //以id形式记录path
 		std::map<int,int> pcurnum; //curnum of every path
+
+	protected:
+        Manager * _manager;
 };
 
 #endif

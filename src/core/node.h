@@ -13,7 +13,6 @@ class Node{
         Node& operator=(const Node& node);
         ~Node();
 
-    private:
         int id; //node id
         vector<int> flinks;
         vector<int> tlinks;

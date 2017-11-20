@@ -26,25 +26,6 @@ class CFETE: public FETEIf {
 
         Config getConfig();
         vector<vector<int>> getPaths();
-        
-
-        /*
-    private:
-        Config _config; //从配置文件.conf中读取文件
-        Manager * _manager;
-        map<int, Link*> links; //全局唯一实际的数据存储
-        map<int, Node*> nodes; //方便直接从id检索所有的信息
-        int curtime; //当前模拟的时间轴
-        bool Finished; //判断是否终止模拟
-        int curnum; //当前已经有的人数，也用作编号
-		int total_num; //总车数
-
-		std::set<int> startIds; //记录集合点
-		std::set<int> endIds; //记录安置点
-		std::vector<std::vector<int>> paths; //以id形式记录path
-		std::map<int,int> pcurnum; //curnum of every path
-
-        */
 };
 
 #endif

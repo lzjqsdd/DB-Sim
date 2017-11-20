@@ -38,9 +38,9 @@ int main()
 	//采样
 	if(config.sample){
 		LOG_TRACE("sample ...");
-		PProcess processor(config.data_path,"car",config.timestep,config.data_path,f.getPaths());
+		PProcess processor(config.data_path,"car",config.timestep,config.data_path,f.paths, f.nodes);
 		processor.init();
-		processor.doSample();
+		processor.doSampleByNode(2062);
 	}
 
 
