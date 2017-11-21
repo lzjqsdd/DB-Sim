@@ -25,13 +25,13 @@ class PProcess{
 	public:
 		PProcess(const string& inpath,const string& pattern,const int &interval,const string& outpath,vector<vector<int>>& paths, map<int,Node*>& nodes);
 		void doSampleByTime(); //采样函数
-		void doSampleByLink(int linkid); //按照link单独采样
-		void doSampleByNode(int nodeid); //按照link单独采样
+		void doSampleByLink(vector<int> linkid); //按照link单独采样
+		void doSampleByNode(vector<int> nodeid); //按照link单独采样
 		void init(); //初始化各个link的数量
 		vector<string> getFilelist(const string& dirpath,const string& pattern);
 		void sampleByTime(const string& path);
-		void sampleByLink(const string& path,const int& link_id);
-		void sampleByNode(const string& path,const int& node_id);
+		void sampleByLink(const string& path,vector<int> link_ids);
+		void sampleByNode(const string& path,vector<int> node_ids);
 	private:
 		string inpath; //output_path
 		string pattern; //查找通配置文件

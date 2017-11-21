@@ -1,5 +1,5 @@
-#ifndef __FETE_H__
-#define __FETE_H__
+#ifndef __GFETE_H__
+#define __GFETE_H__
 
 #include "bfete.h"
 #include "config.h"

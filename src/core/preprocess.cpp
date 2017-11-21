@@ -45,9 +45,11 @@ vector<string> PProcess::getFilelist(const string& dirpath,const string& pattern
 }
 
 void PProcess::sampleByTime(const string& path){
+
 	try{
 		fstream fin(path.c_str(),std::ifstream::in);
 		string line;
+		set<int> pre_inscene;
 		while(std::getline(fin,line)){
 			int frame,num;
 			istringstream is(line);
@@ -55,6 +57,7 @@ void PProcess::sampleByTime(const string& path){
 
             int carid,type,linkid,pathid;
             double x,y,zh;
+			set<int> cur_inscene;
 			for(int i = 0; i < num; ++i){
 				std::getline(fin,line);
                 istringstream is(line);
@@ -78,7 +81,20 @@ void PProcess::sampleByTime(const string& path){
                         magent[carid]->linkid = linkid;
                     } 
                 }
+				cur_inscene.insert(carid);
             }
+
+			//计算离开的agent
+			for(auto carid : pre_inscene){
+				if(cur_inscene.find(carid) == cur_inscene.end())
+				{
+					int pre_linkid = magent[carid]->linkid;
+					mslink[pre_linkid]->outflow++;
+					mslink[pre_linkid]->poolnum--;
+				}	
+			}
+
+			pre_inscene.swap(cur_inscene);
 
             if(frame % interval == 0){
                 //write to file
@@ -99,17 +115,20 @@ void PProcess::sampleByTime(const string& path){
 	}
 }
 
-void PProcess::sampleByLink(const string& path,const int& link_id){
+void PProcess::sampleByLink(const string& path,vector<int> link_ids){
+
 	try{
 		fstream fin(path.c_str(),std::ifstream::in);
 		string line;
+		set<int> pre_inscene;
+		int frame,num;
 		while(std::getline(fin,line)){
-			int frame,num;
 			istringstream is(line);
 			is >> frame >> num;
 
             int carid,type,linkid,pathid;
             double x,y,zh;
+			set<int> cur_inscene;
 			for(int i = 0; i < num; ++i){
 				std::getline(fin,line);
                 istringstream is(line);
@@ -133,32 +152,63 @@ void PProcess::sampleByLink(const string& path,const int& link_id){
                         magent[carid]->linkid = linkid;
                     } 
                 }
+				cur_inscene.insert(carid);
             }
+			//计算离开的agent
+			for(auto carid : pre_inscene){
+				if(cur_inscene.find(carid) == cur_inscene.end())
+				{
+					int pre_linkid = magent[carid]->linkid;
+					mslink[pre_linkid]->outflow++;
+					mslink[pre_linkid]->poolnum--;
+				}	
+			}
+			pre_inscene.swap(cur_inscene);
 
             if(frame % interval == 0){
                 //write to file
 				//LOG_TRACE(my2string("frame:",frame, " num:" ,num));
-                ofstream ofile;
-                string outfile = outpath + "/" + std::to_string(link_id)+"_sample.txt";
-                ofile.open(outfile.c_str(),std::ios::app);
-				auto slink = mslink[link_id];
-			    ofile <<  frame << " " << slink->inflow << " " << slink->outflow << " " << slink->poolnum << endl;
-                ofile.close();
+				for(auto link_id : link_ids){
+					ofstream ofile;
+					string outfile = outpath + "/" + std::to_string(link_id)+"_sample.txt";
+					ofile.open(outfile.c_str(),std::ios::app);
+					auto slink = mslink[link_id];
+					ofile <<  frame << " " << slink->inflow << " " << slink->outflow << " " << slink->poolnum << endl;
+					ofile.close();
+
+					slink->inflow = 0;
+					slink->outflow = 0;
+				}
             }
 		}
+		if(frame % interval != 0) //最后一段不满足一个采样间隔
+		{
+			frame = interval * (frame/interval + 1);
+			for(auto link_id : link_ids){
+				ofstream ofile;
+				string outfile = outpath + "/" + std::to_string(link_id)+"_sample.txt";
+				ofile.open(outfile.c_str(),std::ios::app);
+				auto slink = mslink[link_id];
+				ofile <<  frame << " " << slink->inflow << " " << slink->outflow << " " << slink->poolnum << endl;
+				ofile.close();
+
+				slink->inflow = 0;
+				slink->outflow = 0;
+			}
+
+		}
+
 	}catch(...){
 		LOG_FATAL("can't read file content!!!");
 	}
 }
 
-void PProcess::sampleByNode(const string& path,const int& node_id){
-
-	vector<int> flinks = nodes[node_id]->flinks;
-	vector<int> tlinks = nodes[node_id]->tlinks;
+void PProcess::sampleByNode(const string& path,vector<int> node_ids){
 
 	try{
 		fstream fin(path.c_str(),std::ifstream::in);
 		string line;
+		set<int> pre_inscene;
 		while(std::getline(fin,line)){
 			int frame,num;
 			istringstream is(line);
@@ -166,6 +216,7 @@ void PProcess::sampleByNode(const string& path,const int& node_id){
 
             int carid,type,linkid,pathid;
             double x,y,zh;
+			set<int> cur_inscene;
 			for(int i = 0; i < num; ++i){
 				std::getline(fin,line);
                 istringstream is(line);
@@ -189,33 +240,45 @@ void PProcess::sampleByNode(const string& path,const int& node_id){
                         magent[carid]->linkid = linkid;
                     } 
                 }
+				cur_inscene.insert(carid);
             }
+			//计算离开的agent
+			for(auto carid : pre_inscene){
+				if(cur_inscene.find(carid) == cur_inscene.end())
+				{
+					int pre_linkid = magent[carid]->linkid;
+					mslink[pre_linkid]->outflow++;
+					mslink[pre_linkid]->poolnum--;
+				}	
+			}
+			pre_inscene.swap(cur_inscene);
 
 			//根据node的前后link进行采样
 			//格式
 			//汇入的link数，每个的poolnum、outflow，下游的link的inflow，poolnum
             if(frame % interval == 0){
+				for(auto node_id : node_ids){
+					ofstream ofile;
+					string outfile = outpath + "/" + std::to_string(node_id) + "_node_sample.txt";
+					ofile.open(outfile.c_str(),std::ios::app);
 
-				ofstream ofile;
-				string outfile = outpath + "/" + std::to_string(node_id) + "_node_sample.txt";
-				ofile.open(outfile.c_str(),std::ios::app);
+					ofile << frame;
+					ofile << " " << nodes[node_id]->flinks.size();
+					for(auto link_id : nodes[node_id]->flinks){
+						auto slink = mslink[link_id];
+						ofile << " " << slink->poolnum << " " << slink->outflow;
+					}
 
-				ofile << frame;
-				ofile << " " << flinks.size();
-				for(auto link_id : flinks){
-					auto slink = mslink[link_id];
-					ofile << " " << slink->poolnum << " " << slink->outflow;
+					ofile << " " << nodes[node_id]->tlinks.size();
+					for(auto link_id : nodes[node_id]->tlinks){
+						auto slink = mslink[link_id];
+						ofile << " " << slink->poolnum << " " << slink->inflow;
+					}
+
+					ofile << endl;
+					ofile.flush();
+					ofile.close();
 				}
-
-				ofile << " " << tlinks.size();
-				for(auto link_id : tlinks){
-					auto slink = mslink[link_id];
-					ofile << " " << slink->poolnum << " " << slink->inflow;
-				}
-
-				ofile << endl;
-				ofile.flush();
-				ofile.close();
             }
 		}
 	}catch(...){
@@ -242,18 +305,18 @@ void PProcess::doSampleByTime(){
 	}
 }
 
-void PProcess::doSampleByLink(int linkid){
+void PProcess::doSampleByLink(vector<int> linkids){
 	vector<string> filelist = getFilelist(inpath,pattern);
 	for(auto filename : filelist){
 		LOG_TRACE(my2string("read file: ",filename));
-		sampleByLink(filename,linkid);
+		sampleByLink(filename,linkids);
 	}
 }
 
-void PProcess::doSampleByNode(int nodeid){
+void PProcess::doSampleByNode(vector<int> nodeids){
 	vector<string> filelist = getFilelist(inpath,pattern);
 	for(auto filename : filelist){
 		LOG_TRACE(my2string("read file: ",filename));
-		sampleByNode(filename,nodeid);
+		sampleByNode(filename,nodeids);
 	}
 }

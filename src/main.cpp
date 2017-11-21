@@ -33,8 +33,8 @@ int main()
     initlog(config.log_level);
 
     //创建推演对象
-    GFETE gfete(config); //主要处理类
-	FETEIf &f = gfete;
+    TFETE tfete(config); //主要处理类
+	FETEIf &f = tfete;
 
 	f.init();
 
@@ -43,9 +43,13 @@ int main()
 		LOG_TRACE("sample ...");
 		PProcess processor(config.data_path,"car",config.timestep,config.sample_outpath,f.paths, f.nodes);
 		processor.init();
-		for(auto nodeid : config.sample_nodeids)
-			processor.doSampleByNode(nodeid);
+		vector<int> links;
+		for(auto link:f.links) links.push_back(link.first);
+		if(config.sample_linkids.size() != 0)
+			processor.doSampleByLink(config.sample_linkids);
+		else
+			processor.doSampleByLink(links);
 	}
-
-	f.start();
+	else 
+		f.start();
 }

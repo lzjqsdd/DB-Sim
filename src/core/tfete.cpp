@@ -4,6 +4,8 @@
 
 #include <set>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 TFETE::TFETE(){
     Finished = false;
@@ -15,11 +17,7 @@ TFETE::TFETE(const Config &config){
 }
 
 TFETE& TFETE::operator=(const TFETE& fete){
-    //暂未处理
 }
-
-
-/**********************************/
 
 
 void TFETE::loadNetwork(){
@@ -47,10 +45,37 @@ void TFETE::loadNetwork(){
 	
 }
 
+
+void TFETE::loadStaticData(const string& datapath)
+{
+	//加载link采样的数据
+	//map<frame,map<linkid,pair<inflow,outflow>>
+	for(auto mlink : links){
+		try{
+			string link_datapath = my2string(datapath,"/",mlink.first,"_sample.txt");
+			fstream fin(link_datapath.c_str(), std::ifstream::in);
+			string line;
+			int frame,inflow,outflow,poolnum;
+			while(std::getline(fin,line)){
+				istringstream is(line);
+				is >> frame >> inflow >> outflow >> poolnum;
+				static_data[mlink.first][frame] = new LinkData(inflow,outflow,poolnum);
+			}
+			LOG_TRACE(my2string("load static data link : ",mlink.first, " done."));
+		}catch(...){
+			LOG_FATAL(my2string("read static data link",mlink.first,"error!"));
+			exit(1);
+		}
+	}
+}
+
+
+
 void TFETE::init(){
     //加载路网
     LOG_TRACE("init Tfete ...");
     loadNetwork();
+	loadStaticData(_config.sample_outpath);
     curtime = 0;
     curnum = 0;
 }
@@ -74,15 +99,39 @@ void TFETE::generate(){
 //以下实现的是grawon's的模型
 void TFETE::doUpdate(){ 
     //计算每个增量
-    generate();
+    //generate();
+	//变化以link为更新对象
+	//迭代以node进行迭代
+	for(auto &mnode : nodes){
+		for(auto linkid : mnode.second->flinks){
+			//更新flink的出量
+			if(static_data[linkid].find(curtime) != static_data[linkid].end())
+				links[linkid]->poolnum -= (static_data[linkid][curtime]->outflow);
+		}
+		for(auto linkid: mnode.second->tlinks){
+			//更新tlink的入量
+			if(static_data[linkid].find(curtime) != static_data[linkid].end())
+				links[linkid]->poolnum += (static_data[linkid][curtime]->inflow);
+		}
+	}
+
+	//string ss="links : ";
+	//for(auto &mlink: links)
+	//	ss += ("," + to_string(int(mlink.first)));
+	//LOG_DEBUG(ss);
+
+	string ss=to_string(int(curtime)) + " status: ";
+	for(auto &mlink: links)
+		ss += ("," + to_string(int(mlink.second->poolnum)));
+	LOG_DEBUG(ss);
 }
 void TFETE::start(){
     while(!Finished){
-        LOG_DEBUG(my2string("==============Current Time is : " , curtime, "========================="));
+        //LOG_DEBUG(my2string("==============Current Time is : " , curtime, "========================="));
         if(Finished) return;
-        curtime += _config.timestep;
         doUpdate();
         isClean(); //每次判断是否为空了
+        curtime += _config.timestep;
     }
 	LOG_FATAL(my2string("Total time is : " , curtime));
 }
@@ -92,8 +141,9 @@ void TFETE::check(){
 }
 
 bool TFETE::isClean(){
+	if(curtime <= 1810) return false;
     for(auto mlink : links){
-        if(mlink.second->wait_queue.size() != 0){
+        if(mlink.second->poolnum != 0){
             return false; 
         }
     }

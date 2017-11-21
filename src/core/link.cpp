@@ -15,7 +15,8 @@ Link::Link(){
 
 Link::Link(int32_t id , double length , double maxspeed, int totalnum):
 	id(id),length(length),maxspeed(maxspeed),lane_num(1),
-	capacity(100),totalnum(totalnum),poolnum(0) { 
+	capacity(100),totalnum(totalnum),poolnum(0),
+	inflow(0),outflow(0){ 
 }
 
 Link::Link(const Link& link){
