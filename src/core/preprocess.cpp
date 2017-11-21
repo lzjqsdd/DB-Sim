@@ -201,14 +201,16 @@ void PProcess::sampleByNode(const string& path,const int& node_id){
 				ofile.open(outfile.c_str(),std::ios::app);
 
 				ofile << frame;
+				ofile << " " << flinks.size();
 				for(auto link_id : flinks){
 					auto slink = mslink[link_id];
 					ofile << " " << slink->poolnum << " " << slink->outflow;
 				}
 
+				ofile << " " << tlinks.size();
 				for(auto link_id : tlinks){
 					auto slink = mslink[link_id];
-					ofile << " " << slink->poolnum << " " << slink->outflow;
+					ofile << " " << slink->poolnum << " " << slink->inflow;
 				}
 
 				ofile << endl;
