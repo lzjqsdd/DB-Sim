@@ -45,6 +45,7 @@ void Manager::loadConfig(const string&path, Config& gconfig){
         string nodedir;
         string loglevel;
 		string data_path;
+		string sample_outpath;
 
         if(mconfig.lookupValue("global.timestep",timestep)){
             gconfig.timestep = timestep;
@@ -88,6 +89,11 @@ void Manager::loadConfig(const string&path, Config& gconfig){
 		for(int i=0; i < nodeids.getLength(); ++i){
 			gconfig.sample_nodeids.push_back(nodeids[i]);
 		}
+
+        if(mconfig.lookupValue("sample.outpath",sample_outpath)){
+			gconfig.sample_outpath = sample_outpath;
+        }
+		
 
     }catch(const libconfig::FileIOException &fioex){
         std::cerr << "can't read config file!" << std::endl;

@@ -25,6 +25,7 @@ class Config{
         map<int,int> demands;
 		vector<int> sample_linkids; //需要采样的link
 		vector<int> sample_nodeids; //需要采样的node
+		string sample_outpath; //采样输出位置
 };
 
 #endif

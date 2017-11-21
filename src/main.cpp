@@ -8,10 +8,12 @@
 #include "./core/link.h"
 #include "./core/node.h"
 #include "./core/config.h"
+#include "./core/preprocess.h"
+
 #include "./core/bfete.h"
 #include "./core/cfete.h"
-#include "./core/fete.h"
-#include "./core/preprocess.h"
+#include "./core/gfete.h"
+#include "./core/tfete.h"
 
 #include "./utils/tinyxml2.h"
 #include "./core/manager.h"
@@ -31,14 +33,15 @@ int main()
     initlog(config.log_level);
 
     //创建推演对象
-    FETE fete(config); //主要处理类
-	FETEIf &f = fete;
+    GFETE gfete(config); //主要处理类
+	FETEIf &f = gfete;
+
 	f.init();
 
 	//采样
 	if(config.sample){
 		LOG_TRACE("sample ...");
-		PProcess processor(config.data_path,"car",config.timestep,config.data_path,f.paths, f.nodes);
+		PProcess processor(config.data_path,"car",config.timestep,config.sample_outpath,f.paths, f.nodes);
 		processor.init();
 		for(auto nodeid : config.sample_nodeids)
 			processor.doSampleByNode(nodeid);

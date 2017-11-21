@@ -8,12 +8,12 @@
 #include <map>
 #include <set>
 
-//Grawron's model
-class FETE: public FETEIf {
+//Test model for static input and output
+class TFETE: public FETEIf {
     public:
-        FETE();
-        FETE(const Config &config);
-        FETE& operator=(const FETE& fete);
+        TFETE();
+        TFETE(const Config &config);
+        TFETE& operator=(const TFETE& fete);
 
         void loadNetwork(); //从xml中加载路网
         void init(); //初始化需求

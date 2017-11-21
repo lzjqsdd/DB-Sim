@@ -4,7 +4,8 @@ Config::Config():
 	config_path("../config"),
 	log_level(logging::trivial::trace),
 	sample(false),
-	data_path("../data")
+	data_path("../data"),
+	sample_outpath("../data/sample")
 {
 }
 
@@ -21,6 +22,7 @@ Config::Config(const Config& config){
 	this->data_path = config.data_path;
 	this->sample_linkids = config.sample_linkids;
 	this->sample_nodeids = config.sample_nodeids;
+	this->sample_outpath= config.sample_outpath;
 }
 
 Config& Config::operator=(const Config& config){
@@ -37,6 +39,7 @@ Config& Config::operator=(const Config& config){
 		this->data_path = config.data_path;
 		this->sample_linkids = config.sample_linkids;
 		this->sample_nodeids = config.sample_nodeids;
+		this->sample_outpath= config.sample_outpath;
     }
     return *this;
 }
@@ -65,6 +68,7 @@ ostream& operator<<(ostream& os, const Config& config){
 		for(auto nodeid : config.sample_nodeids){
 			os << " " << nodeid;
 		}
+		os << endl << "\tsample_outpath: " << config.sample_outpath;
 		os << endl << "}";
 	}
     return os;

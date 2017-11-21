@@ -1,20 +1,20 @@
-#include "fete.h"
+#include "gfete.h"
 #include "type.h"
 #include "../utils/tool.hpp"
 
 #include <set>
 #include <algorithm>
 
-FETE::FETE(){
+GFETE::GFETE(){
     Finished = false;
 }
 
-FETE::FETE(const Config &config){ 
+GFETE::GFETE(const Config &config){ 
     this->_config = config;
     this->Finished = false;
 }
 
-FETE& FETE::operator=(const FETE& fete){
+GFETE& GFETE::operator=(const GFETE& fete){
     //暂未处理
 }
 
@@ -22,7 +22,7 @@ FETE& FETE::operator=(const FETE& fete){
 /**********************************/
 
 
-void FETE::loadNetwork(){
+void GFETE::loadNetwork(){
     //加载links和nodes
     _manager->loadLinks(_config.pathdir, links, paths);
     _manager->loadNodes(_config.nodedir, nodes);
@@ -47,24 +47,24 @@ void FETE::loadNetwork(){
 	
 }
 
-void FETE::init(){
+void GFETE::init(){
     //加载路网
-    LOG_TRACE("init fete ...");
+    LOG_TRACE("init gawron's model ...");
     loadNetwork();
     curtime = 0;
     curnum = 0;
 }
 
-Config FETE::getConfig(){
+Config GFETE::getConfig(){
     return _config;
 }
 
-vector<vector<int>> FETE::getPaths(){
+vector<vector<int>> GFETE::getPaths(){
     return paths;
 }
 
 
-void FETE::generate(){
+void GFETE::generate(){
     //根据起点的link进入场景
     for(auto sid : startIds){
         auto link = links[sid];
@@ -84,7 +84,7 @@ void FETE::generate(){
 }
 
 //以下实现的是grawon's的模型
-void FETE::doUpdate(){ 
+void GFETE::doUpdate(){ 
     //计算每个增量
 
     generate();
@@ -137,7 +137,7 @@ void FETE::doUpdate(){
     }
     //更新队列
 }
-void FETE::start(){
+void GFETE::start(){
     while(!Finished){
         LOG_DEBUG(my2string("==============Current Time is : " , curtime, "========================="));
         if(Finished) return;
@@ -148,11 +148,11 @@ void FETE::start(){
 	LOG_FATAL(my2string("Total time is : " , curtime));
 }
 
-void FETE::check(){
+void GFETE::check(){
     
 }
 
-bool FETE::isClean(){
+bool GFETE::isClean(){
     for(auto mlink : links){
         if(mlink.second->wait_queue.size() != 0){
             return false; 
