@@ -9,6 +9,7 @@ class Agent{
     public:
         Agent();
         Agent(int id, int linkid);
+        Agent(int id, int linkid, int pathid);
         Agent(const Agent& agent);
         Agent& operator=(const Agent& agent);
         ~Agent();
@@ -22,6 +23,7 @@ class Agent{
         double type; //different agent type
         double length; //car length
         double arrival_time; //the time when arrival the link end
+		int pathid; //当前car属于哪个path
 };
 
 #endif

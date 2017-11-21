@@ -5,6 +5,7 @@
 
 #include<iostream>
 #include<map>
+#include<vector>
 using namespace std;
 
 class Config{
@@ -22,6 +23,8 @@ class Config{
 		string data_path;
         logging::trivial::severity_level log_level;
         map<int,int> demands;
+		vector<int> sample_linkids; //需要采样的link
+		vector<int> sample_nodeids; //需要采样的node
 };
 
 #endif

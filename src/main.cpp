@@ -40,11 +40,9 @@ int main()
 		LOG_TRACE("sample ...");
 		PProcess processor(config.data_path,"car",config.timestep,config.data_path,f.paths, f.nodes);
 		processor.init();
-		processor.doSampleByNode(2062);
+		for(auto nodeid : config.sample_nodeids)
+			processor.doSampleByNode(nodeid);
 	}
 
-
 	f.start();
-    //fete.init();
-    //fete.start();
 }

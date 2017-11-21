@@ -45,6 +45,7 @@ void Manager::loadConfig(const string&path, Config& gconfig){
         string nodedir;
         string loglevel;
 		string data_path;
+
         if(mconfig.lookupValue("global.timestep",timestep)){
             gconfig.timestep = timestep;
         }
@@ -64,6 +65,7 @@ void Manager::loadConfig(const string&path, Config& gconfig){
             gconfig.log_level = str2enum(loglevel);
         }
 
+
         const libconfig::Setting &demands = mconfig.lookup("demands");
         int count = demands.getLength();
 
@@ -78,11 +80,19 @@ void Manager::loadConfig(const string&path, Config& gconfig){
 
         }
 
+		const libconfig::Setting& linkids = mconfig.lookup("sample.linkids");
+		for(int i=0; i < linkids.getLength(); ++i){
+			gconfig.sample_linkids.push_back(linkids[i]);
+		}
+		const libconfig::Setting& nodeids = mconfig.lookup("sample.nodeids");
+		for(int i=0; i < nodeids.getLength(); ++i){
+			gconfig.sample_nodeids.push_back(nodeids[i]);
+		}
+
     }catch(const libconfig::FileIOException &fioex){
         std::cerr << "can't read config file!" << std::endl;
         return;
-    }
-    catch(const libconfig::ParseException &pex)
+    }catch(const libconfig::ParseException &pex)
     {
         std::cerr << "Parse error at" << pex.getFile() << ":" << pex.getLine()
                   << "-" << pex.getError() << std::endl;

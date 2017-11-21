@@ -53,15 +53,15 @@ void PProcess::sampleByTime(const string& path){
 			istringstream is(line);
 			is >> frame >> num;
 
-            int carid,type,linkid;
+            int carid,type,linkid,pathid;
             double x,y,zh;
 			for(int i = 0; i < num; ++i){
 				std::getline(fin,line);
                 istringstream is(line);
-                is >> carid >> x >> y >> type >> linkid >> zh;
+                is >> carid >> x >> y >> type >> linkid >> zh >> pathid;
                 //LOG_TRACE(my2string("carid:",carid,"\tposx: ",x,"\tposy: ",y));
                 if(magent.find(carid) == magent.end()){
-                    magent[carid] = new Agent(carid, linkid);
+                    magent[carid] = new Agent(carid, linkid,pathid);
 					mslink[linkid]->inflow++;
 					mslink[linkid]->poolnum++;
                 }
