@@ -44,14 +44,14 @@ vector<string> PProcess::getFilelist(const string& dirpath,const string& pattern
 	return filelist;
 }
 
-void PProcess::sampleByTime(const string& path){
+void PProcess::sampleByTime(const string& path, bool lastfile){
 
 	try{
 		fstream fin(path.c_str(),std::ifstream::in);
 		string line;
 		set<int> pre_inscene;
+		int frame,num;
 		while(std::getline(fin,line)){
-			int frame,num;
 			istringstream is(line);
 			is >> frame >> num;
 
@@ -110,6 +110,22 @@ void PProcess::sampleByTime(const string& path){
                 ofile.close();
             }
 		}
+
+		
+		if(lastfile && frame % interval != 0) //最后一段不满足一个采样间隔
+		{
+			frame = interval * (frame/interval + 1);
+			ofstream ofile;
+			string outfile = outpath + "/sample.txt";
+			ofile.open(outfile.c_str(),std::ios::app);
+			ofile << frame << endl;
+			for(auto slink : mslink){
+				ofile << slink.first << " " << slink.second->inflow << " " << slink.second->outflow
+					<< " " << slink.second->poolnum << endl;
+			}
+			ofile.close();
+		}
+
 	}catch(...){
 		LOG_FATAL("can't read file content!!!");
 	}
@@ -181,6 +197,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 				}
             }
 		}
+
 		if(lastfile && frame % interval != 0) //最后一段不满足一个采样间隔
 		{
 			frame = interval * (frame/interval + 1);
@@ -203,14 +220,14 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 	}
 }
 
-void PProcess::sampleByNode(const string& path,vector<int> node_ids){
+void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfile){
 
 	try{
 		fstream fin(path.c_str(),std::ifstream::in);
 		string line;
 		set<int> pre_inscene;
+		int frame,num;
 		while(std::getline(fin,line)){
-			int frame,num;
 			istringstream is(line);
 			is >> frame >> num;
 
@@ -281,6 +298,35 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids){
 				}
             }
 		}
+
+		
+		if(lastfile && frame % interval != 0) //最后一段不满足一个采样间隔
+		{
+			frame = interval * (frame/interval + 1);
+			for(auto node_id : node_ids){
+				ofstream ofile;
+				string outfile = outpath + "/" + std::to_string(node_id) + "_node_sample.txt";
+				ofile.open(outfile.c_str(),std::ios::app);
+
+				ofile << frame;
+				ofile << " " << nodes[node_id]->flinks.size();
+				for(auto link_id : nodes[node_id]->flinks){
+					auto slink = mslink[link_id];
+					ofile << " " << slink->poolnum << " " << slink->outflow;
+				}
+
+				ofile << " " << nodes[node_id]->tlinks.size();
+				for(auto link_id : nodes[node_id]->tlinks){
+					auto slink = mslink[link_id];
+					ofile << " " << slink->poolnum << " " << slink->inflow;
+				}
+
+				ofile << endl;
+				ofile.flush();
+				ofile.close();
+			}
+		}
+
 	}catch(...){
 		LOG_FATAL("can't read file content!!!");
 	}
@@ -299,9 +345,11 @@ void PProcess::init(){
 
 void PProcess::doSampleByTime(){
 	vector<string> filelist = getFilelist(inpath,pattern);
+	int filenum = 1;
 	for(auto filename : filelist){
 		LOG_TRACE(my2string("read file: ",filename));
-		sampleByTime(filename);
+		sampleByTime(filename,filenum == filelist.size());
+		filenum++;
 	}
 }
 
@@ -317,8 +365,10 @@ void PProcess::doSampleByLink(vector<int> linkids){
 
 void PProcess::doSampleByNode(vector<int> nodeids){
 	vector<string> filelist = getFilelist(inpath,pattern);
+	int filenum = 1;
 	for(auto filename : filelist){
 		LOG_TRACE(my2string("read file: ",filename));
-		sampleByNode(filename,nodeids);
+		sampleByNode(filename,nodeids,filenum ==  filelist.size());
+		filenum++;
 	}
 }
