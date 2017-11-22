@@ -186,7 +186,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 				//LOG_TRACE(my2string("frame:",frame, " num:" ,num));
 				for(auto link_id : link_ids){
 					ofstream ofile;
-					string outfile = outpath + "/" + std::to_string(link_id)+"_sample.txt";
+					string outfile = outpath + "/" + std::to_string(link_id)+"_link_sample.txt";
 					ofile.open(outfile.c_str(),std::ios::app);
 					auto slink = mslink[link_id];
 					ofile <<  frame << " " << slink->inflow << " " << slink->outflow << " " << slink->poolnum << endl;
@@ -203,7 +203,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 			frame = interval * (frame/interval + 1);
 			for(auto link_id : link_ids){
 				ofstream ofile;
-				string outfile = outpath + "/" + std::to_string(link_id)+"_sample.txt";
+				string outfile = outpath + "/" + std::to_string(link_id)+"_link_sample.txt";
 				ofile.open(outfile.c_str(),std::ios::app);
 				auto slink = mslink[link_id];
 				ofile <<  frame << " " << slink->inflow << " " << slink->outflow << " " << slink->poolnum << endl;
@@ -371,4 +371,12 @@ void PProcess::doSampleByNode(vector<int> nodeids){
 		sampleByNode(filename,nodeids,filenum ==  filelist.size());
 		filenum++;
 	}
+}
+
+void PProcess::clean(){
+	if(bf::exists(outpath)){
+		uint32_t delete_num = bf::remove_all(outpath);
+		LOG_DEBUG(my2string("Remove ", delete_num, " Sample File."));	
+	}
+	bf::create_directory(outpath);
 }

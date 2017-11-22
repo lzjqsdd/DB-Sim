@@ -43,12 +43,25 @@ int main()
 		LOG_TRACE("sample ...");
 		PProcess processor(config.data_path,"car",config.timestep,config.sample_outpath,f.paths, f.nodes);
 		processor.init();
+		processor.clean();
+
+		//sample by link
 		vector<int> links;
 		for(auto link:f.links) links.push_back(link.first);
+
 		if(config.sample_linkids.size() != 0)
 			processor.doSampleByLink(config.sample_linkids);
 		else
 			processor.doSampleByLink(links);
+
+		//sample by nodes
+		vector<int> nodes;
+		for(auto node:f.nodes) nodes.push_back(node.first);
+		if(config.sample_nodeids.size() != 0)
+			processor.doSampleByNode(config.sample_nodeids);
+		else
+			processor.doSampleByNode(nodes);
+
 	}
 	else 
 		f.start();
