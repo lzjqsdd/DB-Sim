@@ -115,7 +115,7 @@ void PProcess::sampleByTime(const string& path){
 	}
 }
 
-void PProcess::sampleByLink(const string& path,vector<int> link_ids){
+void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfile){
 
 	try{
 		fstream fin(path.c_str(),std::ifstream::in);
@@ -181,7 +181,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids){
 				}
             }
 		}
-		if(frame % interval != 0) //最后一段不满足一个采样间隔
+		if(lastfile && frame % interval != 0) //最后一段不满足一个采样间隔
 		{
 			frame = interval * (frame/interval + 1);
 			for(auto link_id : link_ids){
@@ -307,9 +307,11 @@ void PProcess::doSampleByTime(){
 
 void PProcess::doSampleByLink(vector<int> linkids){
 	vector<string> filelist = getFilelist(inpath,pattern);
+	int filenum = 1;
 	for(auto filename : filelist){
 		LOG_TRACE(my2string("read file: ",filename));
-		sampleByLink(filename,linkids);
+		sampleByLink(filename,linkids,filenum == filelist.size());
+		filenum++;
 	}
 }
 

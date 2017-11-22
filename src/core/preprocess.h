@@ -30,7 +30,7 @@ class PProcess{
 		void init(); //初始化各个link的数量
 		vector<string> getFilelist(const string& dirpath,const string& pattern);
 		void sampleByTime(const string& path);
-		void sampleByLink(const string& path,vector<int> link_ids);
+		void sampleByLink(const string& path,vector<int> link_ids, bool lastfile);
 		void sampleByNode(const string& path,vector<int> node_ids);
 	private:
 		string inpath; //output_path

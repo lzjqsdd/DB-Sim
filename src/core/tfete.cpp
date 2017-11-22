@@ -141,7 +141,7 @@ void TFETE::check(){
 }
 
 bool TFETE::isClean(){
-	if(curtime <= 1810) return false;
+	if(curtime <= 1800+_config.timestep) return false;
     for(auto mlink : links){
         if(mlink.second->poolnum != 0){
             return false; 
