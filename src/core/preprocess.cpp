@@ -106,6 +106,8 @@ void PProcess::sampleByTime(const string& path, bool lastfile){
                 for(auto slink : mslink){
                    ofile << slink.first << " " << slink.second->inflow << " " << slink.second->outflow
                         << " " << slink.second->poolnum << endl;
+					slink.second->inflow = 0;
+					slink.second->outflow = 0;
                 }
                 ofile.close();
             }
@@ -280,21 +282,24 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 					ofile.open(outfile.c_str(),std::ios::app);
 
 					ofile << frame;
-					ofile << " " << nodes[node_id]->flinks.size();
+					//ofile << " " << nodes[node_id]->flinks.size();
 					for(auto link_id : nodes[node_id]->flinks){
 						auto slink = mslink[link_id];
 						ofile << " " << slink->poolnum << " " << slink->outflow;
+						slink->outflow = 0;
 					}
 
-					ofile << " " << nodes[node_id]->tlinks.size();
+					//ofile << " " << nodes[node_id]->tlinks.size();
 					for(auto link_id : nodes[node_id]->tlinks){
 						auto slink = mslink[link_id];
 						ofile << " " << slink->poolnum << " " << slink->inflow;
+						slink->inflow = 0;
 					}
 
 					ofile << endl;
 					ofile.flush();
 					ofile.close();
+
 				}
             }
 		}
@@ -309,13 +314,13 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 				ofile.open(outfile.c_str(),std::ios::app);
 
 				ofile << frame;
-				ofile << " " << nodes[node_id]->flinks.size();
+				//ofile << " " << nodes[node_id]->flinks.size();
 				for(auto link_id : nodes[node_id]->flinks){
 					auto slink = mslink[link_id];
 					ofile << " " << slink->poolnum << " " << slink->outflow;
 				}
 
-				ofile << " " << nodes[node_id]->tlinks.size();
+				//ofile << " " << nodes[node_id]->tlinks.size();
 				for(auto link_id : nodes[node_id]->tlinks){
 					auto slink = mslink[link_id];
 					ofile << " " << slink->poolnum << " " << slink->inflow;
