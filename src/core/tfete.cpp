@@ -52,7 +52,8 @@ void TFETE::loadStaticData(const string& datapath)
 	//map<frame,map<linkid,pair<inflow,outflow>>
 	for(auto mlink : links){
 		try{
-			string link_datapath = my2string(datapath,"/",mlink.first,"_sample.txt");
+			string link_datapath = my2string(datapath,"/",mlink.first,"_link_sample.txt");
+			LOG_TRACE(link_datapath);
 			fstream fin(link_datapath.c_str(), std::ifstream::in);
 			string line;
 			int frame,inflow,outflow,poolnum;
@@ -141,7 +142,7 @@ void TFETE::check(){
 }
 
 bool TFETE::isClean(){
-	if(curtime <= 1800+_config.timestep) return false;
+	if(curtime <= (1820+_config.timestep)) return false;
     for(auto mlink : links){
         if(mlink.second->poolnum != 0){
             return false; 
