@@ -60,7 +60,7 @@ void TFETE::loadStaticData(const string& datapath)
 			while(std::getline(fin,line)){
 				istringstream is(line);
 				is >> frame >> inflow >> outflow >> poolnum;
-				static_data[mlink.first][frame] = new LinkData(inflow,outflow,poolnum);
+				static_data[mlink.first][frame] = shared_ptr<LinkData>(new LinkData(inflow,outflow,poolnum));
 			}
 			LOG_TRACE(my2string("load static data link : ",mlink.first, " done."));
 		}catch(...){

@@ -23,7 +23,7 @@ using namespace std;
 
 class PProcess{
 	public:
-		PProcess(const string& inpath,const string& pattern,const int &interval,const string& outpath,vector<vector<int>>& paths, map<int,Node*>& nodes);
+		PProcess(const string& inpath,const string& pattern,const int &interval,const string& outpath,vector<vector<int>>& paths, map<int,shared_ptr<Node>>& nodes);
 		void doSampleByTime(); //采样函数
 		void doSampleByLink(vector<int> linkid); //按照link单独采样
 		void doSampleByNode(vector<int> nodeid); //按照link单独采样
@@ -39,9 +39,9 @@ class PProcess{
 		int interval; //采样间隔
 		string outpath; //output_path
 		vector<vector<int>> &paths;
-		map<int,Link*> mslink; //记录采样统计，<id,slink>
-		map<int,Agent*> magent; //记录每一时刻Agent的信息
-        map<int,Node*> &nodes; //根据node采样用到
+		map<int,shared_ptr<Link>> mslink; //记录采样统计，<id,slink>
+		map<int,shared_ptr<Agent>> magent; //记录每一时刻Agent的信息
+        map<int,shared_ptr<Node>> &nodes; //根据node采样用到
 };
 
 

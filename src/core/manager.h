@@ -17,18 +17,18 @@ using namespace std;
 //单例模式
 class Manager{
     public:
-        static Manager* getManager();
+        static shared_ptr<Manager> getManager();
         void init();
 
         void loadConfig(const string& filepath, Config& config);
-        void loadLinks(const string& filepath, map<int, Link*>& links, vector<vector<int>>& paths);
-        void loadNodes(const string& filepath, map<int, Node*>& nodes);
-		void fillLinks(const vector<vector<int>>& paths,map<int, Link*>& links);
+        void loadLinks(const string& filepath, map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths);
+        void loadNodes(const string& filepath, map<int, shared_ptr<Node>>& nodes);
+		void fillLinks(const vector<vector<int>>& paths,map<int, shared_ptr<Link>>& links);
 
     protected:
         Manager();
     private:
-        static Manager * _manager;
+        static shared_ptr<Manager> _manager;
 };
 
 

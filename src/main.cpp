@@ -28,7 +28,7 @@ int main()
 {
     //加载配置文件
     Config config;
-    Manager * manager = Manager::getManager();
+    shared_ptr<Manager> manager = Manager::getManager();
     manager->loadConfig("../config/config.conf",config);
     LOG_TRACE(config);
 

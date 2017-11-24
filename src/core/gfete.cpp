@@ -70,7 +70,7 @@ void GFETE::generate(){
         auto link = links[sid];
         //如果是起点,并且当前的人还没全部进入场景，判断是否有空闲空间
         while(pcurnum[sid] < _config.demands[sid] && link->totalnum > link->poolnum){
-            Agent * agent = new Agent(++curnum, link->id);
+            shared_ptr<Agent> agent(new Agent(++curnum, link->id));
             //当前进入的车辆的到达时间，等于 （当前时间点 + 队列最后的车辆到达的时间 + 自由时间)
             agent->arrival_time = curtime + link->length * 1.0 / 1000.0 / link->maxspeed * 3600 ;//先简单处理，按照全自由的时间(这里没有速度啊)
             LOG_DEBUG(my2string("Agent",agent->id," comes in link", link->id));

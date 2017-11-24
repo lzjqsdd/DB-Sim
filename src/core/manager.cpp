@@ -19,12 +19,12 @@ using namespace tinyxml2;
 using namespace boost::algorithm;
 namespace logging = boost::log;
 
-Manager * Manager::_manager = new Manager();
+shared_ptr<Manager> Manager::_manager = shared_ptr<Manager>(new Manager());
 
 Manager::Manager(){
 }
 
-Manager * Manager::getManager(){
+shared_ptr<Manager> Manager::getManager(){
     return _manager;
 }
 
@@ -106,7 +106,7 @@ void Manager::loadConfig(const string&path, Config& gconfig){
     }
 }
 
-void Manager::loadLinks(const string& filepath, map<int, Link*>& links, vector<vector<int>>& paths){
+void Manager::loadLinks(const string& filepath, map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths){
     //遍历path.xml填充links
     //load config
     XMLDocument doc;
@@ -132,7 +132,7 @@ void Manager::loadLinks(const string& filepath, map<int, Link*>& links, vector<v
 
             LOG_TRACE(my2string("linkid is :" ,id , ", length is : " , lengthNode->Value() , ", maxspeed is: " , speedNode->Value() , ", totalnum is: " , totalnum));
 
-            Link* mlink = new Link(id,length,maxspeed,totalnum);
+            shared_ptr<Link> mlink = shared_ptr<Link>(new Link(id,length,maxspeed,totalnum));
             links[id] = mlink;
             path.push_back(id);
 
@@ -143,7 +143,7 @@ void Manager::loadLinks(const string& filepath, map<int, Link*>& links, vector<v
     }
 }
 
-void Manager::loadNodes(const string& path, map<int, Node*>& nodes){
+void Manager::loadNodes(const string& path, map<int, shared_ptr<Node>>& nodes){
     //遍历node.xml填充nodes
     XMLDocument doc;
     doc.LoadFile(path.c_str());
@@ -171,14 +171,14 @@ void Manager::loadNodes(const string& path, map<int, Node*>& nodes){
         for(vector<string>::iterator it = flinks_v.begin();it!=flinks_v.end();++it) flinks_id.push_back(boost::lexical_cast<int>(*it));
         for(vector<string>::iterator it = tlinks_v.begin();it!=tlinks_v.end();++it) tlinks_id.push_back(boost::lexical_cast<int>(*it));
 
-        Node * pnode = new Node(id, flinks_id, tlinks_id);
+        shared_ptr<Node> pnode = shared_ptr<Node>(new Node(id, flinks_id, tlinks_id));
         nodes[id] = pnode;
 
         nodeElement = nodeElement->NextSiblingElement();
     }
 }
 
-void Manager::fillLinks(const vector<vector<int>>& paths , map<int, Link*>& links){
+void Manager::fillLinks(const vector<vector<int>>& paths , map<int, shared_ptr<Link>>& links){
 	//遍历path中的每个link，来处理link的前后关系
 	for(auto path : paths){
 		for(int i = 1; i<path.size(); ++i){
