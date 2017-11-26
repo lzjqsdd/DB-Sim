@@ -6,12 +6,13 @@
 #include <stdint.h>
 #include <queue>
 #include <set>
+#include <memory>
 using namespace std;
 
 
 /****************************************/
 struct cmp{
-	bool operator()(Agent *a, Agent*b){
+	bool operator()(shared_ptr<Agent> a, shared_ptr<Agent> b){
 		return a->arrival_time < b->arrival_time;
 	}
 };
@@ -36,7 +37,7 @@ public:
     double poolnum;
     double totalnum; //总可以容纳的车辆数
     double buffernum;
-    priority_queue<Agent*, vector<Agent *>,  cmp> wait_queue;
+    priority_queue<shared_ptr<Agent>, vector<shared_ptr<Agent>>,  cmp> wait_queue;
 
 
     //for data sampling

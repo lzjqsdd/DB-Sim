@@ -14,7 +14,7 @@ bool cmp(std::string const &arg_a, std::string const &arg_b) {
 
 PProcess::PProcess(const string& inpath, const string& pattern,
 		const int &interval,const string& outpath, 
-		vector<vector<int>>& paths, map<int,Node*>& nodes):
+		vector<vector<int>>& paths, map<int,shared_ptr<Node>>& nodes):
 	inpath(inpath),
 	pattern(pattern),
 	interval(interval),
@@ -64,7 +64,7 @@ void PProcess::sampleByTime(const string& path, bool lastfile){
                 is >> carid >> x >> y >> type >> linkid >> zh >> pathid;
                 //LOG_TRACE(my2string("carid:",carid,"\tposx: ",x,"\tposy: ",y));
                 if(magent.find(carid) == magent.end()){
-                    magent[carid] = new Agent(carid, linkid,pathid);
+                    magent[carid] = shared_ptr<Agent>(new Agent(carid, linkid,pathid));
 					mslink[linkid]->inflow++;
 					mslink[linkid]->poolnum++;
                 }
@@ -153,7 +153,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
                 is >> carid >> x >> y >> type >> linkid >> zh;
                 //LOG_TRACE(my2string("carid:",carid,"\tposx: ",x,"\tposy: ",y));
                 if(magent.find(carid) == magent.end()){
-                    magent[carid] = new Agent(carid, linkid);
+                    magent[carid] = shared_ptr<Agent>(new Agent(carid, linkid,pathid));
 					mslink[linkid]->inflow++;
 					mslink[linkid]->poolnum++;
                 }
@@ -242,7 +242,7 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                 is >> carid >> x >> y >> type >> linkid >> zh;
                 //LOG_TRACE(my2string("carid:",carid,"\tposx: ",x,"\tposy: ",y));
                 if(magent.find(carid) == magent.end()){
-                    magent[carid] = new Agent(carid, linkid);
+                    magent[carid] = shared_ptr<Agent>(new Agent(carid, linkid));
 					mslink[linkid]->inflow++;
 					mslink[linkid]->poolnum++;
                 }
@@ -342,7 +342,7 @@ void PProcess::init(){
     for(auto path: paths){
         for(auto linkid : path){
             if(mslink.find(linkid) == mslink.end()){
-                mslink[linkid] = new Link();
+                mslink[linkid] = shared_ptr<Link>(new Link());
             }
         }
     }

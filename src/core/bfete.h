@@ -22,8 +22,8 @@ class FETEIf{
         virtual vector<vector<int>> getPaths() = 0;
 
         Config _config; //从配置文件.conf中读取文件
-        map<int, Link*> links; //全局唯一实际的数据存储
-        map<int, Node*> nodes; //方便直接从id检索所有的信息
+        map<int, shared_ptr<Link>> links; //全局唯一实际的数据存储
+        map<int, shared_ptr<Node>> nodes; //方便直接从id检索所有的信息
         int curtime; //当前模拟的时间轴
         bool Finished; //判断是否终止模拟
         int curnum; //当前已经有的人数，也用作编号
@@ -35,7 +35,7 @@ class FETEIf{
 		std::map<int,int> pcurnum; //curnum of every path
 
 	protected:
-        Manager * _manager;
+        shared_ptr<Manager> _manager;
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include<sstream>
+#include<chrono>
 
 
 #include "./core/type.h"
@@ -15,17 +16,19 @@
 #include "./core/gfete.h"
 #include "./core/tfete.h"
 
+
 #include "./utils/tinyxml2.h"
 #include "./core/manager.h"
 
 using namespace std;
 using namespace tinyxml2;
 
+
 int main()
 {
     //加载配置文件
     Config config;
-    Manager * manager = Manager::getManager();
+    shared_ptr<Manager> manager = Manager::getManager();
     manager->loadConfig("../config/config.conf",config);
     LOG_TRACE(config);
 
@@ -63,6 +66,13 @@ int main()
 			processor.doSampleByNode(nodes);
 
 	}
-	else 
+	else{
+        auto stime = chrono::system_clock::now();
 		f.start();
+        auto etime = chrono::system_clock::now();
+        auto duration = chrono::duration_cast<chrono::milliseconds>(etime-stime);
+
+        LOG_TRACE(my2string("Total Time is : ", duration.count()," ms"));
+    }
+
 }

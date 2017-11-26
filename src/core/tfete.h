@@ -28,7 +28,7 @@ class TFETE: public FETEIf {
 
         Config getConfig();
         vector<vector<int>> getPaths();
-		map<int,map<int,LinkData*>> static_data;
+		map<int,map<int,shared_ptr<LinkData>>> static_data;
 
 	public:
 		class LinkData{
