@@ -37,3 +37,4 @@ build/*
 .vscode/*
 data/*
 .cmaketools.json
+model/.ipynb_checkpoints/

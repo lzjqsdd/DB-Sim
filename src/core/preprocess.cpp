@@ -14,13 +14,15 @@ bool cmp(std::string const &arg_a, std::string const &arg_b) {
 
 PProcess::PProcess(const string& inpath, const string& pattern,
 		const int &interval,const string& outpath, 
-		vector<vector<int>>& paths, map<int,shared_ptr<Node>>& nodes):
+		vector<vector<int>>& paths, map<int,shared_ptr<Node>>& nodes,
+        map<int,shared_ptr<Link>>& links):
 	inpath(inpath),
 	pattern(pattern),
 	interval(interval),
 	outpath(outpath),
     paths(paths),
-	nodes(nodes){ 
+	nodes(nodes),
+    links(links){ 
 }
 
 vector<string> PProcess::getFilelist(const string& dirpath,const string& pattern){
@@ -302,7 +304,8 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 
                 //计算link的平均速度
                 for(auto mlink : mslink){
-                    mlink.second->avg_speed = mlink.second->sum_zh / mlink.second->sum_frame;
+                    if(mlink.second->sum_frame > 0.0F)
+                        mlink.second->avg_speed = mlink.second->sum_zh / mlink.second->sum_frame;
                 }
 
 				for(auto node_id : node_ids){
@@ -348,7 +351,8 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 
             //计算平均速度
             for(auto mlink : mslink){
-                mlink.second->avg_speed = mlink.second->sum_zh / mlink.second->sum_frame;
+                    if(mlink.second->sum_frame > 0.0F)
+                        mlink.second->avg_speed = mlink.second->sum_zh / mlink.second->sum_frame;
             }
 
 			for(auto node_id : node_ids){
@@ -386,6 +390,7 @@ void PProcess::init(){
         for(auto linkid : path){
             if(mslink.find(linkid) == mslink.end()){
                 mslink[linkid] = shared_ptr<Link>(new Link());
+                mslink[linkid]->length = links[linkid]->length;
             }
         }
     }

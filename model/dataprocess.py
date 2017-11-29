@@ -1,1 +1,7 @@
-'''负责数据预处理，数据分析
+#node/link process and analysis
+
+
+#load node
+def loadNode(node_path):
+
+    return

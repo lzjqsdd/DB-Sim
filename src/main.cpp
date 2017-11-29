@@ -44,7 +44,7 @@ int main()
 	//采样
 	if(config.sample){
 		LOG_TRACE("sample ...");
-		PProcess processor(config.data_path,"car",config.timestep,config.sample_outpath,f.paths, f.nodes);
+		PProcess processor(config.data_path,"car",config.timestep,config.sample_outpath,f.paths, f.nodes, f.links);
 		processor.init();
 		processor.clean();
 
@@ -52,10 +52,10 @@ int main()
 		vector<int> links;
 		for(auto link:f.links) links.push_back(link.first);
 
-		//if(config.sample_linkids.size() != 0)
-		//	processor.doSampleByLink(config.sample_linkids);
-		//else
-		//	processor.doSampleByLink(links);
+		if(config.sample_linkids.size() != 0)
+			processor.doSampleByLink(config.sample_linkids);
+		else
+			processor.doSampleByLink(links);
 
 		//sample by nodes
 		vector<int> nodes;
