@@ -14,7 +14,7 @@ Agent::Agent(int id, int linkid, int pathid):
 Agent::Agent(int id, int linkid):
 	id(id), linkid(linkid) , cur_speed(0),
 	type(0), length(CARLEN), arrival_time(0),
-	pathid(pathid){
+	zh(0.0F){
 }
 
 Agent::Agent(const Agent& agent){
@@ -25,6 +25,8 @@ Agent::Agent(const Agent& agent){
     this->length = agent.length;
     this->arrival_time = agent.arrival_time;
 	this->pathid = agent.pathid;
+
+    this->zh = agent.zh;
 }
 
 Agent& Agent::operator=(const Agent& agent){
@@ -36,6 +38,8 @@ Agent& Agent::operator=(const Agent& agent){
         this->length = agent.length;
         this->arrival_time = agent.arrival_time;
 		this->pathid = agent.pathid;
+
+        this->zh = agent.zh;
     }
     return *this;
 }

@@ -24,6 +24,7 @@ class Agent{
         double length; //car length
         double arrival_time; //the time when arrival the link end
 		int pathid; //当前car属于哪个path
+        double zh; //当前所在link的里程
 };
 
 #endif

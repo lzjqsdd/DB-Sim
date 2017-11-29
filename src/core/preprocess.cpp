@@ -245,20 +245,39 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                     magent[carid] = shared_ptr<Agent>(new Agent(carid, linkid));
 					mslink[linkid]->inflow++;
 					mslink[linkid]->poolnum++;
+                    mslink[linkid]->sum_zh += (zh - 0.0F);
+                    mslink[linkid]->sum_frame++;
                 }
                 else{
                     if(magent[carid]->linkid != linkid){
-                        //换道了
+                        //previous link
                         int pre_linkid = magent[carid]->linkid;
                         mslink[pre_linkid]->outflow++;
                         mslink[pre_linkid]->poolnum--;
 
+                        double pre_delta_zh = mslink[pre_linkid]->length - magent[carid]->zh;
+                        double cur_delta_zh = zh;
+
+                        double pre_ratio = pre_delta_zh / (pre_delta_zh + zh);
+
+                        mslink[pre_linkid]->sum_frame+= pre_ratio; //通过前后两端的时间应该按比例分配当前的frame,比如0.2,0.8
+                        mslink[pre_linkid]->sum_zh += (pre_delta_zh); //累加增量的里程
+
+                        //current link
                         mslink[linkid]->inflow++;
                         mslink[linkid]->poolnum++;
+                        mslink[linkid]->sum_frame += (1-pre_ratio);
+                        mslink[linkid]->sum_zh += (zh - 0.0F);
 
                         magent[carid]->linkid = linkid;
                     } 
+                    else{ //still on current link
+                        mslink[linkid]->sum_frame++;
+                        mslink[linkid]->sum_zh += (zh - magent[carid]->zh);
+                    }
                 }
+
+                magent[carid]->zh = zh; //更新里程信息
 				cur_inscene.insert(carid);
             }
 			//计算离开的agent
@@ -268,6 +287,10 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 					int pre_linkid = magent[carid]->linkid;
 					mslink[pre_linkid]->outflow++;
 					mslink[pre_linkid]->poolnum--;
+
+                    mslink[pre_linkid]->sum_frame ++; //这里粗略统计
+                    mslink[pre_linkid]->sum_zh += (mslink[pre_linkid]->length - magent[carid]->zh);
+
 				}	
 			}
 			pre_inscene.swap(cur_inscene);
@@ -276,6 +299,12 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 			//格式
 			//汇入的link数，每个的poolnum、outflow，下游的link的inflow，poolnum
             if(frame % interval == 0){
+
+                //计算link的平均速度
+                for(auto mlink : mslink){
+                    mlink.second->avg_speed = mlink.second->sum_zh / mlink.second->sum_frame;
+                }
+
 				for(auto node_id : node_ids){
 					ofstream ofile;
 					string outfile = outpath + "/" + std::to_string(node_id) + "_node_sample.txt";
@@ -285,15 +314,15 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 					//ofile << " " << nodes[node_id]->flinks.size();
 					for(auto link_id : nodes[node_id]->flinks){
 						auto slink = mslink[link_id];
-						ofile << " " << slink->poolnum << " " << slink->outflow;
-						slink->outflow = 0;
+						ofile << " " << slink->poolnum << " " << slink->outflow << " " << slink->avg_speed;
+						//slink->outflow = 0;
 					}
 
 					//ofile << " " << nodes[node_id]->tlinks.size();
 					for(auto link_id : nodes[node_id]->tlinks){
 						auto slink = mslink[link_id];
-						ofile << " " << slink->poolnum << " " << slink->inflow;
-						slink->inflow = 0;
+						ofile << " " << slink->poolnum << " " << slink->inflow << " " << slink->avg_speed;
+						//slink->inflow = 0;
 					}
 
 					ofile << endl;
@@ -301,6 +330,14 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 					ofile.close();
 
 				}
+                //重置link的统计量
+                for(auto mlink : mslink){
+                    mlink.second->inflow = 0;
+                    mlink.second->outflow = 0;
+                    mlink.second->sum_frame = 0;
+                    mlink.second->sum_zh = 0;
+                    mlink.second->avg_speed = 0;
+                }
             }
 		}
 
@@ -308,6 +345,12 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 		if(lastfile && frame % interval != 0) //最后一段不满足一个采样间隔
 		{
 			frame = interval * (frame/interval + 1);
+
+            //计算平均速度
+            for(auto mlink : mslink){
+                mlink.second->avg_speed = mlink.second->sum_zh / mlink.second->sum_frame;
+            }
+
 			for(auto node_id : node_ids){
 				ofstream ofile;
 				string outfile = outpath + "/" + std::to_string(node_id) + "_node_sample.txt";

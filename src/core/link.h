@@ -43,6 +43,9 @@ public:
     //for data sampling
     double inflow;
     double outflow;
+    double sum_frame;  //统计累积总时间
+    double sum_zh; //统计区间累积总里程
+    double avg_speed;
 };
 
 #endif 
