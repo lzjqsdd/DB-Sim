@@ -38,3 +38,4 @@ build/*
 data/*
 .cmaketools.json
 model/.ipynb_checkpoints/
+model/__pycache__/
