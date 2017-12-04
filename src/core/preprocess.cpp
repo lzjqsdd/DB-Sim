@@ -305,7 +305,7 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                 //计算link的平均速度
                 for(auto mlink : mslink){
                     if(mlink.second->sum_frame > 0.0F)
-                        mlink.second->avg_speed = mlink.second->sum_zh / mlink.second->sum_frame;
+                        mlink.second->avg_speed = mlink.second->sum_zh / (mlink.second->sum_frame * 0.1);
                 }
 
 				for(auto node_id : node_ids){
@@ -352,7 +352,7 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
             //计算平均速度
             for(auto mlink : mslink){
                     if(mlink.second->sum_frame > 0.0F)
-                        mlink.second->avg_speed = mlink.second->sum_zh / mlink.second->sum_frame;
+                        mlink.second->avg_speed = mlink.second->sum_zh / (mlink.second->sum_frame * 0.1);
             }
 
 			for(auto node_id : node_ids){
