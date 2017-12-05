@@ -33,9 +33,11 @@
 
 
 build/*
+cmake-build-debug
 .idea/*
 .vscode/*
 data/*
 .cmaketools.json
 model/.ipynb_checkpoints/
 model/__pycache__/
+model/.idea

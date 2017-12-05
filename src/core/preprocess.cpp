@@ -306,6 +306,9 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                 for(auto mlink : mslink){
                     if(mlink.second->sum_frame > 0.0F)
                         mlink.second->avg_speed = mlink.second->sum_zh / (mlink.second->sum_frame * 0.1);
+                        if(mlink.second->avg_speed > 40)
+                            LOG_WARNING(my2string("frame:",frame,"\tlink :", mlink.first , "\t " ,mlink.second->sum_zh, "\t " , mlink.second->sum_frame, "\tspeed: ",
+                                        mlink.second->avg_speed));
                 }
 
 				for(auto node_id : node_ids){
