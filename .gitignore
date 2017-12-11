@@ -41,3 +41,4 @@ data/*
 model/.ipynb_checkpoints/
 model/__pycache__/
 model/.idea
+model/pkl
