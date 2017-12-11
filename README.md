@@ -15,7 +15,8 @@ calculate evacuation time faster and  more accurately
 - [x] boost library support
 - [x] logging support
 - [x] basic iterator develop
-- [ ] sample for every link
+- [x] sample for every link
+- [ ] train model for each node
 - [ ] import ml model(trained by python and predict by c++)
 
 
