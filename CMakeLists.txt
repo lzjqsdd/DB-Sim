@@ -25,6 +25,10 @@ file(GLOB_RECURSE LIBCONFIG_MODULE_LIB "${LIB_DIR}/libconfig/*.so")
 #boost
 set(BOOST_MODULE_INCLUDE "/usr/include")
 
+#python
+set(PYTHON_MODULE_INCLUDE "/usr/include/python2.7")
+#set(LIBPYTHON_MODULE_LIB "~/APP/anaconda3/lib")
+
 
 #查找库
 find_package(Boost REQUIRED COMPONENTS
@@ -42,8 +46,12 @@ endif()
 include_directories(
     ${LIBCONFIG_MODULE_INCLUDE}
     ${BOOST_MODULE_INCLUDE}
+    ${PYTHON_MODULE_INCLUDE}
 )
 
+link_directories(
+    #    ${LIBPYTHON_MODULE_LIB}
+)
 
 #设置编译选项
 set(CMAKE_C_FLAGS_DEBUG "-g -Wall -o0")
@@ -52,10 +60,12 @@ set(CMAKe_C_FLAGS_RELEASE "-g -Wall -02")
 #添加编译子目录
 aux_source_directory(./src/core SRC_CORE)
 aux_source_directory(./src/utils SRC_UTILS)
+aux_source_directory(./src/model SRC_MODEL)
 
 #设置编译文件
-set(SRC_LIST 
+set(SRC_LIST
     ${SRC_CORE}
+    ${SRC_MODEL}
     src/main.cpp
     )
 
@@ -77,4 +87,5 @@ target_link_libraries(fete
 	boost_filesystem
     pthread
     tinyxml2
+    python2.7
 )

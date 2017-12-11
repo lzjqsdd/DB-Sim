@@ -10,22 +10,28 @@
 #include "./core/node.h"
 #include "./core/config.h"
 #include "./core/preprocess.h"
+#include "./core/manager.h"
 
 #include "./core/bfete.h"
 #include "./core/cfete.h"
 #include "./core/gfete.h"
 #include "./core/tfete.h"
 
+#include "./model/modelmanager.h"
 
 #include "./utils/tinyxml2.h"
-#include "./core/manager.h"
+
 
 using namespace std;
 using namespace tinyxml2;
 
 
-int main()
+int main(int argc, char *argv[])
 {
+
+    shared_ptr<ModelManager> modelManager = ModelManager::getModelManager();
+    modelManager->Test();
+
     //加载配置文件
     Config config;
     shared_ptr<Manager> manager = Manager::getManager();
@@ -74,5 +80,4 @@ int main()
 
         LOG_TRACE(my2string("Total Time is : ", duration.count()," ms"));
     }
-
 }
