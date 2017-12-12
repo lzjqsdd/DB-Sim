@@ -18,6 +18,7 @@
 #include "./core/tfete.h"
 
 #include "./model/modelmanager.h"
+#include "./model/model.h"
 
 #include "./utils/tinyxml2.h"
 
@@ -31,6 +32,13 @@ int main(int argc, char *argv[])
 
     shared_ptr<ModelManager> modelManager = ModelManager::getModelManager();
     modelManager->Test();
+    shared_ptr<Model> rfmodel = modelManager->getRandomForestModel();
+    rfmodel->init();
+
+    rfmodel = modelManager->getXGBoostModel();
+    rfmodel->init();
+    return 0;
+
 
     //加载配置文件
     Config config;

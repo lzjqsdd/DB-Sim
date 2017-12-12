@@ -21,3 +21,13 @@ void ModelManager::Test()
 {
     PyRun_SimpleString("print 'hello fete' \n");
 }
+
+shared_ptr<Model> ModelManager::getRandomForestModel(){
+    shared_ptr<Model> rfmodel = shared_ptr<Model>(new RandomForestModel()); 
+    return rfmodel;
+}
+
+shared_ptr<Model> ModelManager::getXGBoostModel(){
+    shared_ptr<Model> xgboost_model = shared_ptr<Model>(new XGBoostModel()); 
+    return xgboost_model ;
+}

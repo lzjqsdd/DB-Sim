@@ -5,6 +5,9 @@
 #include <memory>
 #include <Python.h>
 
+#include "rf_model.h"
+#include "xgboost_model.h"
+
 using namespace std;
 //model manager
 //init python environment,load model
@@ -12,6 +15,9 @@ class ModelManager{
 public:
     static shared_ptr<ModelManager> getModelManager();
     void Test();
+    shared_ptr<Model> getRandomForestModel();
+    shared_ptr<Model> getXGBoostModel();
+
     ~ModelManager();
 
 protected:
