@@ -4,6 +4,7 @@ project (FETE)
 add_definitions(-std=c++11)
 #设置工程类型
 set(CMAKE_BUILD_TYPE Debug)
+#SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 #set(CMAKE_BUILD_TYPE Release)
 
 #添加自定义宏
@@ -29,6 +30,11 @@ set(BOOST_MODULE_INCLUDE "/usr/include")
 set(PYTHON_MODULE_INCLUDE "/usr/include/python2.7")
 #set(LIBPYTHON_MODULE_LIB "~/APP/anaconda3/lib")
 
+set(XGBOOST_MODULE_INCLUDE "${INCLUDE_DIR}/xgboost")
+file(GLOB_RECURSE XGBOOST_MODULE_LIB "{LIB_DIR}/xgboost/*.so")
+file(GLOB_RECURSE RABIT_MODULE_LIB "{LIB_DIR}/xgboost/librabit.a")
+file(GLOB_RECURSE DMLC_MODULE_LIB "{LIB_DIR}/xgboost/libdmlc.a")
+
 
 #查找库
 find_package(Boost REQUIRED COMPONENTS
@@ -47,6 +53,7 @@ include_directories(
     ${LIBCONFIG_MODULE_INCLUDE}
     ${BOOST_MODULE_INCLUDE}
     ${PYTHON_MODULE_INCLUDE}
+    ${XGBOOST_MODULE_INCLUDE}
 )
 
 link_directories(
@@ -79,6 +86,9 @@ add_executable(fete ${SRC_LIST})
 #链接第三方库
 target_link_libraries(fete
     ${LIBCONFIG_MODULE_LIB}
+    ${XGBOOST_MODULE_LIB}
+    ${RABIT_MODULE_LIB}
+    ${DMLC_MODULE_LIB}
     stdc++
     boost_system
     boost_log

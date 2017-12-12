@@ -1,15 +1,59 @@
-cmake_minimum_required(VERSION 3.0) 
+cmake_minimum_required(VERSION 3.0)
 project(simpleLogger)
 
+
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+option(USE_SHARED FALSE)
 add_definitions(-std=c++11)
 
 
 find_package(Boost 1.58 COMPONENTS log log_setup system thread REQUIRED)
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND OR OPENMP_FOUND)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
 
-include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIRS})
+
+set(INCLUDE_DIR "../include")
+set(LIB_DIR "../lib")
+
+set(XGBOOST_MODULE_INCLUDE "${INCLUDE_DIR}/xgboost")
+set(XGBOOST_MODULE_LIB "${LIB_DIR}/xgboost")
+file(GLOB_RECURSE XGBOOST_MODULE_STATIC_LIB "${LIB_DIR}/xgboost/libxgboost.a")
+file(GLOB_RECURSE DMLC_MODULE_STATIC_LIB "${LIB_DIR}/xgboost/libdmlc.a")
+file(GLOB_RECURSE RABIT_MODULE_STATIC_LIB "${LIB_DIR}/xgboost/librabit.a")
+
+include_directories(
+    ${Boost_INCLUDE_DIR}
+    ${PYTHON_MODULE_INCLUDE}
+    ${XGBOOST_MODULE_INCLUDE}
+    )
+
+link_directories(
+    ${Boost_LIBRARY_DIRS}
+    ${LIB_DIR}/xgboost
+)
 
 add_executable(sample sample.cpp)
-target_link_libraries(sample 
+target_link_libraries(sample
 	boost_system
 	boost_filesystem)
+
+
+add_executable(test_xgboost xgboost_test.cpp)
+
+if(USE_SHARED)
+    message(STATUS "use shared lib for xgboost")
+    target_link_libraries(test_xgboost
+        xgboost
+        pthread
+    )
+else()
+    message(STATUS "use static lib for xgboost")
+    target_link_libraries(test_xgboost
+        ${XGBOOST_MODULE_STATIC_LIB}
+        ${DMLC_MODULE_STATIC_LIB}
+        ${RABIT_MODULE_STATIC_LIB}
+        pthread
+    )
+endif()
