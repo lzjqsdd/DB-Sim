@@ -46,6 +46,7 @@ find_package(Boost REQUIRED COMPONENTS
 		filesystem
         log
         log_setup
+        program_options
         thread)
 
 if(Boost_FOUND)
@@ -106,6 +107,7 @@ target_link_libraries(fete
     boost_log_setup
     boost_thread
 	boost_filesystem
+    boost_program_options
     pthread
     tinyxml2
     python2.7

@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdio>
-#include<sstream>
-#include<chrono>
+#include <sstream>
+#include <chrono>
+
+#include <boost/program_options.hpp>
 
 
 #include "./core/type.h"
@@ -26,10 +28,8 @@
 using namespace std;
 using namespace tinyxml2;
 
-
-int main(int argc, char *argv[])
+void TestModel()
 {
-
     shared_ptr<ModelManager> modelManager = ModelManager::getModelManager();
     modelManager->Test();
     shared_ptr<Model> rfmodel = modelManager->getRandomForestModel();
@@ -37,9 +37,11 @@ int main(int argc, char *argv[])
 
     rfmodel = modelManager->getXGBoostModel();
     rfmodel->init();
-    return 0;
+}
 
 
+void sample()
+{
     //加载配置文件
     Config config;
     shared_ptr<Manager> manager = Manager::getManager();
@@ -52,40 +54,82 @@ int main(int argc, char *argv[])
     //创建推演对象
     TFETE tfete(config); //主要处理类
 	FETEIf &f = tfete;
+	f.init();
+    LOG_TRACE("sample ...");
+    PProcess processor(config.data_path,"car",config.timestep,config.sample_outpath,f.paths, f.nodes, f.links);
+    processor.init();
+    processor.clean();
 
+    //sample by nodes
+    vector<int> nodes;
+    for(auto node:f.nodes) nodes.push_back(node.first);
+    if(config.sample_nodeids.size() != 0)
+        processor.doSampleByNode(config.sample_nodeids);
+    else
+        processor.doSampleByNode(nodes);
+
+}
+
+
+void simulation()
+{
+    //加载配置文件
+    Config config;
+    shared_ptr<Manager> manager = Manager::getManager();
+    manager->loadConfig("../config/config.conf",config);
+    LOG_TRACE(config);
+
+    //初始化日志等级
+    initlog(config.log_level);
+
+    //创建推演对象
+    TFETE tfete(config); //主要处理类
+	FETEIf &f = tfete;
 	f.init();
 
-	//采样
-	if(config.sample){
-		LOG_TRACE("sample ...");
-		PProcess processor(config.data_path,"car",config.timestep,config.sample_outpath,f.paths, f.nodes, f.links);
-		processor.init();
-		processor.clean();
+    auto stime = chrono::system_clock::now();
+    f.start();
+    auto etime = chrono::system_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(etime-stime);
 
-		//sample by link
-		vector<int> links;
-		for(auto link:f.links) links.push_back(link.first);
+    LOG_TRACE(my2string("Total Time is : ", duration.count()," ms"));
+}
 
-		//if(config.sample_linkids.size() != 0)
-		//	processor.doSampleByLink(config.sample_linkids);
-		//else
-		//	processor.doSampleByLink(links);
 
-		//sample by nodes
-		vector<int> nodes;
-		for(auto node:f.nodes) nodes.push_back(node.first);
-		if(config.sample_nodeids.size() != 0)
-			processor.doSampleByNode(config.sample_nodeids);
-		else
-			processor.doSampleByNode(nodes);
+int main(int argc, char *argv[])
+{
 
-	}
-	else{
-        auto stime = chrono::system_clock::now();
-		f.start();
-        auto etime = chrono::system_clock::now();
-        auto duration = chrono::duration_cast<chrono::milliseconds>(etime-stime);
+    namespace po = boost::program_options;
+    po::options_description desc("Usage");
+    desc.add_options()
+        ("help,h","show help")
+        ("sample,s","sample for node and link")
+        ("simulation,S", "simulation for fete")
+        ("test,t","Test each model")
+        ;
 
-        LOG_TRACE(my2string("Total Time is : ", duration.count()," ms"));
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc,argv,desc),vm);
+    po::notify(vm);
+
+    if(vm.count("help")){
+        cout << desc << "\n";
+        return 1;
     }
+    else if(vm.count("sample")){
+        sample();
+    }
+    else if(vm.count("simulation")){
+        simulation();
+    }
+    else if(vm.count("test")){
+        TestModel();
+    }
+    else
+    {
+        cout << desc << "\n";
+        return 1;
+    }
+    return 0;
+    
 }
