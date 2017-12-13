@@ -23,6 +23,8 @@ file(GLOB_RECURSE XGBOOST_MODULE_STATIC_LIB "${LIB_DIR}/xgboost/libxgboost.a")
 file(GLOB_RECURSE DMLC_MODULE_STATIC_LIB "${LIB_DIR}/xgboost/libdmlc.a")
 file(GLOB_RECURSE RABIT_MODULE_STATIC_LIB "${LIB_DIR}/xgboost/librabit.a")
 
+set(LIBSVM_MODULE_LIB "${LIB_DIR}/libsvm")
+
 include_directories(
     ${Boost_INCLUDE_DIR}
     ${PYTHON_MODULE_INCLUDE}
@@ -31,15 +33,18 @@ include_directories(
 
 link_directories(
     ${Boost_LIBRARY_DIRS}
-    ${LIB_DIR}/xgboost
+    ${XGBOOST_MODULE_LIB}
+    ${LIBSVM_MODULE_LIB}
 )
 
+#build boost sample
 add_executable(sample sample.cpp)
 target_link_libraries(sample
 	boost_system
 	boost_filesystem)
 
 
+#build xgboost test
 add_executable(test_xgboost xgboost_test.cpp)
 
 if(USE_SHARED)
@@ -57,3 +62,11 @@ else()
         pthread
     )
 endif()
+
+
+#build libsvm test
+add_executable(svm_train svm_train.cpp)
+target_link_libraries(svm_train
+    svm
+)
+

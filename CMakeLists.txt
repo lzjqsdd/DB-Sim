@@ -26,15 +26,19 @@ file(GLOB_RECURSE LIBCONFIG_MODULE_LIB "${LIB_DIR}/libconfig/*.so")
 #boost
 set(BOOST_MODULE_INCLUDE "/usr/include")
 
+#livsvm
+set(LIBSVM_MODULE_INCLUDE "${INCLUDE_DIR}/libsvm")
+
 #python
 set(PYTHON_MODULE_INCLUDE "/usr/include/python2.7")
 #set(LIBPYTHON_MODULE_LIB "~/APP/anaconda3/lib")
 
-set(XGBOOST_MODULE_INCLUDE "${INCLUDE_DIR}/xgboost")
-file(GLOB_RECURSE XGBOOST_MODULE_LIB "{LIB_DIR}/xgboost/*.so")
-file(GLOB_RECURSE RABIT_MODULE_LIB "{LIB_DIR}/xgboost/librabit.a")
-file(GLOB_RECURSE DMLC_MODULE_LIB "{LIB_DIR}/xgboost/libdmlc.a")
 
+set(XGBOOST_MODULE_INCLUDE "${INCLUDE_DIR}/xgboost")
+set(XGBOOST_MODULE_LIB "${LIB_DIR}/xgboost")
+file(GLOB_RECURSE XGBOOST_MODULE_STATIC_LIB "${LIB_DIR}/xgboost/libxgboost.a")
+file(GLOB_RECURSE DMLC_MODULE_STATIC_LIB "${LIB_DIR}/xgboost/libdmlc.a")
+file(GLOB_RECURSE RABIT_MODULE_STATIC_LIB "${LIB_DIR}/xgboost/librabit.a")
 
 #查找库
 find_package(Boost REQUIRED COMPONENTS
@@ -48,16 +52,26 @@ if(Boost_FOUND)
     set(BOOST_MODULE_INCLUDE ${Boost_MODULE_DIR})
 endif()
 
+
+#Find Openmp
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND OR OPENMP_FOUND)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
+
+
 #设置头文件查找路径
 include_directories(
     ${LIBCONFIG_MODULE_INCLUDE}
     ${BOOST_MODULE_INCLUDE}
     ${PYTHON_MODULE_INCLUDE}
     ${XGBOOST_MODULE_INCLUDE}
+    ${LIBSVM_MODULE_INCLUDE}
 )
 
 link_directories(
-    #    ${LIBPYTHON_MODULE_LIB}
+    ${Boost_LIBRARY_DIRS}
+    ${XGBOOST_MODULE_LIB}
 )
 
 #设置编译选项
@@ -86,9 +100,6 @@ add_executable(fete ${SRC_LIST})
 #链接第三方库
 target_link_libraries(fete
     ${LIBCONFIG_MODULE_LIB}
-    ${XGBOOST_MODULE_LIB}
-    ${RABIT_MODULE_LIB}
-    ${DMLC_MODULE_LIB}
     stdc++
     boost_system
     boost_log
@@ -99,3 +110,5 @@ target_link_libraries(fete
     tinyxml2
     python2.7
 )
+
+#add_library(svm SHARED ./src/model/svm.cpp)
