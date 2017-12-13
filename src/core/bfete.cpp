@@ -1,16 +1,17 @@
-#include "manager.h"
+#include "bfete.h"
+
 #include "../utils/tinyxml2.h"
 #include "../utils/tool.hpp"
 #include "../core/type.h"
 
-#include<iomanip>
-#include<iostream>
-#include<cstdlib>
-#include<string>
-#include<sstream>
+#include <iomanip>
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <sstream>
 
-#include<boost/algorithm/string.hpp>
-#include<boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
@@ -19,18 +20,8 @@ using namespace tinyxml2;
 using namespace boost::algorithm;
 namespace logging = boost::log;
 
-shared_ptr<Manager> Manager::_manager = shared_ptr<Manager>(new Manager());
-
-Manager::Manager(){
-}
-
-shared_ptr<Manager> Manager::getManager(){
-    return _manager;
-}
-
-/*
-void Manager::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths){
-    //éå†path.xmlå¡«å……links
+void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths){
+    //±éÀúpath.xmlÌî³älinks
     //load config
     XMLDocument doc;
     doc.LoadFile(_config.nodedir.c_str());
@@ -51,7 +42,7 @@ void Manager::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& 
 
             length = atof(lengthNode->Value());
             maxspeed = atof(speedNode->Value());
-            totalnum = length * 1 / CARLEN; //æ¯ä¸ªè½¦7.5ç±³,é»˜è®¤éƒ½æ˜¯ï¼‘ä¸ªlane
+            totalnum = length * 1 / CARLEN; //Ã¿¸ö³µ7.5Ã×,Ä¬ÈÏ¶¼ÊÇ£±¸ölane
 
             LOG_TRACE(my2string("linkid is :" ,id , ", length is : " , lengthNode->Value() , ", maxspeed is: " , speedNode->Value() , ", totalnum is: " , totalnum));
 
@@ -66,8 +57,8 @@ void Manager::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& 
     }
 }
 
-void Manager::loadNodes(map<int, shared_ptr<Node>>& nodes){
-    //éå†node.xmlå¡«å……nodes
+void FETEIf::loadNodes(map<int, shared_ptr<Node>>& nodes){
+    //±éÀúnode.xmlÌî³änodes
     XMLDocument doc;
     doc.LoadFile(_config.pathdir.c_str());
 
@@ -76,8 +67,8 @@ void Manager::loadNodes(map<int, shared_ptr<Node>>& nodes){
 
     while(nodeElement){
         int id;
-        vector<int> flinks; //å­˜å‚¨çš„æ˜¯æ±‡å…¥linkçš„ç¼–å·
-        vector<int> tlinks; //æµå‡ºlinkçš„ç¼–å·
+        vector<int> flinks; //´æ´¢µÄÊÇ»ãÈëlinkµÄ±àºÅ
+        vector<int> tlinks; //Á÷³ölinkµÄ±àºÅ
 
         nodeElement->QueryAttribute("id", &id);
         XMLElement * flinksElement = nodeElement->FirstChildElement("flinks");
@@ -101,8 +92,8 @@ void Manager::loadNodes(map<int, shared_ptr<Node>>& nodes){
     }
 }
 
-void Manager::fillLinks(const vector<vector<int>>& paths , map<int, shared_ptr<Link>>& links){
-	//éå†pathä¸­çš„æ¯ä¸ªlinkï¼Œæ¥å¤„ç†linkçš„å‰åå…³ç³»
+void FETEIf::fillLinks(const vector<vector<int>>& paths , map<int, shared_ptr<Link>>& links){
+	//±éÀúpathÖĞµÄÃ¿¸ölink£¬À´´¦ÀílinkµÄÇ°ºó¹ØÏµ
 	for(auto path : paths){
 		for(int i = 1; i<path.size(); ++i){
 			int32_t pid = path[i-1];
@@ -112,31 +103,3 @@ void Manager::fillLinks(const vector<vector<int>>& paths , map<int, shared_ptr<L
 		}
 	}
 }
-*/
-
-void Manager::init(const Config& config){
-    _config = config;  
-}
-
-/*
-shared_ptr<FETEIf> Manager::getTestModel(){
-    shared_ptr<FETEIf> test_model = shared_ptr<FETEIf>(new TFETE(_config));
-    return test_model;
-}
-
-shared_ptr<FETEIf> Manager::getCeilModel(){
-    shared_ptr<FETEIf> ceil_model = shared_ptr<FETEIf>(new CFETE(_config));
-    return ceil_model;
-}
-
-shared_ptr<FETEIf> Manager::getGawronModel(){
-    shared_ptr<FETEIf> gawron_model = shared_ptr<FETEIf>(new GFETE(_config));
-    return gawron_model;
-}
-
-shared_ptr<FETEIf> Manager::getFETEModel(){
-    //TODO
-    shared_ptr<FETEIf> test_model = shared_ptr<FETEIf>(new TFETE(_config));
-    return test_model;
-}
-*/

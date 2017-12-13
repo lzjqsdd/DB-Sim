@@ -2,7 +2,6 @@
 #define __FETEIF_H__
 
 #include "config.h"
-#include "manager.h"
 
 #include <map>
 #include <set>
@@ -22,6 +21,11 @@ class FETEIf{
         virtual Config getConfig() = 0;
         virtual vector<vector<int>> getPaths() = 0;
 
+        virtual void loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths);
+        virtual void loadNodes(map<int, shared_ptr<Node>>& nodes);
+		virtual void fillLinks(const vector<vector<int>>& paths,map<int, shared_ptr<Link>>& links);
+
+
         Config _config; //从配置文件.conf中读取文件
         map<int, shared_ptr<Link>> links; //全局唯一实际的数据存储
         map<int, shared_ptr<Node>> nodes; //方便直接从id检索所有的信息
@@ -34,9 +38,6 @@ class FETEIf{
 		std::set<int> endIds; //记录安置点
 		std::vector<std::vector<int>> paths; //以id形式记录path
 		std::map<int,int> pcurnum; //curnum of every path
-
-	protected:
-        std::shared_ptr<Manager> _manager;
 };
 
 #endif

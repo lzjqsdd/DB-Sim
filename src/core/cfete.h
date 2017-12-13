@@ -3,7 +3,6 @@
 
 #include "bfete.h"
 #include "config.h"
-#include "manager.h"
 
 #include <map>
 #include <set>

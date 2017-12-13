@@ -24,11 +24,11 @@ CFETE& CFETE::operator=(const CFETE& fete){
 
 void CFETE::loadNetwork(){
     //加载links和nodes
-    _manager->loadLinks(links, paths);
-    _manager->loadNodes(nodes);
+    loadLinks(links, paths);
+    loadNodes(nodes);
 
 	//建立link的前后关系
-	_manager->fillLinks(paths,links);
+	fillLinks(paths,links);
 
     //处理起终点
     for(auto path:paths){
