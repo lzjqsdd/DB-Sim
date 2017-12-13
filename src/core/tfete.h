@@ -1,9 +1,8 @@
-#ifndef __TETE_H__
-#define __TETE_H__
+#ifndef __TFETE_H__
+#define __TFETE_H__
 
 #include "bfete.h"
 #include "config.h"
-#include "manager.h"
 
 #include <map>
 #include <set>

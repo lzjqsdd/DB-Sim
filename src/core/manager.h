@@ -4,12 +4,16 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <libconfig.h++>
+#include <memory>
 
 #include "../core/type.h"
 #include "../core/link.h"
 #include "../core/node.h"
 #include "../core/config.h"
+#include "../core/bfete.h"
+#include "../core/tfete.h"
+#include "../core/cfete.h"
+#include "../core/gfete.h"
 
 using namespace std;
 
@@ -18,17 +22,24 @@ using namespace std;
 class Manager{
     public:
         static shared_ptr<Manager> getManager();
-        void init();
-
-        void loadConfig(const string& filepath, Config& config);
-        void loadLinks(const string& filepath, map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths);
-        void loadNodes(const string& filepath, map<int, shared_ptr<Node>>& nodes);
+        
+        void init(const Config& config);
+        void loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths);
+        void loadNodes(map<int, shared_ptr<Node>>& nodes);
 		void fillLinks(const vector<vector<int>>& paths,map<int, shared_ptr<Link>>& links);
+
+        /*
+        std::shared_ptr<FETEIf> getTestModel();
+        std::shared_ptr<FETEIf> getCeilModel();
+        std::shared_ptr<FETEIf> getGawronModel();
+        std::shared_ptr<FETEIf> getFETEModel();
+        */
 
     protected:
         Manager();
     private:
         static shared_ptr<Manager> _manager;
+        Config& _config;
 };
 
 

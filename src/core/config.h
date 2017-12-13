@@ -3,17 +3,26 @@
 
 #include "type.h"
 
-#include<iostream>
-#include<map>
-#include<vector>
+#include <iostream>
+#include <vector>
+#include <map>
+#include <string>
+#include <libconfig.h++>
+
+#include "../core/type.h"
+#include "../core/link.h"
+#include "../core/node.h"
+
 using namespace std;
 
 class Config{
     public:
         Config();
+        Config(const string& config_path);
         Config(const Config& config);
         Config& operator=(const Config& config);
         friend ostream& operator<<(ostream& os, const Config& config);
+        void init(const string& config_path); //load config
 
         int timestep; //example 30seconds per iteration
 		bool sample; //是否采样

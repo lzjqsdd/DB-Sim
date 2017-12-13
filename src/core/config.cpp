@@ -9,6 +9,16 @@ Config::Config():
 {
 }
 
+Config::Config(const string& config_path):
+	config_path(config_path),
+	log_level(logging::trivial::trace),
+	sample(false),
+	data_path("../data"),
+	sample_outpath("../data/sample")
+{
+    init(config_path);
+}
+
 Config::Config(const Config& config){
     this->timestep = config.timestep;
     this->config_path = config.config_path;
@@ -74,3 +84,84 @@ ostream& operator<<(ostream& os, const Config& config){
     return os;
 }
 
+
+void Config::init(const string& config_path)
+{
+    //使用Libconfig来加载config
+    this->config_path = config_path; //self hold value;
+
+    libconfig::Config mconfig;
+
+    try{
+        mconfig.readFile(config_path.c_str());
+
+        double timestep = 3.0F;
+		bool sample = false;
+        string pathdir;
+        string nodedir;
+        string loglevel;
+		string data_path;
+		string sample_outpath;
+
+        if(mconfig.lookupValue("global.timestep",timestep)){
+            this->timestep = timestep;
+        }
+        if(mconfig.lookupValue("global.sample",sample)){
+            this->sample= sample;
+        }
+        if(mconfig.lookupValue("global.data_path",data_path)){
+			this->data_path = data_path;
+        }
+        if(mconfig.lookupValue("global.pathdir",pathdir)){
+            this->pathdir = pathdir;
+        }
+        if(mconfig.lookupValue("global.nodedir",nodedir)){
+            this->nodedir = nodedir;
+        }
+        if(mconfig.lookupValue("global.loglevel",loglevel)){
+            this->log_level = str2enum(loglevel);
+        }
+
+
+        const libconfig::Setting &demands = mconfig.lookup("demands");
+        int count = demands.getLength();
+
+        for(int i=0;i<count;++i){
+            int linkid,demand;
+            if(!demands[i].lookupValue("linkid",linkid) ||
+                    !demands[i].lookupValue("demand",demand)){
+                std::cerr << "lookup linkid or demand value error!" << std::endl;
+            }else{
+                this->demands[linkid] = demand;
+            }
+
+        }
+
+		const libconfig::Setting& linkids = mconfig.lookup("sample.linkids");
+		for(int i=0; i < linkids.getLength(); ++i){
+			this->sample_linkids.push_back(linkids[i]);
+		}
+		const libconfig::Setting& nodeids = mconfig.lookup("sample.nodeids");
+		for(int i=0; i < nodeids.getLength(); ++i){
+			this->sample_nodeids.push_back(nodeids[i]);
+		}
+
+        if(mconfig.lookupValue("sample.outpath",sample_outpath)){
+			this->sample_outpath = sample_outpath;
+        }
+		
+
+    }catch(const libconfig::FileIOException &fioex){
+        std::cerr << "can't read config file!" << std::endl;
+        return;
+    }catch(const libconfig::ParseException &pex)
+    {
+        std::cerr << "Parse error at" << pex.getFile() << ":" << pex.getLine()
+                  << "-" << pex.getError() << std::endl;
+        return;
+    }
+
+    LOG_TRACE("Load Config From File Done.");
+    LOG_TRACE(*this);
+
+}

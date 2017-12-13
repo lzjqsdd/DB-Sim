@@ -24,8 +24,8 @@ CFETE& CFETE::operator=(const CFETE& fete){
 
 void CFETE::loadNetwork(){
     //加载links和nodes
-    _manager->loadLinks(_config.pathdir, links, paths);
-    _manager->loadNodes(_config.nodedir, nodes);
+    _manager->loadLinks(links, paths);
+    _manager->loadNodes(nodes);
 
 	//建立link的前后关系
 	_manager->fillLinks(paths,links);

@@ -7,8 +7,9 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <memory>
 
-//定义抽闲基类
+//定义抽象基类
 class FETEIf{
     public:
         virtual void loadNetwork() = 0; //从xml中加载路网
@@ -35,7 +36,7 @@ class FETEIf{
 		std::map<int,int> pcurnum; //curnum of every path
 
 	protected:
-        shared_ptr<Manager> _manager;
+        std::shared_ptr<Manager> _manager;
 };
 
 #endif

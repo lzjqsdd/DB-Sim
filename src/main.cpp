@@ -43,10 +43,9 @@ void TestModel()
 void sample()
 {
     //加载配置文件
-    Config config;
+    Config config("../config/config.conf");
     shared_ptr<Manager> manager = Manager::getManager();
-    manager->loadConfig("../config/config.conf",config);
-    LOG_TRACE(config);
+    manager->init(config);
 
     //初始化日志等级
     initlog(config.log_level);
@@ -74,10 +73,10 @@ void sample()
 void simulation()
 {
     //加载配置文件
-    Config config;
+    Config config("../config/config.conf");
+
     shared_ptr<Manager> manager = Manager::getManager();
-    manager->loadConfig("../config/config.conf",config);
-    LOG_TRACE(config);
+    manager->init(config);
 
     //初始化日志等级
     initlog(config.log_level);

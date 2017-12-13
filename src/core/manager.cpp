@@ -28,89 +28,11 @@ shared_ptr<Manager> Manager::getManager(){
     return _manager;
 }
 
-
-//gconfig: global config
-void Manager::loadConfig(const string&path, Config& gconfig){
-    //使用Libconfig来加载config
-    gconfig.config_path = path; //self hold value;
-
-    libconfig::Config mconfig;
-
-    try{
-        mconfig.readFile(path.c_str());
-
-        double timestep = 3.0F;
-		bool sample = false;
-        string pathdir;
-        string nodedir;
-        string loglevel;
-		string data_path;
-		string sample_outpath;
-
-        if(mconfig.lookupValue("global.timestep",timestep)){
-            gconfig.timestep = timestep;
-        }
-        if(mconfig.lookupValue("global.sample",sample)){
-            gconfig.sample= sample;
-        }
-        if(mconfig.lookupValue("global.data_path",data_path)){
-			gconfig.data_path = data_path;
-        }
-        if(mconfig.lookupValue("global.pathdir",pathdir)){
-            gconfig.pathdir = pathdir;
-        }
-        if(mconfig.lookupValue("global.nodedir",nodedir)){
-            gconfig.nodedir = nodedir;
-        }
-        if(mconfig.lookupValue("global.loglevel",loglevel)){
-            gconfig.log_level = str2enum(loglevel);
-        }
-
-
-        const libconfig::Setting &demands = mconfig.lookup("demands");
-        int count = demands.getLength();
-
-        for(int i=0;i<count;++i){
-            int linkid,demand;
-            if(!demands[i].lookupValue("linkid",linkid) ||
-                    !demands[i].lookupValue("demand",demand)){
-                std::cerr << "lookup linkid or demand value error!" << std::endl;
-            }else{
-                gconfig.demands[linkid] = demand;
-            }
-
-        }
-
-		const libconfig::Setting& linkids = mconfig.lookup("sample.linkids");
-		for(int i=0; i < linkids.getLength(); ++i){
-			gconfig.sample_linkids.push_back(linkids[i]);
-		}
-		const libconfig::Setting& nodeids = mconfig.lookup("sample.nodeids");
-		for(int i=0; i < nodeids.getLength(); ++i){
-			gconfig.sample_nodeids.push_back(nodeids[i]);
-		}
-
-        if(mconfig.lookupValue("sample.outpath",sample_outpath)){
-			gconfig.sample_outpath = sample_outpath;
-        }
-		
-
-    }catch(const libconfig::FileIOException &fioex){
-        std::cerr << "can't read config file!" << std::endl;
-        return;
-    }catch(const libconfig::ParseException &pex)
-    {
-        std::cerr << "Parse error at" << pex.getFile() << ":" << pex.getLine()
-                  << "-" << pex.getError() << std::endl;
-        return;
-    }
-}
-
-void Manager::loadLinks(const string& filepath, map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths){
+void Manager::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths){
     //遍历path.xml填充links
     //load config
     XMLDocument doc;
-    doc.LoadFile("../config/path.xml");
+    doc.LoadFile(_config.nodedir.c_str());
     XMLElement * pathListElement = doc.FirstChildElement("pathlist");
     XMLElement * pathElement= pathListElement->FirstChildElement("path");
 
@@ -143,10 +65,10 @@ void Manager::loadLinks(const string& filepath, map<int, shared_ptr<Link>>& link
     }
 }
 
-void Manager::loadNodes(const string& path, map<int, shared_ptr<Node>>& nodes){
+void Manager::loadNodes(map<int, shared_ptr<Node>>& nodes){
     //遍历node.xml填充nodes
     XMLDocument doc;
-    doc.LoadFile(path.c_str());
+    doc.LoadFile(_config.pathdir.c_str());
 
     XMLElement * nodesElement = doc.FirstChildElement("nodes");
     XMLElement * nodeElement = nodesElement->FirstChildElement("node");
@@ -189,3 +111,30 @@ void Manager::fillLinks(const vector<vector<int>>& paths , map<int, shared_ptr<L
 		}
 	}
 }
+
+void Manager::init(const Config& config){
+    _config = config;  
+}
+
+/*
+shared_ptr<FETEIf> Manager::getTestModel(){
+    shared_ptr<FETEIf> test_model = shared_ptr<FETEIf>(new TFETE(_config));
+    return test_model;
+}
+
+shared_ptr<FETEIf> Manager::getCeilModel(){
+    shared_ptr<FETEIf> ceil_model = shared_ptr<FETEIf>(new CFETE(_config));
+    return ceil_model;
+}
+
+shared_ptr<FETEIf> Manager::getGawronModel(){
+    shared_ptr<FETEIf> gawron_model = shared_ptr<FETEIf>(new GFETE(_config));
+    return gawron_model;
+}
+
+shared_ptr<FETEIf> Manager::getFETEModel(){
+    //TODO
+    shared_ptr<FETEIf> test_model = shared_ptr<FETEIf>(new TFETE(_config));
+    return test_model;
+}
+*/
