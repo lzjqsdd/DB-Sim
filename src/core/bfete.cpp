@@ -15,17 +15,27 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
+#include <boost/filesystem.hpp>
 
 using namespace tinyxml2;
 using namespace boost::algorithm;
 namespace logging = boost::log;
+namespace bf = boost::filesystem;
 
 void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths){
     //±éÀúpath.xmlÌî³älinks
     //load config
+    
+    if(!bf::exists(_config.pathdir)){
+        LOG_TRACE("path.xmlnot found!");
+        exit(0);
+    }
+
     XMLDocument doc;
-    doc.LoadFile(_config.nodedir.c_str());
+    doc.LoadFile(_config.pathdir.c_str());
     XMLElement * pathListElement = doc.FirstChildElement("pathlist");
+    if(pathListElement == NULL)
+        std::cout << "NULLLLLLLLLL" <<std::endl;
     XMLElement * pathElement= pathListElement->FirstChildElement("path");
 
     while(pathElement){
@@ -59,8 +69,12 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
 
 void FETEIf::loadNodes(map<int, shared_ptr<Node>>& nodes){
     //±éÀúnode.xmlÌî³änodes
+    if(!bf::exists(_config.nodedir)){
+        LOG_TRACE("node.xml not found!");
+        exit(0);
+    }
     XMLDocument doc;
-    doc.LoadFile(_config.pathdir.c_str());
+    doc.LoadFile(_config.nodedir.c_str());
 
     XMLElement * nodesElement = doc.FirstChildElement("nodes");
     XMLElement * nodeElement = nodesElement->FirstChildElement("node");

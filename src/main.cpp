@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 {
 
     namespace po = boost::program_options;
-    po::options_description desc("Usage");
+    po::options_description desc("\nfete [options]");
     desc.add_options()
         ("help,h","show help")
         ("sample,s","sample for node and link")
