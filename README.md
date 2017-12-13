@@ -11,11 +11,18 @@ calculate evacuation time faster and  more accurately
 -  Experiment
 
 # TODOLISTS
+## Framework
 - [x] parse xml from config
 - [x] boost library support
 - [x] logging support
 - [x] basic iterator develop
-- [x] sample for every link
+- [x] xgboost,randomforest c++ support
+- [ ] refacting fete manage
+- [ ] refacting config manage 
+
+## Model
+- [x] sample for every link and node
+- [x] add pool and buffer sample
 - [ ] train model for each node
 - [ ] import ml model(trained by python and predict by c++)
 
