@@ -41,4 +41,14 @@ extern void initlog(logging::trivial::severity_level severity);
 //macro for car
 #define CARLEN 7.5
 
+
+enum model_type
+{
+    FETE = 1,
+    CEIL = 2,
+    GAWRON = 3,
+    TEST = 4
+};
+extern enum model_type str2type(const std::string& type);
+
 #endif

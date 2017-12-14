@@ -22,20 +22,12 @@ using namespace std;
 class Manager{
     public:
         static shared_ptr<Manager> getManager();
-        
         void init(const Config& config);
-        /*
-        void loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths);
-        void loadNodes(map<int, shared_ptr<Node>>& nodes);
-		void fillLinks(const vector<vector<int>>& paths,map<int, shared_ptr<Link>>& links);
-        */
 
-        /*
         std::shared_ptr<FETEIf> getTestModel();
         std::shared_ptr<FETEIf> getCeilModel();
         std::shared_ptr<FETEIf> getGawronModel();
         std::shared_ptr<FETEIf> getFETEModel();
-        */
 
     protected:
         Manager();

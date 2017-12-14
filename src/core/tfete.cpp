@@ -53,7 +53,6 @@ void TFETE::loadStaticData(const string& datapath)
 	for(auto mlink : links){
 		try{
 			string link_datapath = my2string(datapath,"/",mlink.first,"_link_sample.txt");
-			LOG_TRACE(link_datapath);
 			fstream fin(link_datapath.c_str(), std::ifstream::in);
 			string line;
 			int frame,inflow,outflow,poolnum;
@@ -116,11 +115,6 @@ void TFETE::doUpdate(){
 		}
 	}
 
-	//string ss="links : ";
-	//for(auto &mlink: links)
-	//	ss += ("," + to_string(int(mlink.first)));
-	//LOG_DEBUG(ss);
-
 	string ss=to_string(int(curtime)) + " status: ";
 	for(auto &mlink: links)
 		ss += ("," + to_string(int(mlink.second->poolnum)));
@@ -134,7 +128,6 @@ void TFETE::start(){
         isClean(); //每次判断是否为空了
         curtime += _config.timestep;
     }
-	LOG_FATAL(my2string("Total time is : " , curtime));
 }
 
 void TFETE::check(){

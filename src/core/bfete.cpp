@@ -34,8 +34,6 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
     XMLDocument doc;
     doc.LoadFile(_config.pathdir.c_str());
     XMLElement * pathListElement = doc.FirstChildElement("pathlist");
-    if(pathListElement == NULL)
-        std::cout << "NULLLLLLLLLL" <<std::endl;
     XMLElement * pathElement= pathListElement->FirstChildElement("path");
 
     while(pathElement){

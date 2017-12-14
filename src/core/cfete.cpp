@@ -82,7 +82,6 @@ void CFETE::start(){
         doUpdate();
         isClean(); //每次判断是否为空了
     }
-	LOG_FATAL(my2string("Total time is : " , curtime));
 }
 
 void CFETE::check(){

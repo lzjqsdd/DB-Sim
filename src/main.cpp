@@ -70,45 +70,52 @@ void sample()
 }
 
 
-void simulation()
+void simulation(const Config& config, model_type type)
 {
-    //加载配置文件
-    Config config("../config/config.conf");
-
     shared_ptr<Manager> manager = Manager::getManager();
     manager->init(config);
 
-    //初始化日志等级
-    initlog(config.log_level);
-
     //创建推演对象
-    TFETE tfete(config); //主要处理类
-	FETEIf &f = tfete;
-	f.init();
+	shared_ptr<FETEIf> model = shared_ptr<FETEIf>();
+    
+    switch(type){
+        case FETE:      model = manager->getFETEModel();    break;
+        case CEIL:      model = manager->getCeilModel();    break;
+        case GAWRON:    model = manager->getGawronModel();  break;
+        case TEST:      model = manager->getTestModel();    break;
+    }
 
+	model->init();
     auto stime = chrono::system_clock::now();
-    f.start();
+    model->start();
     auto etime = chrono::system_clock::now();
     auto duration = chrono::duration_cast<chrono::milliseconds>(etime-stime);
 
-    LOG_TRACE(my2string("Total Time is : ", duration.count()," ms"));
+    LOG_FATAL(my2string("Total Time is : ", duration.count()," ms"));
 }
 
 
 int main(int argc, char *argv[])
 {
+    //加载配置文件
+    Config config("../config/config.conf");
+    //初始化日志等级
+    initlog(config.log_level);
 
     namespace po = boost::program_options;
-    po::options_description desc("\nfete [options]");
+    po::options_description desc("\nfete [options] [ceil|test|gawron|fete] ");
     desc.add_options()
         ("help,h","show help")
         ("sample,s","sample for node and link")
-        ("simulation,S", "simulation for fete")
+        ("simulation,S", po::value< vector<string> >(),"simulation for fete")
         ("test,t","Test each model")
         ;
 
+    po::positional_options_description p;
+    p.add("simulation",-1);
+
     po::variables_map vm;
-    po::store(po::parse_command_line(argc,argv,desc),vm);
+    po::store(po::command_line_parser(argc,argv).options(desc).positional(p).run(), vm);
     po::notify(vm);
 
     if(vm.count("help")){
@@ -119,7 +126,8 @@ int main(int argc, char *argv[])
         sample();
     }
     else if(vm.count("simulation")){
-        simulation();
+        vector<string> simu_args = vm["simulation"].as< vector<string> >();
+        for(auto sarg : simu_args) simulation(config, str2type(sarg));
     }
     else if(vm.count("test")){
         TestModel();

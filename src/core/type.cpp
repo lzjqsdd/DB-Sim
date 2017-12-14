@@ -38,7 +38,16 @@ void initlog(logging::trivial::severity_level severity)
 
     logging::core::get()->set_filter
     (
-        logging::trivial::severity <= severity
+        logging::trivial::severity >= severity
     );
 }
 
+
+enum model_type str2type(const std::string& type){
+    if(type == "ceil") return CEIL;
+    else if(type == "gawron") return GAWRON;
+    else if(type == "fete") return FETE;
+    else if(type == "test") return TEST;
+
+    return TEST;
+}

@@ -118,7 +118,6 @@ void Manager::init(const Config& config){
     _config = config;  
 }
 
-/*
 shared_ptr<FETEIf> Manager::getTestModel(){
     shared_ptr<FETEIf> test_model = shared_ptr<FETEIf>(new TFETE(_config));
     return test_model;
@@ -139,4 +138,3 @@ shared_ptr<FETEIf> Manager::getFETEModel(){
     shared_ptr<FETEIf> test_model = shared_ptr<FETEIf>(new TFETE(_config));
     return test_model;
 }
-*/
