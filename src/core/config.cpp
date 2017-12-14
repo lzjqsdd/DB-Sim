@@ -160,8 +160,4 @@ void Config::init(const string& config_path)
                   << "-" << pex.getError() << std::endl;
         return;
     }
-
-    LOG_TRACE("Load Config From File Done.");
-    LOG_TRACE(*this);
-
 }

@@ -40,15 +40,11 @@ void TestModel()
 }
 
 
-void sample()
+void sample(const Config& config)
 {
     //加载配置文件
-    Config config("../config/config.conf");
     shared_ptr<Manager> manager = Manager::getManager();
     manager->init(config);
-
-    //初始化日志等级
-    initlog(config.log_level);
 
     //创建推演对象
     TFETE tfete(config); //主要处理类
@@ -97,11 +93,6 @@ void simulation(const Config& config, model_type type)
 
 int main(int argc, char *argv[])
 {
-    //加载配置文件
-    Config config("../config/config.conf");
-    //初始化日志等级
-    initlog(config.log_level);
-
     namespace po = boost::program_options;
     po::options_description desc("\nfete [options] [ceil|test|gawron|fete] ");
     desc.add_options()
@@ -123,9 +114,15 @@ int main(int argc, char *argv[])
         return 1;
     }
     else if(vm.count("sample")){
-        sample();
+        Config config("../config/config.conf");
+        initlog(config.log_level);
+        LOG_TRACE(config);
+        sample(config);
     }
     else if(vm.count("simulation")){
+        Config config("../config/config.conf");
+        initlog(config.log_level);
+        LOG_TRACE(config);
         vector<string> simu_args = vm["simulation"].as< vector<string> >();
         for(auto sarg : simu_args) simulation(config, str2type(sarg));
     }
