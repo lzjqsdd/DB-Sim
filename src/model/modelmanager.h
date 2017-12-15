@@ -7,6 +7,7 @@
 
 #include "rf_model.h"
 #include "xgboost_model.h"
+#include "svm_model.h"
 
 using namespace std;
 //model manager
@@ -17,6 +18,7 @@ public:
     void Test();
     shared_ptr<Model> getRandomForestModel();
     shared_ptr<Model> getXGBoostModel();
+    shared_ptr<Model> getSVMModel();
 
     ~ModelManager();
 

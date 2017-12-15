@@ -31,3 +31,9 @@ shared_ptr<Model> ModelManager::getXGBoostModel(){
     shared_ptr<Model> xgboost_model = shared_ptr<Model>(new XGBoostModel()); 
     return xgboost_model ;
 }
+
+shared_ptr<Model> ModelManager::getSVMModel(){
+    shared_ptr<Model> svm_model = shared_ptr<Model>(new SVMModel()); 
+    return svm_model ;
+}
+

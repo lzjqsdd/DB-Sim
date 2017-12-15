@@ -32,11 +32,15 @@ void TestModel()
 {
     shared_ptr<ModelManager> modelManager = ModelManager::getModelManager();
     modelManager->Test();
-    shared_ptr<Model> rfmodel = modelManager->getRandomForestModel();
-    rfmodel->init();
 
-    rfmodel = modelManager->getXGBoostModel();
-    rfmodel->init();
+    shared_ptr<Model> model = modelManager->getRandomForestModel();
+    model->init();
+
+    model = modelManager->getXGBoostModel();
+    model->init();
+
+    model = modelManager->getSVMModel();
+    model->init();
 }
 
 
