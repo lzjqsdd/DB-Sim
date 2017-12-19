@@ -5,7 +5,9 @@ Config::Config():
 	log_level(logging::trivial::trace),
 	sample(false),
 	data_path("../data"),
-	sample_outpath("../data/sample")
+	sample_outpath("../data/sample"),
+    poolsize(0.0F),
+    buffersize(100.0F)
 {
 }
 
@@ -14,7 +16,9 @@ Config::Config(const string& config_path):
 	log_level(logging::trivial::trace),
 	sample(false),
 	data_path("../data"),
-	sample_outpath("../data/sample")
+	sample_outpath("../data/sample"),
+    poolsize(0.0F),
+    buffersize(100.0F)
 {
     init(config_path);
 }
@@ -33,6 +37,8 @@ Config::Config(const Config& config){
 	this->sample_linkids = config.sample_linkids;
 	this->sample_nodeids = config.sample_nodeids;
 	this->sample_outpath= config.sample_outpath;
+    this->poolsize = config.poolsize;
+    this->buffersize = config.buffersize;
 }
 
 Config& Config::operator=(const Config& config){
@@ -50,6 +56,8 @@ Config& Config::operator=(const Config& config){
 		this->sample_linkids = config.sample_linkids;
 		this->sample_nodeids = config.sample_nodeids;
 		this->sample_outpath= config.sample_outpath;
+        this->poolsize = config.poolsize;
+        this->buffersize = config.buffersize;
     }
     return *this;
 }
@@ -79,6 +87,8 @@ ostream& operator<<(ostream& os, const Config& config){
 			os << " " << nodeid;
 		}
 		os << endl << "\tsample_outpath: " << config.sample_outpath;
+        os << endl << "\tpoolsize: " << config.poolsize;
+        os << endl << "\tbuffersize: " << config.buffersize;
 		os << endl << "}";
 	}
     return os;
@@ -102,6 +112,7 @@ void Config::init(const string& config_path)
         string loglevel;
 		string data_path;
 		string sample_outpath;
+        double poolsize,buffersize;
 
         if(mconfig.lookupValue("global.timestep",timestep)){
             this->timestep = timestep;
@@ -149,7 +160,14 @@ void Config::init(const string& config_path)
         if(mconfig.lookupValue("sample.outpath",sample_outpath)){
 			this->sample_outpath = sample_outpath;
         }
+
+        if(mconfig.lookupValue("sample.poolsize",poolsize)){
+			this->poolsize= poolsize;
+        }
 		
+        if(mconfig.lookupValue("sample.buffersize",buffersize)){
+			this->buffersize= buffersize;
+        }
 
     }catch(const libconfig::FileIOException &fioex){
         std::cerr << "can't read config file!" << std::endl;

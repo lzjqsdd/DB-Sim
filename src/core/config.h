@@ -24,17 +24,26 @@ class Config{
         friend ostream& operator<<(ostream& os, const Config& config);
         void init(const string& config_path); //load config
 
-        int timestep; //example 30seconds per iteration
-		bool sample; //是否采样
         string config_path;
+
+        //global config
+		bool sample; //是否采样
+        int timestep; //example 30seconds per iteration
         string pathdir;
         string nodedir;
-		string data_path;
         logging::trivial::severity_level log_level;
+
+        //demands config
         map<int,int> demands;
+
+
+        //sample config
+		string data_path;
 		vector<int> sample_linkids; //需要采样的link
 		vector<int> sample_nodeids; //需要采样的node
 		string sample_outpath; //采样输出位置
+        double poolsize; //pool length after node
+        double buffersize; //buffer length before node
 };
 
 #endif
