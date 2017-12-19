@@ -226,6 +226,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 
 void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfile){
 
+    addHeader(node_ids);
 	try{
 		fstream fin(path.c_str(),std::ifstream::in);
 		string line;
@@ -246,7 +247,11 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                 if(magent.find(carid) == magent.end()){
                     magent[carid] = shared_ptr<Agent>(new Agent(carid, linkid));
 					mslink[linkid]->inflow++;
-					mslink[linkid]->poolnum++;
+
+                    if(zh <= mslink[linkid]->pool_zh)   mslink[linkid]->poolnum++; //如果在pool中，则poolnum++
+                    else if(zh > mslink[linkid]->buffer_zh)  mslink[linkid]->buffernum++; //如果在buffer中，则buffernum++;
+
+
                     mslink[linkid]->sum_zh += (zh - 0.0F);
                     mslink[linkid]->sum_frame++;
                 }
@@ -255,7 +260,9 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                         //previous link
                         int pre_linkid = magent[carid]->linkid;
                         mslink[pre_linkid]->outflow++;
-                        mslink[pre_linkid]->poolnum--;
+
+                        if(magent[carid]->zh <= mslink[pre_linkid]->pool_zh)    mslink[pre_linkid]->poolnum--; //如果之前在Pool中
+                        else if(magent[carid]->zh > mslink[pre_linkid]->buffer_zh)   mslink[pre_linkid]->buffernum--; //如果之前在buffer中
 
                         double pre_delta_zh = mslink[pre_linkid]->length - magent[carid]->zh;
                         double cur_delta_zh = zh;
@@ -267,13 +274,24 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 
                         //current link
                         mslink[linkid]->inflow++;
-                        mslink[linkid]->poolnum++;
+
+                        if(zh <= mslink[linkid]->pool_zh)   mslink[linkid]->poolnum++; //如果现在在pool中
+                        else if(zh > mslink[linkid]->buffer_zh)  mslink[linkid]->buffernum++; //如果现在在buffer中
+
+                        //mslink[linkid]->poolnum++;
                         mslink[linkid]->sum_frame += (1-pre_ratio);
                         mslink[linkid]->sum_zh += (zh - 0.0F);
 
                         magent[carid]->linkid = linkid;
                     } 
                     else{ //still on current link
+
+                        if(magent[carid]->zh <= mslink[linkid]->pool_zh && zh > mslink[linkid]->buffer_zh) //之前在pool,现在在buffer中
+                        {
+                            mslink[linkid]->poolnum--;
+                            mslink[linkid]->buffernum++;
+                        }
+
                         mslink[linkid]->sum_frame++;
                         mslink[linkid]->sum_zh += (zh - magent[carid]->zh);
                     }
@@ -288,7 +306,9 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 				{
 					int pre_linkid = magent[carid]->linkid;
 					mslink[pre_linkid]->outflow++;
-					mslink[pre_linkid]->poolnum--;
+
+                    if(magent[carid]->zh <= mslink[pre_linkid]->pool_zh)    mslink[pre_linkid]->poolnum--; //如果之前在Pool中
+                    if(magent[carid]->zh > mslink[pre_linkid]->buffer_zh)   mslink[pre_linkid]->buffernum--; //如果之前在buffer中
 
                     mslink[pre_linkid]->sum_frame ++; //这里粗略统计
                     mslink[pre_linkid]->sum_zh += (mslink[pre_linkid]->length - magent[carid]->zh);
@@ -317,18 +337,18 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 					ofile.open(outfile.c_str(),std::ios::app);
 
 					ofile << frame;
-					//ofile << " " << nodes[node_id]->flinks.size();
 					for(auto link_id : nodes[node_id]->flinks){
 						auto slink = mslink[link_id];
-						ofile << " " << slink->poolnum << " " << slink->outflow << " " << slink->avg_speed;
-						//slink->outflow = 0;
+						ofile << "\t" << slink->poolnum << "\t" << slink->buffernum
+                              << "\t" << slink->inflow << "\t"  << slink->outflow
+                              << "\t" << slink->avg_speed;
 					}
 
-					//ofile << " " << nodes[node_id]->tlinks.size();
 					for(auto link_id : nodes[node_id]->tlinks){
 						auto slink = mslink[link_id];
-						ofile << " " << slink->poolnum << " " << slink->inflow << " " << slink->avg_speed;
-						//slink->inflow = 0;
+						ofile << "\t" << slink->poolnum << "\t" << slink->buffernum
+                              << "\t" << slink->inflow << "\t" <<  slink->outflow
+                              << "\t" << slink->avg_speed;
 					}
 
 					ofile << endl;
@@ -364,16 +384,18 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 				ofile.open(outfile.c_str(),std::ios::app);
 
 				ofile << frame;
-				//ofile << " " << nodes[node_id]->flinks.size();
 				for(auto link_id : nodes[node_id]->flinks){
 					auto slink = mslink[link_id];
-					ofile << " " << slink->poolnum << " " << slink->outflow;
+                    ofile << "\t" << slink->poolnum << "\t" << slink->buffernum
+                          << "\t" << slink->inflow << "\t"  << slink->outflow
+                          << "\t" << slink->avg_speed;
 				}
 
-				//ofile << " " << nodes[node_id]->tlinks.size();
 				for(auto link_id : nodes[node_id]->tlinks){
 					auto slink = mslink[link_id];
-					ofile << " " << slink->poolnum << " " << slink->inflow;
+                    ofile << "\t" << slink->poolnum << "\t" << slink->buffernum
+                          << "\t" << slink->inflow << "\t" <<  slink->outflow
+                          << "\t" << slink->avg_speed;
 				}
 
 				ofile << endl;
@@ -394,6 +416,8 @@ void PProcess::init(){
             if(mslink.find(linkid) == mslink.end()){
                 mslink[linkid] = shared_ptr<Link>(new Link());
                 mslink[linkid]->length = links[linkid]->length;
+                mslink[linkid]->pool_zh = links[linkid]->pool_zh;
+                mslink[linkid]->buffer_zh= links[linkid]->buffer_zh;
             }
         }
     }
@@ -435,4 +459,34 @@ void PProcess::clean(){
 		LOG_DEBUG(my2string("Remove ", delete_num, " Sample File."));	
 	}
 	bf::create_directory(outpath);
+}
+
+void PProcess::addHeader(const vector<int>& node_ids){
+    for(auto node_id : node_ids){
+        ofstream ofile;
+        string outfile = outpath + "/" + std::to_string(node_id) + "_node_sample.txt";
+
+        if(!bf::exists(outfile)){
+            ofile.open(outfile.c_str(),std::ios::app);
+            ofile << "frame";
+            for(auto link_id : nodes[node_id]->flinks){
+                auto slink = mslink[link_id];
+                auto prefix = std::to_string(link_id) + "_";
+                ofile << "\t" << prefix + "poolnum" << "\t" << prefix + "buffernum"
+                    << "\t" << prefix + "inflow" << "\t"  << prefix + "outflow"
+                    << "\t" << prefix + "speed";
+            }
+
+            for(auto link_id : nodes[node_id]->tlinks){
+                auto slink = mslink[link_id];
+                auto prefix= std::to_string(link_id) + "_";
+                ofile << "\t" << prefix + "poolnum" << "\t" << prefix + "buffernum"
+                    << "\t" << prefix + "inflow" << "\t"  << prefix + "outflow"
+                    << "\t" << prefix + "speed";
+            }
+            ofile << endl;
+            ofile.flush();
+            ofile.close();
+        } 
+    }
 }

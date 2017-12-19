@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
+#include <assert.h>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
@@ -27,7 +28,7 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
     //load config
     
     if(!bf::exists(_config.pathdir)){
-        LOG_TRACE("path.xmlnot found!");
+        LOG_FATAL("path.xml not found!");
         exit(0);
     }
 
@@ -42,6 +43,8 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
         while(linkElement){
             int id,totalnum;
             double length,maxspeed;
+            double pool_zh, buffer_zh; //pool endzh, buffer startzh
+
             linkElement->QueryAttribute("id",&id);
             XMLElement *speedElement = linkElement->FirstChildElement("maxspeed");
             XMLElement *lengthElement = linkElement->FirstChildElement("length");
@@ -52,9 +55,19 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
             maxspeed = atof(speedNode->Value());
             totalnum = length * 1 / CARLEN; //每个车7.5米,默认都是１个lane
 
-            LOG_TRACE(my2string("linkid is :" ,id , ", length is : " , lengthNode->Value() , ", maxspeed is: " , speedNode->Value() , ", totalnum is: " , totalnum));
+            if(_config.poolsize != 0) 
+                pool_zh = _config.poolsize; //如果配置了,则按照配置处理
+            else
+                pool_zh = length - _config.buffersize; //未配置则按照两段切分方法
 
-            shared_ptr<Link> mlink = shared_ptr<Link>(new Link(id,length,maxspeed,totalnum));
+            buffer_zh = length - _config.buffersize;
+
+            //assert((pool_zh >=0) && (buffer_zh >= 0));
+
+            LOG_DEBUG(my2string("linkid is :" ,id , ", length is : " , lengthNode->Value() , ", maxspeed is: " , speedNode->Value() ,
+                    ", totalnum is: " , totalnum , "pool_zh is :", pool_zh , "buffer_zh is: " , buffer_zh));
+
+            shared_ptr<Link> mlink = shared_ptr<Link>(new Link(id,length,maxspeed,totalnum,pool_zh,buffer_zh));
             links[id] = mlink;
             path.push_back(id);
 

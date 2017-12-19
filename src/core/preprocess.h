@@ -24,9 +24,9 @@ using namespace std;
 class PProcess{
 	public:
 		PProcess(const string& inpath,const string& pattern,const int &interval,const string& outpath,
-                vector<vector<int>>& paths,
-                map<int,shared_ptr<Node>>& nodes,
-                map<int,shared_ptr<Link>>& links);
+        vector<vector<int>>& paths,
+        map<int,shared_ptr<Node>>& nodes,
+        map<int,shared_ptr<Link>>& links);
 		void doSampleByTime(); //采样函数
 		void doSampleByLink(vector<int> linkid); //按照link单独采样
 		void doSampleByNode(vector<int> nodeid); //按照link单独采样
@@ -36,6 +36,8 @@ class PProcess{
 		void sampleByTime(const string& path, bool lastfile);
 		void sampleByLink(const string& path,vector<int> link_ids, bool lastfile);
 		void sampleByNode(const string& path,vector<int> node_ids, bool lastfile);
+    private:
+        void addHeader(const vector<int>& node_ids);
 	private:
 		string inpath; //output_path
 		string pattern; //查找通配置文件

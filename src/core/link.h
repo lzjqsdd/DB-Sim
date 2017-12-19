@@ -22,7 +22,7 @@ class Link{
 public:
     Link();
     Link(const Link& link);
-    Link(int32_t id , double length , double maxspeed, int poolnum);
+    Link(int32_t id , double length , double maxspeed, int totalnum,double pool_zh, double buffer_zh);
     Link& operator=(const Link& link);
 
     ~Link();
@@ -46,6 +46,8 @@ public:
     double sum_frame;  //统计累积总时间
     double sum_zh; //统计区间累积总里程
     double avg_speed;
+    double pool_zh; //pool endzh
+    double buffer_zh; //buffer startzh
 };
 
 #endif 

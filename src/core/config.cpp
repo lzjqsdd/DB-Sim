@@ -120,9 +120,6 @@ void Config::init(const string& config_path)
         if(mconfig.lookupValue("global.sample",sample)){
             this->sample= sample;
         }
-        if(mconfig.lookupValue("global.data_path",data_path)){
-			this->data_path = data_path;
-        }
         if(mconfig.lookupValue("global.pathdir",pathdir)){
             this->pathdir = pathdir;
         }
@@ -157,7 +154,11 @@ void Config::init(const string& config_path)
 			this->sample_nodeids.push_back(nodeids[i]);
 		}
 
-        if(mconfig.lookupValue("sample.outpath",sample_outpath)){
+        if(mconfig.lookupValue("sample.data_path",data_path)){
+			this->data_path = data_path;
+        }
+
+        if(mconfig.lookupValue("sample.out_path",sample_outpath)){
 			this->sample_outpath = sample_outpath;
         }
 
