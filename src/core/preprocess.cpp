@@ -155,23 +155,66 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
                 is >> carid >> x >> y >> type >> linkid >> zh;
                 //LOG_TRACE(my2string("carid:",carid,"\tposx: ",x,"\tposy: ",y));
                 if(magent.find(carid) == magent.end()){
-                    magent[carid] = shared_ptr<Agent>(new Agent(carid, linkid,pathid));
+                    magent[carid] = shared_ptr<Agent>(new Agent(carid, linkid));
 					mslink[linkid]->inflow++;
-					mslink[linkid]->poolnum++;
+
+                    if(zh < mslink[linkid]->pool_zh || abs(zh - mslink[linkid]->pool_zh) < 1e-9 )   mslink[linkid]->poolnum++; //如果在pool中，则poolnum++
+                    else if(zh > mslink[linkid]->buffer_zh)  mslink[linkid]->buffernum++; //如果在buffer中，则buffernum++;
+
+
+                    mslink[linkid]->sum_zh += (zh - 0.0F);
+                    mslink[linkid]->sum_frame++;
                 }
                 else{
                     if(magent[carid]->linkid != linkid){
-                        //换道了
+                        //previous link
                         int pre_linkid = magent[carid]->linkid;
                         mslink[pre_linkid]->outflow++;
-                        mslink[pre_linkid]->poolnum--;
 
+                        if(magent[carid]->zh < mslink[pre_linkid]->pool_zh || abs(magent[carid]->zh - mslink[pre_linkid]->pool_zh) < 1e-9 ) {   
+                            mslink[pre_linkid]->poolnum--; //如果之前在Pool中
+                        }
+                        else if(magent[carid]->zh > mslink[pre_linkid]->buffer_zh)   mslink[pre_linkid]->buffernum--; //如果之前在buffer中
+
+                        double pre_delta_zh = mslink[pre_linkid]->length - magent[carid]->zh;
+                        double cur_delta_zh = zh;
+
+                        double pre_ratio = pre_delta_zh / (pre_delta_zh + zh);
+
+                        mslink[pre_linkid]->sum_frame+= pre_ratio; //通过前后两端的时间应该按比例分配当前的frame,比如0.2,0.8
+                        mslink[pre_linkid]->sum_zh += (pre_delta_zh); //累加增量的里程
+
+                        //current link
                         mslink[linkid]->inflow++;
-                        mslink[linkid]->poolnum++;
+
+                        if(zh < mslink[linkid]->pool_zh || abs(zh - mslink[linkid]->pool_zh) < 1e-9 )   mslink[linkid]->poolnum++; //如果现在在pool中
+                        else if(zh > mslink[linkid]->buffer_zh)  mslink[linkid]->buffernum++; //如果现在在buffer中
+
+                        //mslink[linkid]->poolnum++;
+                        mslink[linkid]->sum_frame += (1-pre_ratio);
+                        mslink[linkid]->sum_zh += (zh - 0.0F);
 
                         magent[carid]->linkid = linkid;
                     } 
+                    else{ //still on current link
+
+                        if( (magent[carid]->zh < mslink[linkid]->pool_zh || abs(magent[carid]->zh - mslink[linkid]->pool_zh) < 1e-9) && (zh > mslink[linkid]->buffer_zh)) //之前在pool,现在在buffer中
+                        {
+                            mslink[linkid]->poolnum--;
+                            if(mslink[linkid]->poolnum < 0){
+                                std::cout << "======" << "pool_zh: "  << mslink[linkid]->pool_zh <<"pre zh : " << magent[carid]->zh << " cur_zh:" << zh << 
+                                    "buffer_zh: " << mslink[linkid]->buffer_zh <<endl;
+
+                            }
+                            mslink[linkid]->buffernum++;
+                        }
+
+                        mslink[linkid]->sum_frame++;
+                        mslink[linkid]->sum_zh += (zh - magent[carid]->zh);
+                    }
                 }
+
+                magent[carid]->zh = zh; //更新里程信息
 				cur_inscene.insert(carid);
             }
 			//计算离开的agent
@@ -180,7 +223,13 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 				{
 					int pre_linkid = magent[carid]->linkid;
 					mslink[pre_linkid]->outflow++;
-					mslink[pre_linkid]->poolnum--;
+
+                    if(magent[carid]->zh < mslink[pre_linkid]->pool_zh || abs(magent[carid]->zh - mslink[pre_linkid]->pool_zh) < 1e-9) mslink[pre_linkid]->poolnum--;//如果之前在Pool中
+                    else if(magent[carid]->zh > mslink[pre_linkid]->buffer_zh)   mslink[pre_linkid]->buffernum--; //如果之前在buffer中
+
+                    mslink[pre_linkid]->sum_frame ++; //这里粗略统计
+                    mslink[pre_linkid]->sum_zh += (mslink[pre_linkid]->length - magent[carid]->zh);
+
 				}	
 			}
 			pre_inscene.swap(cur_inscene);
@@ -193,11 +242,18 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 					string outfile = outpath + "/" + std::to_string(link_id)+"_link_sample.txt";
 					ofile.open(outfile.c_str(),std::ios::app);
 					auto slink = mslink[link_id];
-					ofile <<  frame << " " << slink->inflow << " " << slink->outflow << " " << slink->poolnum << endl;
+					//ofile <<  frame << " " << slink->inflow << " " << slink->outflow << " " << slink->poolnum << endl;
+                    ofile << frame;
+                    ofile << "\t" << slink->poolnum << "\t" << slink->buffernum
+                          << "\t" << slink->inflow << "\t"  << slink->outflow
+                          << "\t" << slink->avg_speed << endl;
 					ofile.close();
-
+                    //重置统计量
 					slink->inflow = 0;
 					slink->outflow = 0;
+                    slink->sum_frame = 0;
+                    slink->sum_zh = 0;
+                    slink->avg_speed = 0;
 				}
             }
 		}
@@ -205,16 +261,28 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 		if(lastfile && frame % interval != 0) //最后一段不满足一个采样间隔
 		{
 			frame = interval * (frame/interval + 1);
+            //计算平均速度
+            for(auto mlink : mslink){
+                    if(mlink.second->sum_frame > 0.0F)
+                        mlink.second->avg_speed = mlink.second->sum_zh / (mlink.second->sum_frame * 0.1);
+            }
+
 			for(auto link_id : link_ids){
 				ofstream ofile;
 				string outfile = outpath + "/" + std::to_string(link_id)+"_link_sample.txt";
 				ofile.open(outfile.c_str(),std::ios::app);
 				auto slink = mslink[link_id];
-				ofile <<  frame << " " << slink->inflow << " " << slink->outflow << " " << slink->poolnum << endl;
+                ofile << frame;
+                ofile << "\t" << slink->poolnum << "\t" << slink->buffernum
+                      << "\t" << slink->inflow << "\t"  << slink->outflow
+                      << "\t" << slink->avg_speed << endl;
 				ofile.close();
 
 				slink->inflow = 0;
 				slink->outflow = 0;
+                slink->sum_frame = 0;
+                slink->sum_zh = 0;
+                slink->avg_speed = 0;
 			}
 
 		}
@@ -411,6 +479,9 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 
 void PProcess::init(){
     //初始化填充Link
+    mslink.clear();
+    magent.clear();
+
     for(auto path: paths){
         for(auto linkid : path){
             if(mslink.find(linkid) == mslink.end()){
@@ -434,6 +505,9 @@ void PProcess::doSampleByTime(){
 }
 
 void PProcess::doSampleByLink(vector<int> linkids){
+
+    init();
+
 	vector<string> filelist = getFilelist(inpath,pattern);
 	int filenum = 1;
 	for(auto filename : filelist){
@@ -444,6 +518,9 @@ void PProcess::doSampleByLink(vector<int> linkids){
 }
 
 void PProcess::doSampleByNode(vector<int> nodeids){
+
+    init();
+
 	vector<string> filelist = getFilelist(inpath,pattern);
 	int filenum = 1;
 	for(auto filename : filelist){

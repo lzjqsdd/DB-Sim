@@ -44,7 +44,7 @@ void TestModel()
 }
 
 
-void sample(const Config& config)
+void sample(const Config& config, bool sample_node, bool sample_link)
 {
     //加载配置文件
     shared_ptr<Manager> manager = Manager::getManager();
@@ -54,18 +54,32 @@ void sample(const Config& config)
     TFETE tfete(config); //主要处理类
 	FETEIf &f = tfete;
 	f.init();
-    LOG_TRACE("sample ...");
     PProcess processor(config.data_path,"car",config.timestep,config.sample_outpath,f.paths, f.nodes, f.links);
-    processor.init();
     processor.clean();
 
     //sample by nodes
-    vector<int> nodes;
-    for(auto node:f.nodes) nodes.push_back(node.first);
-    if(config.sample_nodeids.size() != 0)
-        processor.doSampleByNode(config.sample_nodeids);
-    else
-        processor.doSampleByNode(nodes);
+    if(sample_node){
+        LOG_DEBUG("Sample Node ...");
+        if(config.sample_nodeids.size() != 0)
+            processor.doSampleByNode(config.sample_nodeids);
+        else{
+            vector<int> nodes;
+            for(auto node:f.nodes) nodes.push_back(node.first);
+            processor.doSampleByNode(nodes);
+        }
+    }
+
+    //sample by links
+    if(sample_link){
+        LOG_DEBUG("Sample Link...");
+        if(config.sample_linkids.size() != 0)
+            processor.doSampleByLink(config.sample_linkids);
+        else{
+            vector<int> links;
+            for(auto link:f.links) links.push_back(link.first);
+            processor.doSampleByLink(links);
+        }
+    }
 
 }
 
@@ -101,14 +115,14 @@ int main(int argc, char *argv[])
     po::options_description desc("\nfete [options] [ceil|test|gawron|fete] ");
     desc.add_options()
         ("help,h","show help")
-        ("sample,s","sample for node and link")
+        ("sample,s", po::value<vector<string> >(),"sample for node and link")
         ("simulation,S", po::value< vector<string> >(),"simulation for fete")
         ("test,t","Test each model")
         ;
 
     po::positional_options_description p;
-    p.add("simulation",-1);
-
+    p.add("simulation",-1); //-1表示后面可以跟的参数无限
+    p.add("sample",2);
     po::variables_map vm;
     po::store(po::command_line_parser(argc,argv).options(desc).positional(p).run(), vm);
     po::notify(vm);
@@ -121,7 +135,15 @@ int main(int argc, char *argv[])
         Config config("../config/config.conf");
         initlog(config.log_level);
         LOG_TRACE(config);
-        sample(config);
+        vector<string> sample_args = vm["sample"].as< vector<string> >();
+        bool sample_node = false;
+        bool sample_link = false;
+        for(auto sarg : sample_args)
+        {
+            if(sarg == "link") sample_link = true;
+            else if(sarg == "node") sample_node = true;
+        }
+        sample(config, sample_node, sample_link);
     }
     else if(vm.count("simulation")){
         Config config("../config/config.conf");

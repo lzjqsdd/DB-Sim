@@ -55,11 +55,11 @@ void TFETE::loadStaticData(const string& datapath)
 			string link_datapath = my2string(datapath,"/",mlink.first,"_link_sample.txt");
 			fstream fin(link_datapath.c_str(), std::ifstream::in);
 			string line;
-			int frame,inflow,outflow,poolnum;
+			int frame,inflow,outflow,poolnum,buffernum,speed;
 			while(std::getline(fin,line)){
 				istringstream is(line);
-				is >> frame >> inflow >> outflow >> poolnum;
-				static_data[mlink.first][frame] = shared_ptr<LinkData>(new LinkData(inflow,outflow,poolnum));
+				is >> frame >> poolnum >> buffernum >> inflow>> outflow >> speed;
+				static_data[mlink.first][frame] = shared_ptr<LinkData>(new LinkData(inflow,outflow,poolnum + buffernum));
 			}
 			LOG_TRACE(my2string("load static data link : ",mlink.first, " done."));
 		}catch(...){
@@ -75,7 +75,6 @@ void TFETE::init(){
     //加载路网
     LOG_TRACE("init Tfete ...");
     loadNetwork();
-	loadStaticData(_config.sample_outpath);
     curtime = 0;
     curnum = 0;
 }
@@ -121,6 +120,7 @@ void TFETE::doUpdate(){
 	LOG_DEBUG(ss);
 }
 void TFETE::start(){
+	loadStaticData(_config.sample_outpath);
     while(!Finished){
         //LOG_DEBUG(my2string("==============Current Time is : " , curtime, "========================="));
         if(Finished) return;
