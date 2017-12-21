@@ -5,6 +5,7 @@ Config::Config():
 	log_level(logging::trivial::trace),
 	sample(false),
 	data_path("../data"),
+    data_prefix("car"),
 	sample_outpath("../data/sample"),
     poolsize(0.0F),
     buffersize(100.0F)
@@ -16,6 +17,7 @@ Config::Config(const string& config_path):
 	log_level(logging::trivial::trace),
 	sample(false),
 	data_path("../data"),
+    data_prefix("car"),
 	sample_outpath("../data/sample"),
     poolsize(0.0F),
     buffersize(100.0F)
@@ -34,6 +36,7 @@ Config::Config(const Config& config){
     }
 	this->sample = config.sample;
 	this->data_path = config.data_path;
+    this->data_prefix = config.data_prefix;
 	this->sample_linkids = config.sample_linkids;
 	this->sample_nodeids = config.sample_nodeids;
 	this->sample_outpath= config.sample_outpath;
@@ -53,6 +56,7 @@ Config& Config::operator=(const Config& config){
         }
 		this->sample = config.sample;
 		this->data_path = config.data_path;
+        this->data_prefix = config.data_prefix;
 		this->sample_linkids = config.sample_linkids;
 		this->sample_nodeids = config.sample_nodeids;
 		this->sample_outpath= config.sample_outpath;
@@ -156,6 +160,10 @@ void Config::init(const string& config_path)
 
         if(mconfig.lookupValue("sample.data_path",data_path)){
 			this->data_path = data_path;
+        }
+
+        if(mconfig.lookupValue("sample.data_prefix",data_path)){
+			this->data_prefix= data_prefix;
         }
 
         if(mconfig.lookupValue("sample.out_path",sample_outpath)){

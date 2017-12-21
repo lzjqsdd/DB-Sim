@@ -54,7 +54,7 @@ void sample(const Config& config, bool sample_node, bool sample_link)
     TFETE tfete(config); //主要处理类
 	FETEIf &f = tfete;
 	f.init();
-    PProcess processor(config.data_path,"car",config.timestep,config.sample_outpath,f.paths, f.nodes, f.links);
+    PProcess processor(config.data_path, config.data_prefix, config.timestep,config.sample_outpath,f.paths, f.nodes, f.links);
     processor.clean();
 
     //sample by nodes
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
     else if(vm.count("simulation")){
         Config config("../config/config.conf");
         initlog(config.log_level);
-        LOG_TRACE(config);
+        cout << config << endl;
         vector<string> simu_args = vm["simulation"].as< vector<string> >();
         for(auto sarg : simu_args) simulation(config, str2type(sarg));
     }

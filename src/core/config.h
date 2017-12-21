@@ -41,6 +41,7 @@ class Config{
 		string data_path; //原始数据所在位置
 		vector<int> sample_linkids; //需要采样的link
 		vector<int> sample_nodeids; //需要采样的node
+        string data_prefix; //原始数据的命名前缀
 		string sample_outpath; //采样输出位置
         double poolsize; //pool length after node
         double buffersize; //buffer length before node
