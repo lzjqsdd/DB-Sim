@@ -55,12 +55,24 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
             maxspeed = atof(speedNode->Value());
             totalnum = length * 1 / CARLEN; //每个车7.5米,默认都是１个lane
 
-            if(_config.poolsize != 0) 
-                pool_zh = _config.poolsize; //如果配置了,则按照配置处理
-            else
-                pool_zh = length - _config.buffersize; //未配置则按照两段切分方法
+            if(length > _config.buffersize) 
+            {
+                if(_config.poolsize != 0) 
+                    pool_zh = _config.poolsize; //如果配置了,则按照配置处理
+                else
+                    pool_zh = length - _config.buffersize; //未配置则按照两段切分方法
+                buffer_zh = length - _config.buffersize;
+            }
+            else{ //buffersize too large,set buffersize to 1/3 length
+                double buffer_size = length / 3.0;
+                if(_config.poolsize != 0) 
+                    pool_zh = _config.poolsize; //如果配置了,则按照配置处理
+                else
+                    pool_zh = length - buffer_size; //未配置则按照两段切分方法
+                buffer_zh = length - buffer_size;
+            }
+            
 
-            buffer_zh = length - _config.buffersize;
 
             //assert((pool_zh >=0) && (buffer_zh >= 0));
 
