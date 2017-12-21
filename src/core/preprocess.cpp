@@ -158,7 +158,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
                     magent[carid] = shared_ptr<Agent>(new Agent(carid, linkid));
 					mslink[linkid]->inflow++;
 
-                    if(zh < mslink[linkid]->pool_zh || abs(zh - mslink[linkid]->pool_zh) < 1e-9 )   mslink[linkid]->poolnum++; //如果在pool中，则poolnum++
+                    if(zh < mslink[linkid]->pool_zh || fabs(zh - mslink[linkid]->pool_zh) < 1e-15 )   mslink[linkid]->poolnum++; //如果在pool中，则poolnum++
                     else if(zh > mslink[linkid]->buffer_zh)  mslink[linkid]->buffernum++; //如果在buffer中，则buffernum++;
 
 
@@ -171,7 +171,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
                         int pre_linkid = magent[carid]->linkid;
                         mslink[pre_linkid]->outflow++;
 
-                        if(magent[carid]->zh < mslink[pre_linkid]->pool_zh || abs(magent[carid]->zh - mslink[pre_linkid]->pool_zh) < 1e-9 ) {   
+                        if(magent[carid]->zh < mslink[pre_linkid]->pool_zh || fabs(magent[carid]->zh - mslink[pre_linkid]->pool_zh) < 1e-15 ) {   
                             mslink[pre_linkid]->poolnum--; //如果之前在Pool中
                         }
                         else if(magent[carid]->zh > mslink[pre_linkid]->buffer_zh)   mslink[pre_linkid]->buffernum--; //如果之前在buffer中
@@ -187,7 +187,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
                         //current link
                         mslink[linkid]->inflow++;
 
-                        if(zh < mslink[linkid]->pool_zh || abs(zh - mslink[linkid]->pool_zh) < 1e-9 )   mslink[linkid]->poolnum++; //如果现在在pool中
+                        if(zh < mslink[linkid]->pool_zh || fabs(zh - mslink[linkid]->pool_zh) < 1e-15 )   mslink[linkid]->poolnum++; //如果现在在pool中
                         else if(zh > mslink[linkid]->buffer_zh)  mslink[linkid]->buffernum++; //如果现在在buffer中
 
                         //mslink[linkid]->poolnum++;
@@ -198,15 +198,17 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
                     } 
                     else{ //still on current link
 
-                        if( (magent[carid]->zh < mslink[linkid]->pool_zh || abs(magent[carid]->zh - mslink[linkid]->pool_zh) < 1e-9) && (zh > mslink[linkid]->buffer_zh)) //之前在pool,现在在buffer中
+                        if( (magent[carid]->zh < mslink[linkid]->pool_zh || fabs(magent[carid]->zh - mslink[linkid]->pool_zh) < 1e-15)
+                                && (zh > mslink[linkid]->buffer_zh)) //之前在pool,现在在buffer中
                         {
                             mslink[linkid]->poolnum--;
-                            if(mslink[linkid]->poolnum < 0){
-                                std::cout << "======" << "pool_zh: "  << mslink[linkid]->pool_zh <<"pre zh : " << magent[carid]->zh << " cur_zh:" << zh << 
-                                    "buffer_zh: " << mslink[linkid]->buffer_zh <<endl;
-
-                            }
                             mslink[linkid]->buffernum++;
+                        }
+                        else if( (zh < mslink[linkid]->pool_zh || fabs(zh - mslink[linkid]->pool_zh) < 1e-15) 
+                                && (magent[carid]->zh > mslink[linkid]->buffer_zh)) //现在在pool,之前在buffer中(很诡异)
+                        {
+                            mslink[linkid]->poolnum++;
+                            mslink[linkid]->buffernum--;
                         }
 
                         mslink[linkid]->sum_frame++;
@@ -224,7 +226,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 					int pre_linkid = magent[carid]->linkid;
 					mslink[pre_linkid]->outflow++;
 
-                    if(magent[carid]->zh < mslink[pre_linkid]->pool_zh || abs(magent[carid]->zh - mslink[pre_linkid]->pool_zh) < 1e-9) mslink[pre_linkid]->poolnum--;//如果之前在Pool中
+                    if(magent[carid]->zh < mslink[pre_linkid]->pool_zh || fabs(magent[carid]->zh - mslink[pre_linkid]->pool_zh) < 1e-15) mslink[pre_linkid]->poolnum--;//如果之前在Pool中
                     else if(magent[carid]->zh > mslink[pre_linkid]->buffer_zh)   mslink[pre_linkid]->buffernum--; //如果之前在buffer中
 
                     mslink[pre_linkid]->sum_frame ++; //这里粗略统计
@@ -316,7 +318,7 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                     magent[carid] = shared_ptr<Agent>(new Agent(carid, linkid));
 					mslink[linkid]->inflow++;
 
-                    if(zh <= mslink[linkid]->pool_zh)   mslink[linkid]->poolnum++; //如果在pool中，则poolnum++
+                    if(zh < mslink[linkid]->pool_zh || fabs(zh - mslink[linkid]->pool_zh) < 1e-15 )   mslink[linkid]->poolnum++; //如果在pool中，则poolnum++
                     else if(zh > mslink[linkid]->buffer_zh)  mslink[linkid]->buffernum++; //如果在buffer中，则buffernum++;
 
 
@@ -329,7 +331,9 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                         int pre_linkid = magent[carid]->linkid;
                         mslink[pre_linkid]->outflow++;
 
-                        if(magent[carid]->zh <= mslink[pre_linkid]->pool_zh)    mslink[pre_linkid]->poolnum--; //如果之前在Pool中
+                        if(magent[carid]->zh < mslink[pre_linkid]->pool_zh || fabs(magent[carid]->zh - mslink[pre_linkid]->pool_zh) < 1e-15 ) {   
+                            mslink[pre_linkid]->poolnum--; //如果之前在Pool中
+                        }
                         else if(magent[carid]->zh > mslink[pre_linkid]->buffer_zh)   mslink[pre_linkid]->buffernum--; //如果之前在buffer中
 
                         double pre_delta_zh = mslink[pre_linkid]->length - magent[carid]->zh;
@@ -343,7 +347,7 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                         //current link
                         mslink[linkid]->inflow++;
 
-                        if(zh <= mslink[linkid]->pool_zh)   mslink[linkid]->poolnum++; //如果现在在pool中
+                        if(zh < mslink[linkid]->pool_zh || fabs(zh - mslink[linkid]->pool_zh) < 1e-15 )   mslink[linkid]->poolnum++; //如果现在在pool中
                         else if(zh > mslink[linkid]->buffer_zh)  mslink[linkid]->buffernum++; //如果现在在buffer中
 
                         //mslink[linkid]->poolnum++;
@@ -353,12 +357,19 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                         magent[carid]->linkid = linkid;
                     } 
                     else{ //still on current link
-
-                        if(magent[carid]->zh <= mslink[linkid]->pool_zh && zh > mslink[linkid]->buffer_zh) //之前在pool,现在在buffer中
+                        if( (magent[carid]->zh < mslink[linkid]->pool_zh || fabs(magent[carid]->zh - mslink[linkid]->pool_zh) < 1e-15)
+                                && (zh > mslink[linkid]->buffer_zh)) //之前在pool,现在在buffer中
                         {
                             mslink[linkid]->poolnum--;
                             mslink[linkid]->buffernum++;
                         }
+                        else if( (zh < mslink[linkid]->pool_zh || fabs(zh - mslink[linkid]->pool_zh) < 1e-15) 
+                                && (magent[carid]->zh > mslink[linkid]->buffer_zh)) //现在在pool,之前在buffer中(很诡异)
+                        {
+                            mslink[linkid]->poolnum++;
+                            mslink[linkid]->buffernum--;
+                        }
+
 
                         mslink[linkid]->sum_frame++;
                         mslink[linkid]->sum_zh += (zh - magent[carid]->zh);
@@ -375,8 +386,8 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
 					int pre_linkid = magent[carid]->linkid;
 					mslink[pre_linkid]->outflow++;
 
-                    if(magent[carid]->zh <= mslink[pre_linkid]->pool_zh)    mslink[pre_linkid]->poolnum--; //如果之前在Pool中
-                    if(magent[carid]->zh > mslink[pre_linkid]->buffer_zh)   mslink[pre_linkid]->buffernum--; //如果之前在buffer中
+                    if(magent[carid]->zh < mslink[pre_linkid]->pool_zh || fabs(magent[carid]->zh - mslink[pre_linkid]->pool_zh) < 1e-15) mslink[pre_linkid]->poolnum--;//如果之前在Pool中
+                    else if(magent[carid]->zh > mslink[pre_linkid]->buffer_zh)   mslink[pre_linkid]->buffernum--; //如果之前在buffer中
 
                     mslink[pre_linkid]->sum_frame ++; //这里粗略统计
                     mslink[pre_linkid]->sum_zh += (mslink[pre_linkid]->length - magent[carid]->zh);
