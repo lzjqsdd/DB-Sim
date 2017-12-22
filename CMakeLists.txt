@@ -6,6 +6,7 @@ add_definitions(-std=c++11)
 set(CMAKE_BUILD_TYPE Debug)
 #SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 #set(CMAKE_BUILD_TYPE Release)
+set(PROJECT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 #添加自定义宏
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
@@ -113,4 +114,8 @@ target_link_libraries(fete
     python2.7
 )
 
-#add_library(svm SHARED ./src/model/svm.cpp)
+#安装
+#install(TARGETS fete DESTINATION  ${PROJECT_DIR}/fete/bin)
+#install(DIRECTORY ${PROJECT_DIR}/config DESTINATION ${PROJECT_DIR}/fete)
+#install(PROGRAMS ${PROJECT_DIR}/lib/libconfig/libconfig++.so DESTINATION ${PROJECT_DIR}/fete/lib)
+#install(PROGRAMS ${PROJECT_DIR}/lib/libconfig/libconfig++.so.11.0.0 DESTINATION ${PROJECT_DIR}/fete/lib)
