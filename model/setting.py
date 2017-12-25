@@ -26,3 +26,5 @@ need_preprocess = True
 
 # config的文件
 config_file = os.path.join(config_root,"config.conf")
+pathxml = os.path.join(data_root,"network/path.xml")
+nodexml = os.path.join(data_root,"network/node.xml")

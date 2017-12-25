@@ -60,4 +60,4 @@ def showNetwork(node_file):
 
 
 #loadNetwork("../data/data_qs/network/node.xml")
-showNetwork("../data/data_qs/network/node.xml")
+#showNetwork("../data/data_qs/network/node.xml")
