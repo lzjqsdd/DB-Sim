@@ -6,8 +6,9 @@ import os
 DEBUG = True
 
 # root path
-data_root = '../data/'
+data_root = '../data/data_qs'
 model_root='../model/'
+config_root = '../config'
 
 # data path
 origin_data_path = os.path.join(data_root,'sample/')
@@ -22,3 +23,6 @@ data_pkl_filename = os.path.join(pkl_path,'data.pkl')
 
 # 是否进行预处理
 need_preprocess = True
+
+# config的文件
+config_file = os.path.join(config_root,"config.conf")

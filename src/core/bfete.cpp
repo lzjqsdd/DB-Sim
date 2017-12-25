@@ -24,7 +24,7 @@ namespace logging = boost::log;
 namespace bf = boost::filesystem;
 
 void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& paths){
-    //±éÀúpath.xmlÌî³älinks
+    //éå†path.xmlå¡«å……links
     //load config
     
     if(!bf::exists(_config.pathdir)){
@@ -53,22 +53,22 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
 
             length = atof(lengthNode->Value());
             maxspeed = atof(speedNode->Value());
-            totalnum = length * 1 / CARLEN; //Ã¿¸ö³µ7.5Ã×,Ä¬ÈÏ¶¼ÊÇ£±¸ölane
+            totalnum = length * 1 / CARLEN; //æ¯ä¸ªè½¦7.5ç±³,é»˜è®¤éƒ½æ˜¯ï¼‘ä¸ªlane
 
             if(length > _config.buffersize) 
             {
                 if(_config.poolsize != 0) 
-                    pool_zh = _config.poolsize; //Èç¹ûÅäÖÃÁË,Ôò°´ÕÕÅäÖÃ´¦Àí
+                    pool_zh = _config.poolsize; //å¦‚æœé…ç½®äº†,åˆ™æŒ‰ç…§é…ç½®å¤„ç†
                 else
-                    pool_zh = length - _config.buffersize; //Î´ÅäÖÃÔò°´ÕÕÁ½¶ÎÇĞ·Ö·½·¨
+                    pool_zh = length - _config.buffersize; //æœªé…ç½®åˆ™æŒ‰ç…§ä¸¤æ®µåˆ‡åˆ†æ–¹æ³•
                 buffer_zh = length - _config.buffersize;
             }
             else{ //buffersize too large,set buffersize to 1/3 length
                 double buffer_size = length / 3.0;
                 if(_config.poolsize != 0) 
-                    pool_zh = _config.poolsize; //Èç¹ûÅäÖÃÁË,Ôò°´ÕÕÅäÖÃ´¦Àí
+                    pool_zh = _config.poolsize; //å¦‚æœé…ç½®äº†,åˆ™æŒ‰ç…§é…ç½®å¤„ç†
                 else
-                    pool_zh = length - buffer_size; //Î´ÅäÖÃÔò°´ÕÕÁ½¶ÎÇĞ·Ö·½·¨
+                    pool_zh = length - buffer_size; //æœªé…ç½®åˆ™æŒ‰ç…§ä¸¤æ®µåˆ‡åˆ†æ–¹æ³•
                 buffer_zh = length - buffer_size;
             }
             
@@ -91,7 +91,7 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
 }
 
 void FETEIf::loadNodes(map<int, shared_ptr<Node>>& nodes){
-    //±éÀúnode.xmlÌî³änodes
+    //éå†node.xmlå¡«å……nodes
     if(!bf::exists(_config.nodedir)){
         LOG_TRACE("node.xml not found!");
         exit(0);
@@ -104,8 +104,8 @@ void FETEIf::loadNodes(map<int, shared_ptr<Node>>& nodes){
 
     while(nodeElement){
         int id;
-        vector<int> flinks; //´æ´¢µÄÊÇ»ãÈëlinkµÄ±àºÅ
-        vector<int> tlinks; //Á÷³ölinkµÄ±àºÅ
+        vector<int> flinks; //å­˜å‚¨çš„æ˜¯æ±‡å…¥linkçš„ç¼–å·
+        vector<int> tlinks; //æµå‡ºlinkçš„ç¼–å·
 
         nodeElement->QueryAttribute("id", &id);
         XMLElement * flinksElement = nodeElement->FirstChildElement("flinks");
@@ -130,7 +130,7 @@ void FETEIf::loadNodes(map<int, shared_ptr<Node>>& nodes){
 }
 
 void FETEIf::fillLinks(const vector<vector<int>>& paths , map<int, shared_ptr<Link>>& links){
-	//±éÀúpathÖĞµÄÃ¿¸ölink£¬À´´¦ÀílinkµÄÇ°ºó¹ØÏµ
+	//éå†pathä¸­çš„æ¯ä¸ªlinkï¼Œæ¥å¤„ç†linkçš„å‰åå…³ç³»
 	for(auto path : paths){
 		for(int i = 1; i<path.size(); ++i){
 			int32_t pid = path[i-1];

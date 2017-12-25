@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <nodes>
   <node id="1949">
-    <flinks>
-    </flinks>
+    <flinks></flinks>
     <tlinks>1949</tlinks>
   </node>
   <node id="1951">
@@ -58,8 +57,7 @@
     <tlinks>2637</tlinks>
   </node>
   <node id="1953">
-    <flinks>
-    </flinks>
+    <flinks></flinks>
     <tlinks>1953</tlinks>
   </node>
   <node id="1956">
