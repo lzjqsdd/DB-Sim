@@ -51,11 +51,13 @@ def showNetwork(node_file):
 
     # Need to create a layout when doing
     # separate calls to draw nodes and edges
-    pos = nx.spring_layout(G)
-    nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'),
-                           node_size=1000)
-    nx.draw_networkx_labels(G, pos)
-    nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color='b', arrows=True)
+    #pos = nx.spring_layout(G)
+    #pos = nx.shell_layout(G)
+    #pos = nx.circular_layout(G)
+    pos = nx.spectral_layout(G)
+    nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'),node_size=500)
+    nx.draw_networkx_labels(G, pos, font_size = 8)
+    nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color='black', arrows=True)
     plt.show()
 
 

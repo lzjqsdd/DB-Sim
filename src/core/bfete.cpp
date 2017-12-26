@@ -76,8 +76,8 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
 
             //assert((pool_zh >=0) && (buffer_zh >= 0));
 
-            LOG_DEBUG(my2string("linkid is :" ,id , ", length is : " , lengthNode->Value() , ", maxspeed is: " , speedNode->Value() ,
-                    ", totalnum is: " , totalnum , "pool_zh is :", pool_zh , "buffer_zh is: " , buffer_zh));
+            LOG_DEBUG(my2string("linkid is :" ,id , "\tlength is : " , lengthNode->Value() , "\tmaxspeed is: " , speedNode->Value() ,
+                    "\ttotalnum is: " , totalnum , "\tpool_zh is :", pool_zh , "\tbuffer_zh is: " , buffer_zh));
 
             shared_ptr<Link> mlink = shared_ptr<Link>(new Link(id,length,maxspeed,totalnum,pool_zh,buffer_zh));
             links[id] = mlink;

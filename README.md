@@ -25,10 +25,12 @@ calculate evacuation time faster and  more accurately
 - [x] logging support
 - [x] basic iterator develop
 - [x] xgboost,randomforest c++ support
-- [ ] refacting fete manage
-- [ ] refacting config manage 
+- [x] refacting fete manage
+- [x] refacting config manage 
 
 ## Model
+- [ ] poolnum -> buffernum
+- [ ] buffernum -> outflow
 - [x] sample for every link and node
 - [x] add pool and buffer sample
 - [ ] train model for each node

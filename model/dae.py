@@ -18,15 +18,15 @@ import setting as st
 
 
 #根据node列表加载原始数据
-def load_origin_data(data_path, node_list, col_list, origin_data):
+def load_origin_data(data_path, node_list, origin_data):
     if len(node_list) == 0:
         return
 
-    for node_id,col in zip(node_list,col_list):
+    for node_id in node_list:
         node_sample_path = os.path.join(data_path,str(node_id)+"_node_sample.txt")
         if st.DEBUG:
             print("load node:",node_id,"in path",node_sample_path)
-        data = pd.read_csv(node_sample_path,delim_whitespace=True,names=col)
+        data = pd.read_csv(node_sample_path,delim_whitespace=True)
         origin_data.append(data)
         if st.DEBUG:
             print(data.describe())
@@ -93,7 +93,7 @@ def score(classfier, train_data, test_data):
 ####################################################################
 
 ## pipeline
-col = ['frame','pre_num','pre_oflow','pre_v','cur_num','cur_inflow','cur_v']
+#col = ['frame','pre_poolnum','pre_oflow','pre_v','cur_num','cur_inflow','cur_v']
 origin_data = [] #data through pipeline,contains all node data
 
 # try loading dump data
@@ -103,13 +103,16 @@ if(os.path.exists(st.data_pkl_filename) and not(st.override_pkl)):
 else:
 
     # step1 load data
-    load_origin_data(st.origin_data_path, [1951], [col], origin_data)
+    #load_origin_data(st.origin_data_path, [1949,1951,2073,2075,2066,2068,2062], origin_data)
+    load_origin_data(st.origin_data_path, [1949], origin_data)
     # step2 clean data
-    clean_data(origin_data)
+    # clean_data(origin_data)
     # dump data
     pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
 
-
+data_1949 = origin_data[0]
+plt.plot(data_1949['1949_poolnum'])
+plt.show()
     # step3 train data
 
     # step4 test data
