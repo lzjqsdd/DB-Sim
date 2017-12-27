@@ -43,6 +43,7 @@ def clean_data(origin_data):
 
     #shuffule
 
+
 # 分析目标变量的分布
 def analysis_y(df_train, y_name):
     sns.distplot(df_train[y_name])
@@ -56,13 +57,13 @@ def analysis_data_boxplot(df_train, feature_name, y_name):
     data = pd.concat([df_train[y_name],df_train[feature_name]],axis=1)
     f, ax = plt.subplots(figsize=(16,8))
     fig = sns.boxplot(x=feature_name,y=y_name,data = data)
-    fig.axis(ymin=0, ymax=800000)
+    fig.axis(ymin=0, ymax=df_train[y_name].max() + 10)
     plt.show()
 
 # 分析连续变量的分布采用散点图
-def analysis_data_scatter(df_train, feature_name, y_name):
-    data = pd.concat([df_train[y_name],df_train[feature_name]],axis=1)
-    data.plot.scatter(x = feature_name,y=y_name, ylim=(0,800000))
+def analysis_data_scatter(df_train, feature_name, y_name, jitter_factor):
+    data = pd.concat([jitter(df_train[y_name],jitter_factor),jitter(df_train[feature_name],jitter_factor)],axis=1)
+    data.plot.scatter(x = feature_name,y=y_name, ylim=(0,df_train[y_name].max()), marker='x')
     plt.show()
 
 #输出各个量之间的相关性
@@ -78,6 +79,11 @@ def analysis_data_heatmap(df_train, feature_name, y_name, klargest):
 
     plt.show()
 
+def jitter(series, factor):
+    z = float(series.max()) - float(series.min())
+    a = float(factor) * z /50.0
+    return series.apply(lambda x: x+np.random.uniform(-a,a))
+
 #训练
 def train(train_data):
     # random forest
@@ -87,34 +93,3 @@ def train(train_data):
 #calc score
 def score(classfier, train_data, test_data):
     pass
-
-
-
-####################################################################
-
-## pipeline
-#col = ['frame','pre_poolnum','pre_oflow','pre_v','cur_num','cur_inflow','cur_v']
-origin_data = [] #data through pipeline,contains all node data
-
-# try loading dump data
-if(os.path.exists(st.data_pkl_filename) and not(st.override_pkl)):
-    origin_data = pickle.load(open(st.data_pkl_filename,'rb'))
-
-else:
-
-    # step1 load data
-    #load_origin_data(st.origin_data_path, [1949,1951,2073,2075,2066,2068,2062], origin_data)
-    load_origin_data(st.origin_data_path, [1949], origin_data)
-    # step2 clean data
-    # clean_data(origin_data)
-    # dump data
-    pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
-
-data_1949 = origin_data[0]
-plt.plot(data_1949['1949_poolnum'])
-plt.show()
-    # step3 train data
-
-    # step4 test data
-
-##################################################################
