@@ -6,7 +6,7 @@ import os
 DEBUG = True
 
 # root path
-data_root = '../data/data_qs'
+data_root = '../data/data_qs/small'
 model_root='../model/'
 config_root = '../config'
 
