@@ -6,7 +6,7 @@ import os
 DEBUG = True
 
 # root path
-data_root = '../data/data_qs/small'
+data_root = '../data/one-short/one-short-500car'
 model_root='../model/'
 config_root = '../config'
 
