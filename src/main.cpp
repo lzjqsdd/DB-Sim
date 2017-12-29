@@ -115,8 +115,9 @@ int main(int argc, char *argv[])
     po::options_description desc("\nfete [options] [ceil|test|gawron|fete] ");
     desc.add_options()
         ("help,h","show help")
-        ("sample,s", po::value<vector<string> >(),"sample for node and link")
-        ("simulation,S", po::value< vector<string> >(),"simulation for fete")
+        ("config,c",po::value<string>() , "user defined config file")
+        ("sample,s", po::value<vector<string> >() ,"sample for node and link")
+        ("simulation,S", po::value< vector<string> > (),"simulation for fete")
         ("test,t","Test each model")
         ;
 
@@ -127,12 +128,19 @@ int main(int argc, char *argv[])
     po::store(po::command_line_parser(argc,argv).options(desc).positional(p).run(), vm);
     po::notify(vm);
 
+    string config_file = "../config/config.conf"; //defalut 
+    if(vm.count("config")){
+       config_file = vm["config"].as<string>(); 
+       cout << "using " << config_file << endl;
+    }
+
     if(vm.count("help")){
         cout << desc << "\n";
         return 0;
     }
-    else if(vm.count("sample")){
-        Config config("../config/config.conf");
+
+    if(vm.count("sample")){
+        Config config(config_file);
         initlog(config.log_level);
         LOG_TRACE(config);
         vector<string> sample_args = vm["sample"].as< vector<string> >();
@@ -144,22 +152,23 @@ int main(int argc, char *argv[])
             else if(sarg == "node") sample_node = true;
         }
         sample(config, sample_node, sample_link);
+        return 0;
     }
-    else if(vm.count("simulation")){
-        Config config("../config/config.conf");
+
+    if(vm.count("simulation")){
+        Config config(config_file);
         initlog(config.log_level);
         cout << config << endl;
         vector<string> simu_args = vm["simulation"].as< vector<string> >();
         for(auto sarg : simu_args) simulation(config, str2type(sarg));
+        return 0;
     }
-    else if(vm.count("test")){
-        TestModel();
-    }
-    else
-    {
-        cout << desc << "\n";
-        return 1;
-    }
-    return 0;
     
+    if(vm.count("test")){
+        TestModel();
+        return 0;
+    }
+
+    cout << desc << "\n";
+    return 1;
 }

@@ -180,11 +180,11 @@ void Config::init(const string& config_path)
 
     }catch(const libconfig::FileIOException &fioex){
         std::cerr << "can't read config file!" << std::endl;
-        return;
+        exit(-1);
     }catch(const libconfig::ParseException &pex)
     {
         std::cerr << "Parse error at" << pex.getFile() << ":" << pex.getLine()
                   << "-" << pex.getError() << std::endl;
-        return;
+        exit(-1);
     }
 }
