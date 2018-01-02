@@ -18,12 +18,13 @@ else:
     # step1 load data
     #load_origin_data(st.origin_data_path, [1949,1951,2077], origin_data)
     load_origin_data(st.origin_data_path, [1949,1951,2077], origin_data)
+    #load_origin_data(st.origin_data_path, [1949,1951,2073,2075,2066,2068,2062], origin_data)
     # step2 clean data
     # clean_data(origin_data)
     # dump data
     pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
 
-df_train = origin_data[1]
+df_train = origin_data[0]
 #df_train['1949_poolnum'].plot()
 #plt.show()
 #df_train['frame'] = df_train['frame'] % 1050
@@ -52,6 +53,8 @@ print(df_train2.describe())
 #analysis_data_boxplot(df_train, "frame", "2075_outflow")
 #df_train.dropna()
 #analysis_data_heatmap(df_train2, "1951_buffernum", "1951_outflow",10)
+df_train.dropna()
+analysis_data_heatmap(df_train, "frame", "1949_outflow",10)
     # step3 train data
 
     # step4 test data
