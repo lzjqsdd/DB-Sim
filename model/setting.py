@@ -6,14 +6,15 @@ import os
 DEBUG = True
 
 # root path
-data_root = '../data/data_qs/small'
+data_root = '../data/one-short/'
+data_sample_root = '../data/one-short/one-short-500car'
 model_root='../model/'
 config_root = '../config'
 
 # data path
-origin_data_path = os.path.join(data_root,'sample/')
-train_data_path = os.path.join(data_root,'sample/train')
-test_data_path = os.path.join(data_root,'sample/test')
+origin_data_path = os.path.join(data_sample_root,'sample/')
+train_data_path = os.path.join(data_sample_root,'sample/train')
+test_data_path = os.path.join(data_sample_root,'sample/test')
 
 # dump path
 pkl_path = os.path.join(model_root,'pkl/')
