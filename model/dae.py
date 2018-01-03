@@ -67,15 +67,19 @@ def analysis_data_scatter(df_train, feature_name, y_name, jitter_factor):
     plt.show()
 
 #输出各个量之间的相关性
-def analysis_data_heatmap(df_train, feature_name, y_name, klargest):
+def analysis_data_heatmap(df_train, y_name, klargest):
     corrmat = df_train.corr()
     f,ax = plt.subplots(figsize=(12,9))
+
     sns.heatmap(corrmat, vmax=.8, square=True)
 
     cols = corrmat.nlargest(klargest, y_name)[y_name].index
     cm = np.corrcoef(df_train[cols].values.T) #计算的是行与行之间的相关性系数
     sns.set(font_scale=1.25)
     hm = sns.heatmap(cm, cbar=True, annot=True, square=True, fmt='.2f',annot_kws={'size':10}, yticklabels=cols.values, xticklabels=cols.values)
+
+    ax.set_xticklabels(ax.get_xticklabels(),rotation=90)
+    ax.set_yticklabels(ax.get_yticklabels(),rotation=0,fontsize=10)
 
     plt.show()
 

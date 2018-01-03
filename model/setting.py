@@ -6,8 +6,8 @@ import os
 DEBUG = True
 
 # root path
-data_root = '../data/one-short/'
-data_sample_root = '../data/one-short/one-short-500car'
+data_root = '../data/one-short-nolight/'
+data_sample_root = '../data/one-short-nolight/one-short-500car-nolight'
 model_root='../model/'
 config_root = '../config'
 
@@ -26,6 +26,6 @@ data_pkl_filename = os.path.join(pkl_path,'data.pkl')
 need_preprocess = True
 
 # config的文件
-config_file = os.path.join(config_root,"config.conf")
+config_file = os.path.join(config_root,"500car-nolight.conf")
 pathxml = os.path.join(data_root,"network/path.xml")
 nodexml = os.path.join(data_root,"network/node.xml")
