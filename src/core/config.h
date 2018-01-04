@@ -45,6 +45,7 @@ class Config{
 		string sample_outpath; //采样输出位置
         double poolsize; //pool length after node
         double buffersize; //buffer length before node
+        bool cleanall; //clean all sample file
 };
 
 #endif

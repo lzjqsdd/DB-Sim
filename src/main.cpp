@@ -55,7 +55,10 @@ void sample(const Config& config, bool sample_node, bool sample_link)
 	FETEIf &f = tfete;
 	f.init();
     PProcess processor(config.data_path, config.data_prefix, config.timestep,config.sample_outpath,f.paths, f.nodes, f.links);
-    processor.clean();
+    if(config.cleanall)
+        processor.clean();
+    else
+        processor.clean(config.sample_linkids, config.sample_nodeids);
 
     //sample by nodes
     if(sample_node){

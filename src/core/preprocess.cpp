@@ -549,6 +549,26 @@ void PProcess::clean(){
 	bf::create_directory(outpath);
 }
 
+//采样哪个删除哪个
+void PProcess::clean(vector<int> link_ids, vector<int>node_ids)
+{
+    for(auto link_id: link_ids){
+        string outfile = outpath + "/" + std::to_string(link_id) + "_link_sample.txt";
+        if(bf::exists(outfile)){
+            uint32_t delete_num = bf::remove(outfile);
+            LOG_DEBUG(my2string("Remove ", outfile));   
+        }
+    }
+
+    for(auto node_id : node_ids){
+        string outfile = outpath + "/" + std::to_string(node_id) + "_node_sample.txt";
+        if(bf::exists(outfile)){
+            uint32_t delete_num = bf::remove(outfile);
+            LOG_DEBUG(my2string("Remove ", outfile));   
+        }
+    }
+}
+
 void PProcess::addHeader(const vector<int>& node_ids){
     for(auto node_id : node_ids){
         ofstream ofile;

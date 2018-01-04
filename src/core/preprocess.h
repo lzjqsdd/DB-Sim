@@ -31,7 +31,8 @@ class PProcess{
 		void doSampleByLink(vector<int> linkid); //按照link单独采样
 		void doSampleByNode(vector<int> nodeid); //按照link单独采样
 		void init(); //初始化各个link的数量
-		void clean(); //清楚以前的采样记录
+		void clean(); //清除以前的采样记录
+        void clean(vector<int> link_ids, vector<int>node_ids); //清除制定的link或者node的文件
 		vector<string> getFilelist(const string& dirpath,const string& pattern);
 		void sampleByTime(const string& path, bool lastfile);
 		void sampleByLink(const string& path,vector<int> link_ids, bool lastfile);

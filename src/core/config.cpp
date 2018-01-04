@@ -8,7 +8,8 @@ Config::Config():
     data_prefix("car"),
 	sample_outpath("../data/sample"),
     poolsize(0.0F),
-    buffersize(100.0F)
+    buffersize(100.0F),
+    cleanall(false)
 {
 }
 
@@ -20,7 +21,8 @@ Config::Config(const string& config_path):
     data_prefix("car"),
 	sample_outpath("../data/sample"),
     poolsize(0.0F),
-    buffersize(100.0F)
+    buffersize(100.0F),
+    cleanall(false)
 {
     init(config_path);
 }
@@ -42,6 +44,7 @@ Config::Config(const Config& config){
 	this->sample_outpath= config.sample_outpath;
     this->poolsize = config.poolsize;
     this->buffersize = config.buffersize;
+    this->cleanall = config.cleanall;
 }
 
 Config& Config::operator=(const Config& config){
@@ -62,6 +65,7 @@ Config& Config::operator=(const Config& config){
 		this->sample_outpath= config.sample_outpath;
         this->poolsize = config.poolsize;
         this->buffersize = config.buffersize;
+        this->cleanall = config.cleanall;
     }
     return *this;
 }
@@ -93,6 +97,7 @@ ostream& operator<<(ostream& os, const Config& config){
 		os << endl << "\tsample_outpath: " << config.sample_outpath;
         os << endl << "\tpoolsize: " << config.poolsize;
         os << endl << "\tbuffersize: " << config.buffersize;
+        os << endl << "\tcleanAll: " << config.cleanall;
 		os << endl << "}";
 	}
     return os;
@@ -117,6 +122,7 @@ void Config::init(const string& config_path)
 		string data_path;
 		string sample_outpath;
         double poolsize,buffersize;
+        bool cleanall;
 
         if(mconfig.lookupValue("global.timestep",timestep)){
             this->timestep = timestep;
@@ -177,6 +183,11 @@ void Config::init(const string& config_path)
         if(mconfig.lookupValue("sample.buffersize",buffersize)){
 			this->buffersize= buffersize;
         }
+
+        if(mconfig.lookupValue("sample.cleanall",cleanall)){
+            this->cleanall = cleanall;
+        }
+
 
     }catch(const libconfig::FileIOException &fioex){
         std::cerr << "can't read config file!" << std::endl;
