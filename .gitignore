@@ -39,6 +39,10 @@ cmake-build-debug
 data/*
 .cmaketools.json
 model/.ipynb_checkpoints/
-model/__pycache__/
 model/.idea
+model/__pycache__/
 model/pkl
+train/.ipynb_checkpoints/
+train/__pycache__/
+train/.idea
+train/pkl
