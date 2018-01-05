@@ -28,19 +28,23 @@
 using namespace std;
 using namespace tinyxml2;
 
-void TestModel()
+void TestModel(const Config& config)
 {
     shared_ptr<ModelManager> modelManager = ModelManager::getModelManager();
     modelManager->Test();
 
-    shared_ptr<Model> model = modelManager->getRandomForestModel();
-    model->init();
+    //shared_ptr<Model> model = modelManager->getRandomForestModel();
+    //model->init(config);
 
-    model = modelManager->getXGBoostModel();
-    model->init();
+    shared_ptr<Model> model = modelManager->getXGBoostModel();
+    model->init(config);
+    vector<float> test_data = {4,8,12};
+    float output;
+    model->predict(1951, test_data, output );
+    cout << "predict value : " << output<< endl;
 
-    model = modelManager->getSVMModel();
-    model->init();
+    //model = modelManager->getSVMModel();
+    //model->init(config);
 }
 
 
@@ -168,7 +172,10 @@ int main(int argc, char *argv[])
     }
     
     if(vm.count("test")){
-        TestModel();
+        Config config(config_file);
+        initlog(config.log_level);
+        cout << config << endl;
+        TestModel(config);
         return 0;
     }
 

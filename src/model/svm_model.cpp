@@ -6,7 +6,7 @@ SVMModel::SVMModel(){
    LOG_TRACE("Ctor SVMModel"); 
 }
 
-void SVMModel::init() {
+void SVMModel::init(const Config& config) {
 
    LOG_TRACE("Init SVMModel"); 
 
@@ -18,7 +18,7 @@ void SVMModel::train() {
 
 }
 
-void SVMModel::predict(const vector<int> &input, vector<int> &output) {
+void SVMModel::predict(const vector<float> &input, vector<float> &output) {
 
    LOG_TRACE("predict SVMModel"); 
 

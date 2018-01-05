@@ -5,9 +5,9 @@
 class SVMModel: public Model{
     public:
         SVMModel();
-        void init();
+        void init(const Config& config);
         void train();
-        void predict(const vector<int>&input, vector<int>& output);
+        void predict(const vector<float>&input, vector<float>& output);
         ~SVMModel();
 };
 

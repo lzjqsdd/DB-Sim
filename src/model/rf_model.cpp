@@ -6,7 +6,7 @@ RandomForestModel::RandomForestModel(){
    LOG_TRACE("Ctor RandomForestModel"); 
 }
 
-void RandomForestModel::init() {
+void RandomForestModel::init(const Config& config) {
 
    LOG_TRACE("Init RandomForestModel"); 
 
@@ -18,7 +18,7 @@ void RandomForestModel::train() {
 
 }
 
-void RandomForestModel::predict(const vector<int> &input, vector<int> &output) {
+void RandomForestModel::predict(const vector<float> &input, vector<float> &output) {
 
    LOG_TRACE("predict RandomForestModel"); 
 

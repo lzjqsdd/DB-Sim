@@ -189,6 +189,43 @@ void Config::init(const string& config_path)
         }
 
 
+        //model config
+        string xgboost_version;
+        if(mconfig.lookupValue("model.xgboost_version",xgboost_version)){
+            this->xgboost_version = xgboost_version;
+        }
+
+        try{
+            const libconfig::Setting& xgboost_model_list = mconfig.lookup("model.xgboost_model_list");
+            int model_count = xgboost_model_list.getLength();
+            for(int i=0; i< model_count; ++i){
+                string cur_version;
+                xgboost_model_list[i].lookupValue("model_version",cur_version);
+
+                //查找当前需要的版本
+                if(xgboost_version ==  cur_version){
+                    xgboost_model_list[i].lookupValue("model_desc",this->xgboost_desc);
+                    const libconfig::Setting& model_list = xgboost_model_list[i]["model_list"];
+                    //遍历当前版本所有node的model
+                    int node_model_count = model_list.getLength();
+                    this->xgboost_model.resize(node_model_count);
+                    for(int j = 0; j< node_model_count; ++j){
+                        //   model_list[j].lookupValue("node_id",this->xgboost_model[j].node_id); 
+                        //   model_list[j].lookupValue("model_file",this->xgboost_model[j].model_file);
+                        this->xgboost_model[j].node_id = model_list[j]["node_id"];
+                        this->xgboost_model[j].model_file = model_list[j]["model_file"].c_str(); //这里使用c_str是因为setting 到 string的转换会出现多个重载可选的情况
+                    }
+                }
+
+            }
+
+        }catch(const libconfig::SettingNotFoundException &snfex){
+            std::cerr << "can't found xgboost_model_list config" << std::endl;
+            exit(-1);
+        }
+
+
+
     }catch(const libconfig::FileIOException &fioex){
         std::cerr << "can't read config file!" << std::endl;
         exit(-1);

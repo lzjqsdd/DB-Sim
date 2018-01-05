@@ -15,6 +15,14 @@
 
 using namespace std;
 
+struct ModelConfig
+{ 
+    int node_id;
+    string model_file;
+    //TODO model version management
+};
+
+
 class Config{
     public:
         Config();
@@ -46,6 +54,12 @@ class Config{
         double poolsize; //pool length after node
         double buffersize; //buffer length before node
         bool cleanall; //clean all sample file
+
+        //train and model config
+        vector<ModelConfig> xgboost_model; //xgboost的模型文件目录
+        string xgboost_version; //xgboost当前使用的模型
+        string xgboost_desc; //当前xgboost的一些描述信息
+
 };
 
 #endif

@@ -29,3 +29,7 @@ need_preprocess = True
 config_file = os.path.join(config_root,"500car-nolight.conf")
 pathxml = os.path.join(data_root,"network/path.xml")
 nodexml = os.path.join(data_root,"network/node.xml")
+
+#model path
+xgboost_model_path = os.path.join(model_root,'xgboost')
+svm_model_path = os.path.join(model_root,'svm')

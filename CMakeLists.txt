@@ -109,6 +109,7 @@ target_link_libraries(fete
     boost_thread
 	boost_filesystem
     boost_program_options
+    xgboost
     pthread
     tinyxml2
     python2.7
