@@ -31,16 +31,15 @@ using namespace tinyxml2;
 void TestModel(const Config& config)
 {
     shared_ptr<ModelManager> modelManager = ModelManager::getModelManager();
-    modelManager->Test();
+    modelManager->init(config);
 
     //shared_ptr<Model> model = modelManager->getRandomForestModel();
     //model->init(config);
 
-    shared_ptr<Model> model = modelManager->getXGBoostModel();
-    model->init(config);
+    shared_ptr<Model> model = modelManager->getXGBoostModelByNode(1951);
     vector<float> test_data = {4,8,12};
     float output;
-    model->predict(1951, test_data, output );
+    model->predict(test_data, output );
     cout << "predict value : " << output<< endl;
 
     //model = modelManager->getSVMModel();
@@ -135,10 +134,13 @@ int main(int argc, char *argv[])
     po::store(po::command_line_parser(argc,argv).options(desc).positional(p).run(), vm);
     po::notify(vm);
 
-    string config_file = "../config/config.conf"; //defalut 
+    string config_file = "../config/config.conf"; //default 
     if(vm.count("config")){
        config_file = vm["config"].as<string>(); 
        cout << "using " << config_file << endl;
+    }
+    else{
+       cout << "using defalut config" << endl;
     }
 
     if(vm.count("help")){

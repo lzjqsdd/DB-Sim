@@ -6,7 +6,7 @@ RandomForestModel::RandomForestModel(){
    LOG_TRACE("Ctor RandomForestModel"); 
 }
 
-void RandomForestModel::init(const Config& config) {
+void RandomForestModel::init(const string& model_file) {
 
    LOG_TRACE("Init RandomForestModel"); 
 

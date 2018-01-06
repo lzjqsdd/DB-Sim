@@ -17,6 +17,11 @@ ModelManager::~ModelManager(){
    Py_Finalize(); 
 }
 
+void ModelManager::init(const Config& config){
+   Config tmpconfig(config);
+   _config = std::move(tmpconfig); 
+}
+
 void ModelManager::Test()
 {
     PyRun_SimpleString("print 'hello fete' \n");
@@ -29,7 +34,29 @@ shared_ptr<Model> ModelManager::getRandomForestModel(){
 
 shared_ptr<Model> ModelManager::getXGBoostModel(){
     shared_ptr<Model> xgboost_model = shared_ptr<Model>(new XGBoostModel()); 
-    return xgboost_model ;
+    return xgboost_model;
+}
+
+shared_ptr<Model> ModelManager::getXGBoostModelByNode(const int& node_id){ 
+    
+    shared_ptr<Model> xgboost_model = shared_ptr<Model>(new XGBoostModel()); 
+    size_t node_num = _config.xgboost_model.size();
+    cout << "node_num :" << node_num << endl;
+    bool found = false;
+    for(int i=0; i< node_num; ++i){
+        if(node_id == _config.xgboost_model[i].node_id ){
+            xgboost_model->init(_config.xgboost_model[i].model_file);
+            found = true;
+            break;
+        }
+    }
+    if(!found){ 
+        LOG_FATAL(my2string("modelmanager can't init node",node_id, " model!!!"));
+        exit(-1);
+    }
+    LOG_DEBUG(my2string("\n\tusing xgboost model. \n\tversion:", _config.xgboost_version, "\n\t", _config.xgboost_desc));
+
+    return xgboost_model;
 }
 
 shared_ptr<Model> ModelManager::getSVMModel(){

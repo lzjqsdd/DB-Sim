@@ -6,7 +6,7 @@ SVMModel::SVMModel(){
    LOG_TRACE("Ctor SVMModel"); 
 }
 
-void SVMModel::init(const Config& config) {
+void SVMModel::init(const string& model_file) {
 
    LOG_TRACE("Init SVMModel"); 
 

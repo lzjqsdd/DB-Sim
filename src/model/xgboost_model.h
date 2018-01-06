@@ -9,10 +9,10 @@
 class XGBoostModel: public Model{
     public:
         XGBoostModel();
-        void init(const Config& config); //init model args
+        void init(const string& model_file);
         void train(); //train model,may never use
         void predict(const vector<float> &input, vector<float> &output);
-        void predict(int node_id, const vector<float> &input, float &output);
+        void predict(const vector<float> &input, float &output);
         void predict(const map<int, vector<float>> &input, map<int,vector<float>> &output);
         ~XGBoostModel();
 
@@ -20,7 +20,7 @@ class XGBoostModel: public Model{
         void free();
 
     private:
-        map<int, BoosterHandle> booster_list;
+        BoosterHandle booster;
         string version;
         string desc;
         

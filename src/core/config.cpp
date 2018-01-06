@@ -27,24 +27,26 @@ Config::Config(const string& config_path):
     init(config_path);
 }
 
-Config::Config(const Config& config){
-    this->timestep = config.timestep;
-    this->config_path = config.config_path;
-    this->pathdir = config.pathdir;
-    this->nodedir = config.nodedir;
-    this->log_level = config.log_level;
-    for(auto demand : config.demands){
-        this->demands[demand.first] = demand.second;
-    }
-	this->sample = config.sample;
-	this->data_path = config.data_path;
-    this->data_prefix = config.data_prefix;
-	this->sample_linkids = config.sample_linkids;
-	this->sample_nodeids = config.sample_nodeids;
-	this->sample_outpath= config.sample_outpath;
-    this->poolsize = config.poolsize;
-    this->buffersize = config.buffersize;
-    this->cleanall = config.cleanall;
+Config::Config(const Config& config):
+    sample(config.sample),
+    timestep(config.timestep),
+    config_path(config.config_path),
+    pathdir(config.pathdir),
+    nodedir(config.nodedir),
+    log_level(config.log_level),
+    demands(config.demands),
+	data_path(config.data_path),
+    data_prefix(config.data_prefix),
+	sample_linkids(config.sample_linkids),
+	sample_nodeids(config.sample_nodeids),
+	sample_outpath(config.sample_outpath),
+    poolsize(config.poolsize),
+    buffersize(config.buffersize),
+    cleanall(config.cleanall),
+    xgboost_model(config.xgboost_model),
+    xgboost_version(config.xgboost_version),
+    xgboost_desc(config.xgboost_desc)
+{
 }
 
 Config& Config::operator=(const Config& config){
@@ -66,6 +68,9 @@ Config& Config::operator=(const Config& config){
         this->poolsize = config.poolsize;
         this->buffersize = config.buffersize;
         this->cleanall = config.cleanall;
+        this->xgboost_model = config.xgboost_model;
+        this->xgboost_version = config.xgboost_version;
+        this->xgboost_desc = config.xgboost_desc;
     }
     return *this;
 }

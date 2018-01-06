@@ -7,7 +7,7 @@
 class RandomForestModel: public Model{
     public:
         RandomForestModel();
-        void init(const Config& config); //init model args
+        void init(const string& model_file); //init model args
         void train(); //train model,may never use
         void predict(const vector<float> &input, vector<float> &output);
         ~RandomForestModel();
