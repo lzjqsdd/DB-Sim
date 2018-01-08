@@ -24,7 +24,21 @@ else:
     # dump data
     pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
 
-df_train = origin_data[1]
+df_train = origin_data[0]
+
+print('----------------------')
+#print(df_train['1949_inflow'].sum())
+
+frame = df_train['frame'].values[:-1]
+num = df_train['1949_poolnum'].values[:-1] + df_train['1949_buffernum'].values[:-1]
+inflow = df_train['1949_inflow'].values[1:]
+
+di = {'frame':frame, 'num':num, 'inflow':inflow}
+
+df_train2 = pd.DataFrame(data = di);
+df_train2.describe();
+
+#df_train = origin_data[1]
 #df_train['1951_poolandbuffer'] = df_train['1951_poolnum'] + df_train['1951_buffernum']
 #df_train = df_train.drop(['1949_inflow','1949_outflow','1949_speed','1951_speed'],axis=1)
 #analysis_data_heatmap(df_train, "1951_inflow", 5)
@@ -32,10 +46,10 @@ df_train = origin_data[1]
 #analysis_data_boxplot(df_train, "1949_buffernum", "1951_inflow")
 
 
-df_train2 = pd.DataFrame()
-df_train2['1949_buffernum'] = df_train['1949_buffernum'][:-1]
-df_train2['1951_inflow'] = df_train['1951_inflow'][1:]
-analysis_data_scatter(df_train2,'1949_buffernum','1951_inflow',0)
+#df_train2 = pd.DataFrame()
+#df_train2['1949_buffernum'] = df_train['1949_buffernum'][:-1]
+#df_train2['1951_inflow'] = df_train['1951_inflow'][1:]
+#analysis_data_scatter(df_train2,'1949_buffernum','1951_inflow',0)
 
 
 
