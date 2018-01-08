@@ -48,6 +48,7 @@ enum model_type str2type(const std::string& type){
     else if(type == "gawron") return GAWRON;
     else if(type == "fete") return FETE;
     else if(type == "test") return TEST;
+    else if(type == "db")   return DB;
 
     return TEST;
 }

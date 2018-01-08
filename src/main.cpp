@@ -103,6 +103,7 @@ void simulation(const Config& config, model_type type)
         case CEIL:      model = manager->getCeilModel();    break;
         case GAWRON:    model = manager->getGawronModel();  break;
         case TEST:      model = manager->getTestModel();    break;
+        case DB:        model = manager->getDBModel();      break;
     }
 
 	model->init();

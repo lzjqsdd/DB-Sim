@@ -14,6 +14,7 @@
 #include "../core/tfete.h"
 #include "../core/cfete.h"
 #include "../core/gfete.h"
+#include "../core/dbfete.h"
 
 using namespace std;
 
@@ -28,6 +29,7 @@ class Manager{
         std::shared_ptr<FETEIf> getCeilModel();
         std::shared_ptr<FETEIf> getGawronModel();
         std::shared_ptr<FETEIf> getFETEModel();
+        std::shared_ptr<FETEIf> getDBModel();
 
     protected:
         Manager();

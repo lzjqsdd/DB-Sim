@@ -52,3 +52,8 @@ shared_ptr<FETEIf> Manager::getFETEModel(){
     shared_ptr<FETEIf> test_model = shared_ptr<FETEIf>(new TFETE(_config));
     return test_model;
 }
+
+shared_ptr<FETEIf> Manager::getDBModel(){
+    shared_ptr<FETEIf> db_model = shared_ptr<FETEIf>(new DBFETE(_config));
+    return db_model;
+}
