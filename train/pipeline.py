@@ -24,35 +24,29 @@ else:
     # dump data
     pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
 
+
 df_train = origin_data[0]
 
-print('----------------------')
-#print(df_train['1949_inflow'].sum())
+# 错位分析
+#frame = df_train['frame'].values[:-1]
+#num = df_train['1949_poolnum'].values[:-1] + df_train['1949_buffernum'].values[:-1]
+#inflow = df_train['1949_inflow'].values[1:]
+#di = {'frame':frame, 'num':num, 'inflow':inflow}
 
-frame = df_train['frame'].values[:-1]
-num = df_train['1949_poolnum'].values[:-1] + df_train['1949_buffernum'].values[:-1]
-inflow = df_train['1949_inflow'].values[1:]
+# 构造frame%60特征
 
-di = {'frame':frame, 'num':num, 'inflow':inflow}
+df_train = df_train[(df_train.frame >= 2760) & (df_train.frame <= 13500)]
 
-df_train2 = pd.DataFrame(data = di);
-df_train2.describe();
+#analysis_data_heatmap(df_train_frame_8, '1949_outflow',10)
 
-#df_train = origin_data[1]
-#df_train['1951_poolandbuffer'] = df_train['1951_poolnum'] + df_train['1951_buffernum']
-#df_train = df_train.drop(['1949_inflow','1949_outflow','1949_speed','1951_speed'],axis=1)
-#analysis_data_heatmap(df_train, "1951_inflow", 5)
+#x = np.arange(10)
+#y = []
+#for i in x:
+#    y.append(df_train[df_train.frame2 == i]['1949_outflow'].mean())
+#plt.plot(x,y)
+#plt.show()
 
-#analysis_data_boxplot(df_train, "1949_buffernum", "1951_inflow")
-
-
-#df_train2 = pd.DataFrame()
-#df_train2['1949_buffernum'] = df_train['1949_buffernum'][:-1]
-#df_train2['1951_inflow'] = df_train['1951_inflow'][1:]
-#analysis_data_scatter(df_train2,'1949_buffernum','1951_inflow',0)
-
-
-
+analysis_data_boxplot(df_train, 'frame2', '1949_outflow')
 
 # step3 train data
 

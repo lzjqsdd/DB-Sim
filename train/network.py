@@ -26,7 +26,8 @@ def loadEdges(node_file):
                 flinks_str = flinks.childNodes[0].data.split()
 
             if len(tlinks.childNodes) == 0:
-                tlinks_str = [10000]
+                #tlinks_str = [10000]
+                tlinks_str = [node.getAttribute("id")]
             else:
                 tlinks_str = tlinks.childNodes[0].data.split()
 

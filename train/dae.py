@@ -49,7 +49,7 @@ def analysis_y(df_train, y_name):
     sns.distplot(df_train[y_name])
     print("Skewness: %f" % df_train.SalePrice.skew())
     print("Kurtosis: %f" % df_train.SalePrice.kurt())
-    plot.show()
+    plt.show()
 
 #分析离散变量采用箱形图
 def analysis_data_boxplot(df_train, feature_name, y_name):
@@ -57,6 +57,7 @@ def analysis_data_boxplot(df_train, feature_name, y_name):
     data = pd.concat([df_train[y_name],df_train[feature_name]],axis=1)
     f, ax = plt.subplots(figsize=(16,8))
     fig = sns.boxplot(x=feature_name,y=y_name,data = data)
+    fig = sns.swarmplot(x=feature_name,y=y_name,data=data,color=".25")
     fig.axis(ymin=0, ymax=df_train[y_name].max() + 10)
     plt.show()
 
