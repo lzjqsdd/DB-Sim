@@ -76,14 +76,19 @@ vector<vector<int>> DBFETE::getPaths(){
 
 void DBFETE::generate(){
     int frames = _config.timestep;
+    int gentime = curtime;
     int tmp = 0;
     while(frames--){
-        curtime ++;
         int agentCount =  generatePerFrame();
-        car_num += agentCount;
         tmp += agentCount;
+        curtime++;
     }
-    LOG_DEBUG(my2string("generate num is ", tmp , ", time is ", curtime));
+    if(car_num + tmp > total_num) //最后一帧已经超过了
+        tmp = total_num - car_num;
+    
+    car_num += tmp;
+
+    LOG_DEBUG(my2string("generate num is ", tmp , ", time is ", gentime));
 }
 
 int DBFETE::generatePerFrame(){
