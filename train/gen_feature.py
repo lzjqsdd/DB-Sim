@@ -6,13 +6,13 @@ import setting as st
 
 
 #截取一定范围内的数据
-def filter(df, start, end):
+def filter_cut(df, start, end):
 
     df = df[(df.frame >= start) & (df.frame <= end)]
 
 #错位构造,这里根据不同的nodeid进行处理,暂时不考虑泛化的处理方式
 def reindex(df,node_id):
-    if(node_id == '1949'):
+    if(node_id == 1949):
 
         frame = df['frame'].values[:-1]
         poolnum_1949 = df['1949_poolnum'].values[:-1]
@@ -31,7 +31,7 @@ def reindex(df,node_id):
         df = pd.DataFrame(data=data)
 
 
-    elif(node_id == '1951'):
+    elif(node_id == 1951):
 
         frame = df['frame'].values[:-1]
 
@@ -58,7 +58,7 @@ def reindex(df,node_id):
         df = pd.DataFrame(data = data)
 
 
-    elif(node_id == '2077'):
+    elif(node_id == 2077):
 
         frame = df['frame'].values[:-1]
 
