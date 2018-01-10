@@ -41,8 +41,11 @@ data/*
 model/.ipynb_checkpoints/
 model/.idea
 model/__pycache__/
+model/tutorial
 model/pkl
 train/.ipynb_checkpoints/
 train/__pycache__/
 train/.idea
 train/pkl
+
+demo.model
