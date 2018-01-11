@@ -3,7 +3,7 @@
 
 import os
 
-DEBUG = True
+DEBUG = False
 
 # root path
 data_root = '../data/one-short-nolight/'

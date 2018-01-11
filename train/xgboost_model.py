@@ -37,7 +37,9 @@ class XGBModel:
         '''
 
         # read in data
-        dtrain = xgb.DMatrix(self.train_data)
+        train_y = self.train_data['label'] / 10.0
+        train_x = self.train_data.drop(['label'],axis=1)
+        dtrain = xgb.DMatrix(data = self.train_data, label=train_y)
         # specify parameters via map
         if not param:
             param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'binary:logistic'}
@@ -45,7 +47,7 @@ class XGBModel:
         num_round = 10
         bst = xgb.train(param, dtrain, num_round)
         if savemodel:
-            model_file = str(node_id)+'.model'
+            model_file = str(self.node_id)+'.model'
             bst.save_model(os.path.join(st.xgboost_model_path,model_file))
 
     def loadmodel(self, model_file) -> xgb.Booster:

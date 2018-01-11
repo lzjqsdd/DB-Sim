@@ -9,6 +9,7 @@ import setting as st
 def filter_cut(df, start, end):
 
     df = df[(df.frame >= start) & (df.frame <= end)]
+    return df
 
 #错位构造,这里根据不同的nodeid进行处理,暂时不考虑泛化的处理方式
 def reindex(df,node_id):
@@ -28,7 +29,9 @@ def reindex(df,node_id):
                 '1949_outflow':outflow_1949
         }
 
-        df = pd.DataFrame(data=data)
+        new_df = pd.DataFrame(data=data)
+        new_df = new_df.rename(columns={"1949_inflow":"label"}) #1949作为发车点，不使用model
+        return new_df
 
 
     elif(node_id == 1951):
@@ -55,7 +58,9 @@ def reindex(df,node_id):
             '1951_outflow': outflow_1951
         }
 
-        df = pd.DataFrame(data = data)
+        new_df = pd.DataFrame(data = data)
+        new_df = new_df.rename(index=str, columns={'1951_inflow':'label'})
+        return new_df
 
 
     elif(node_id == 2077):
@@ -82,7 +87,9 @@ def reindex(df,node_id):
             '2077_outflow': outflow_2077
         }
 
-        df = pd.DataFrame(data = data)
+        new_df = pd.DataFrame(data = data)
+        new_df = new_df.rename(index=str, columns={'2077_inflow':'label'})
+        return new_df
 
     else:
         frame = df['frame'].values[:-1]
@@ -99,17 +106,18 @@ def reindex(df,node_id):
             '2077_inflow': inflow_2077,
             '2077_outflow': outflow_2077
         }
+        new_df = pd.DataFrame(data = data)
+        new_df = new_df.rename(index=str, columns={'2077_outflow':'label'})
+        return new_df
 
 
 #根据frame分组
-#period = 600
-#timestep = 60
 def group_frame(df, period_dur = 600 , timestep = 60):
 
-    df['period'] = df['frame'] % period_dur / timestep
+    df['period'] = (df['frame'] % period_dur / timestep).astype('int32')
     #df.groupby(['period'])
     #df.get_group(1)
-
+    return df
 
 #TODO 扩充数据
 def expand(df):

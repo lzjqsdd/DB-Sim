@@ -17,9 +17,9 @@ if __name__ == '__main__':
     df_train_1949 = origin_data[0]
 
     #step2: gen_feature
-    filter_cut(df_train_1949,2760,13500)
-    reindex(df_train_1949,1949)
-    group_frame(df_train_1949)
+    df_train_1949 = filter_cut(df_train_1949,2760,13500)
+    df_train_1949 = reindex(df_train_1949,1949)
+    df_train_1949 = group_frame(df_train_1949)
 
     #step3: train
     model_1949 = XGBModel(df_train_1949, df_train_1949, 1949)

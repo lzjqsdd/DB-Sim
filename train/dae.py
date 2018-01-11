@@ -88,13 +88,3 @@ def jitter(series, factor):
     z = float(series.max()) - float(series.min())
     a = float(factor) * z /50.0
     return series.apply(lambda x: x+np.random.uniform(-a,a))
-
-#训练
-def train(train_data):
-    # random forest
-    # or GBDT
-    pass
-
-#calc score
-def score(classfier, train_data, test_data):
-    pass
