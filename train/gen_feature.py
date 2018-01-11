@@ -115,6 +115,7 @@ def reindex(df,node_id):
 def group_frame(df, period_dur = 600 , timestep = 60):
 
     df['period'] = (df['frame'] % period_dur / timestep).astype('int32')
+    df = df.drop(['frame'],axis=1)
     #df.groupby(['period'])
     #df.get_group(1)
     return df

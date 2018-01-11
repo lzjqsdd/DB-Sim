@@ -22,6 +22,10 @@ if __name__ == '__main__':
     df_train_1949 = group_frame(df_train_1949)
 
     #step3: train
-    model_1949 = XGBModel(df_train_1949, df_train_1949, 1949)
-    model_1949.train()
+    model_1949 = XGBModel(node_id=1949,train_data = df_train_1949, test_data=df_train_1949)
+    #model_1949.train(model_path= st.xgboost_model_path)
+
+    model_1949.loadModel(model_path = st.xgboost_model_path)
+    model_1949.test()
+
 
