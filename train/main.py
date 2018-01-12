@@ -23,8 +23,11 @@ if __name__ == '__main__':
 
     #step3: train
     model_1949 = XGBModel(node_id=1949,train_data = df_train_1949, test_data=df_train_1949)
-    #model_1949.train(model_path= st.xgboost_model_path)
+    #param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'reg:linear'}
+    model_1949.train(model_path = st.xgboost_model_path)
+    #model_1949.train4period(model_path = st.xgboost_model_path, period = 6, param = param)
 
+    #model_1949.loadModel4Period(model_path = st.xgboost_model_path, period = 6)
     model_1949.loadModel(model_path = st.xgboost_model_path)
     model_1949.test()
 
