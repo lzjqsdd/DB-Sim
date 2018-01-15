@@ -50,24 +50,27 @@ class XGBModel:
         '''
 
         if self.train_data is None:
-            print("You need load train_data before train!")
+            print("[FATAL] You need load train_data before train!")
             return
         # read in data
         train_y = self.train_data['label']
         train_x = self.train_data.drop(['label'],axis=1)
-        print(train_x.columns)
+        print("[INFO] using features: ", train_x.columns.values)
+        print("[INFO] data size is: ", train_x.shape);
         dtrain = xgb.DMatrix(data = train_x, label=train_y)
         # specify parameters via map
         if param is None:
-            param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
+            param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
 
         num_round = 10
         bst = xgb.train(param, dtrain, num_round)
         if  model_path is not None:
+            if not os.path.exists(model_path):
+                os.makedirs(model_path)
             model_file = str(self.node_id)+'.model'
             full_filename = os.path.join(model_path,model_file)
             bst.save_model(full_filename)
-            print('save model to ', full_filename)
+            print('[INFO] save model to ', full_filename)
 
     def train4period(self, period, param=None, model_path = None):
         train_period_group = self.train_data.groupby(['period'])
@@ -79,15 +82,17 @@ class XGBModel:
         dtrain = xgb.DMatrix(data = train_x, label=train_y)
         # specify parameters via map
         if param is None:
-            param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
+            param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
 
         num_round = 10
         bst = xgb.train(param, dtrain, num_round)
         if model_path is not None:
+            if not os.path.exists(model_path):
+                os.makedirs(model_path)
             model_file = str(self.node_id)+ '_' + str(period) + '.model'
             full_filename = os.path.join(model_path,model_file)
             bst.save_model(full_filename)
-            print('save model to ', full_filename)
+            print('[INFO] save model to ', full_filename)
 
 
     def loadModel(self, model_path) -> xgb.Booster:
@@ -108,7 +113,7 @@ class XGBModel:
         model_file = str(self.node_id)+'.model'
         full_filename = os.path.join(model_path,model_file)
         if not os.path.exists(full_filename):
-            print(full_filename + " not exits!")
+            print('[INFO] ', full_filename + " not exits!")
             return
 
         self.clf = xgb.Booster(model_file = full_filename)
@@ -118,7 +123,7 @@ class XGBModel:
         model_file = str(self.node_id)+ '_' + str(period) + '.model'
         full_filename = os.path.join(model_path,model_file)
         if not os.path.exists(full_filename):
-            print(full_filename + " not exits!")
+            print('[INFO] ', full_filename + " not exits!")
             return
 
         self.clf = xgb.Booster(model_file = full_filename)
@@ -127,11 +132,11 @@ class XGBModel:
 
     def test(self):
         if self.test_data is None:
-            print("You need load test_data before test!")
+            print("[FATAL] You need load test_data before test!")
             return
 
         if self.clf is None:
-            print("You need load Model before test!")
+            print("[FATAL] You need load Model before test!")
             return
 
         test_x = self.test_data.drop(['label'], axis=1)
@@ -142,11 +147,9 @@ class XGBModel:
 
     def score_misclass(self, pred, origin):
 
-        print(type(origin[0]))
-        print(type(pred[0]))
         err = abs(pred != origin)
         train_error = np.array(err).sum() / len(err)
-        print("misclass train error is : ", train_error)
+        print("[INFO] misclass train error is : ", train_error)
         pass
 
     def score_mape(self, pred, origin):
@@ -154,5 +157,5 @@ class XGBModel:
         print(np.array([pred[0:20], origin[0:20]]))
         err = abs((pred - origin) / origin) # TODO if origin is 0
         train_error = np.array(err.sum()) * 1.0 / len(err)
-        print("misclass train error is : ", train_error)
+        print("[INFO] misclass train error is : ", train_error)
         pass

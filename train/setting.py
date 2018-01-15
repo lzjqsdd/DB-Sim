@@ -20,7 +20,7 @@ test_data_path = os.path.join(data_sample_root,'sample/test')
 # dump path
 pkl_path = os.path.join(train_root,'pkl/')
 # 是否覆盖序列化数据
-override_pkl = True
+override_pkl = False
 data_pkl_filename = os.path.join(pkl_path,'data.pkl')
 
 # 是否进行预处理
@@ -32,5 +32,6 @@ pathxml = os.path.join(data_root,"network/path.xml")
 nodexml = os.path.join(data_root,"network/node.xml")
 
 #model path
-xgboost_model_path = os.path.join(model_root,'xgboost')
+model_version = '20180115'
+xgboost_model_path = os.path.join(model_root,'xgboost/'+model_version)
 svm_model_path = os.path.join(model_root,'svm')
