@@ -30,12 +30,32 @@ calculate evacuation time faster and  more accurately
 
 ## Model
 - [ ] poolnum -> buffernum
-- [ ] buffernum -> outflow
+- [x] buffernum -> outflow
 - [x] sample for every link and node
 - [x] add pool and buffer sample
-- [ ] train model for each node
-- [ ] import ml model(trained by python and predict by c++)
+- [x] train model for each node
+- [x] import ml model(trained by python and predict by c++)
 
+
+## Plans
+### V0.1.3
+- [ ] add cross-validation
+- [ ] add param configure for better tune.
+- [ ] add super-dest-point process
+
+
+### V0.1.4
+- [ ] add [poolnum -> buffernum] Model
+- [ ] finished basic iteration for simulation.
+
+
+### V0.1.5
+- [ ] add 2out->1in intersection analysis
+
+### V0.1.6
+- [ ] add rotary island intersection analysis
+
+### To Be Continue~
 
 # Usage
 ## Settings
