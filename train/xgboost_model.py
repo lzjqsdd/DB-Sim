@@ -12,19 +12,19 @@ class XGBModel:
         train_data: pandas.DataFrame format, passing when init
         test_data: pandas.DataFrame format, passing when init
         clf : xgboost classfier
-        node_id : current model will be used for node_id
+        mid : current model will be used for node_id or link_id
     '''
 
-    def __init__(self, node_id , train_data = None, test_data = None):
+    def __init__(self, mid , train_data = None, test_data = None):
         '''
         Each model only train for one node.
 
-        :param node_id: node_id which it will be trained for.
+        :param mid: node_id or link_id which it will be trained for.
         :param train_data: Default None.You can load later.
         :param test_data: Defalut None. You can load later.
         '''
 
-        self.node_id = node_id
+        self.mid = mid
         self.train_data = train_data
         self.test_data = test_data
         self.clf = None
@@ -67,7 +67,7 @@ class XGBModel:
         if  model_path is not None:
             if not os.path.exists(model_path):
                 os.makedirs(model_path)
-            model_file = str(self.node_id)+'.model'
+            model_file = str(self.mid)+'.model'
             full_filename = os.path.join(model_path,model_file)
             bst.save_model(full_filename)
             print('[INFO] save model to ', full_filename)
@@ -89,7 +89,7 @@ class XGBModel:
         if model_path is not None:
             if not os.path.exists(model_path):
                 os.makedirs(model_path)
-            model_file = str(self.node_id)+ '_' + str(period) + '.model'
+            model_file = str(self.mid)+ '_' + str(period) + '.model'
             full_filename = os.path.join(model_path,model_file)
             bst.save_model(full_filename)
             print('[INFO] save model to ', full_filename)
@@ -110,7 +110,7 @@ class XGBModel:
 
         '''
 
-        model_file = str(self.node_id)+'.model'
+        model_file = str(self.mid)+'.model'
         full_filename = os.path.join(model_path,model_file)
         if not os.path.exists(full_filename):
             print('[INFO] ', full_filename + " not exits!")
@@ -120,7 +120,7 @@ class XGBModel:
         return self.clf
 
     def loadModel4Period(self, period, model_path ):
-        model_file = str(self.node_id)+ '_' + str(period) + '.model'
+        model_file = str(self.mid)+ '_' + str(period) + '.model'
         full_filename = os.path.join(model_path,model_file)
         if not os.path.exists(full_filename):
             print('[INFO] ', full_filename + " not exits!")

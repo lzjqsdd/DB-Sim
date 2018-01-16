@@ -33,5 +33,6 @@ nodexml = os.path.join(data_root,"network/node.xml")
 
 #model path
 model_version = '20180115'
-xgboost_model_path = os.path.join(model_root,'xgboost/'+model_version)
+xgboost_node_model_path = os.path.join(model_root,'xgboost/'+model_version+'/node/')
+xgboost_link_model_path = os.path.join(model_root,'xgboost/'+model_version+'/link/')
 svm_model_path = os.path.join(model_root,'svm')

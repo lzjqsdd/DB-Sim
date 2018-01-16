@@ -30,7 +30,6 @@ def reindex(df,node_id):
         }
 
         new_df = pd.DataFrame(data=data)
-        new_df = new_df.rename(columns={"1949_inflow":"label"}) #1949作为发车点，不使用model
         return new_df
 
 
@@ -59,7 +58,6 @@ def reindex(df,node_id):
         }
 
         new_df = pd.DataFrame(data = data)
-        new_df = new_df.rename(index=str, columns={'1951_inflow':'label'})
         return new_df
 
 
@@ -88,7 +86,6 @@ def reindex(df,node_id):
         }
 
         new_df = pd.DataFrame(data = data)
-        new_df = new_df.rename(index=str, columns={'2077_inflow':'label'})
         return new_df
 
     else:
@@ -107,7 +104,6 @@ def reindex(df,node_id):
             '2077_outflow': outflow_2077
         }
         new_df = pd.DataFrame(data = data)
-        new_df = new_df.rename(index=str, columns={'2077_outflow':'label'})
         return new_df
 
 
@@ -118,6 +114,43 @@ def group_frame(df, period_dur = 600 , timestep = 60):
     df = df.drop(['frame'],axis=1)
     #df.groupby(['period'])
     #df.get_group(1)
+    return df
+
+#增加pool->buffer的流量特征
+def gen_pool2buffer(df, node_id):
+    if node_id == 1949:
+        pool_before = df['1949_poolnum'].values + df['1949_inflow'].values
+        pool_after = df['1949_poolnum'][1:].append( pd.Series([0]) ).values #追加一行0，不然没法求最后一个的数据
+        df['pool2buffer'] = pool_before - pool_after
+        return df
+    elif node_id == 1951:
+        pool_before = df['1951_poolnum'].values + df['1951_inflow'].values
+        pool_after = df['1951_poolnum'][1:].append( pd.Series([0]) ).values
+        df['pool2buffer'] = pool_before - pool_after
+        return df
+    elif node_id == 2077:
+        pool_before = df['2077_poolnum'].values + df['2077_inflow'].values
+        pool_after = df['2077_poolnum'][1:].append( pd.Series([0]) ).values
+        df['pool2buffer'] = pool_before - pool_after
+        return df
+    else:
+        return df
+
+
+def gen_label(df, node_id = None, link_id = None):
+
+    if node_id is not None:
+        if node_id == 1949:
+            df = df.rename(columns={"1949_inflow":"label"}) #1949作为发车点，不使用model
+        elif node_id == 1951:
+            df = df.rename(columns={"1951_inflow":"label"}) #1949作为发车点，不使用model
+        elif node_id == 2077:
+            df = df.rename(columns={"2077_inflow":"label"}) #1949作为发车点，不使用model
+
+
+    if link_id is not None:
+        df = df.rename(columns={"pool2buffer":"label"}) #1949作为发车点，不使用model
+
     return df
 
 #TODO 扩充数据
