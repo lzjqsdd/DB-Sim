@@ -24,6 +24,7 @@ public:
     //xgboost model
     shared_ptr<Model> getXGBoostModel();
     shared_ptr<Model> getXGBoostModelByNode(const int& node_id);
+    shared_ptr<Model> getXGBoostModelByLink(const int& link_id);
 
     //svm model
     shared_ptr<Model> getSVMModel();

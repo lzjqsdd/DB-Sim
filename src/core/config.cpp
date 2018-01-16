@@ -28,9 +28,9 @@ Config::Config(const string& config_path):
 }
 
 Config::Config(const Config& config):
+    config_path(config.config_path),
     sample(config.sample),
     timestep(config.timestep),
-    config_path(config.config_path),
     pathdir(config.pathdir),
     nodedir(config.nodedir),
     log_level(config.log_level),
@@ -43,7 +43,8 @@ Config::Config(const Config& config):
     poolsize(config.poolsize),
     buffersize(config.buffersize),
     cleanall(config.cleanall),
-    xgboost_model(config.xgboost_model),
+    xgboost_node_model(config.xgboost_node_model),
+    xgboost_link_model(config.xgboost_link_model),
     xgboost_version(config.xgboost_version),
     xgboost_desc(config.xgboost_desc)
 {
@@ -68,7 +69,8 @@ Config& Config::operator=(const Config& config){
         this->poolsize = config.poolsize;
         this->buffersize = config.buffersize;
         this->cleanall = config.cleanall;
-        this->xgboost_model = config.xgboost_model;
+        this->xgboost_node_model = config.xgboost_node_model;
+        this->xgboost_link_model = config.xgboost_link_model;
         this->xgboost_version = config.xgboost_version;
         this->xgboost_desc = config.xgboost_desc;
     }
@@ -210,16 +212,29 @@ void Config::init(const string& config_path)
                 //查找当前需要的版本
                 if(xgboost_version ==  cur_version){
                     xgboost_model_list[i].lookupValue("model_desc",this->xgboost_desc);
-                    const libconfig::Setting& model_list = xgboost_model_list[i]["model_list"];
+                    //加载node的模型
+                    const libconfig::Setting& node_model_list = xgboost_model_list[i]["node_model_list"];
                     //遍历当前版本所有node的model
-                    int node_model_count = model_list.getLength();
-                    this->xgboost_model.resize(node_model_count);
+                    int node_model_count = node_model_list.getLength();
+                    this->xgboost_node_model.resize(node_model_count);
                     for(int j = 0; j< node_model_count; ++j){
                         //   model_list[j].lookupValue("node_id",this->xgboost_model[j].node_id); 
                         //   model_list[j].lookupValue("model_file",this->xgboost_model[j].model_file);
-                        this->xgboost_model[j].node_id = model_list[j]["node_id"];
-                        this->xgboost_model[j].model_file = model_list[j]["model_file"].c_str(); //这里使用c_str是因为setting 到 string的转换会出现多个重载可选的情况
+                        this->xgboost_node_model[j].mid = node_model_list[j]["node_id"];
+                        this->xgboost_node_model[j].model_file = node_model_list[j]["model_file"].c_str(); //这里使用c_str是因为setting 到 string的转换会出现多个重载可选的情况
                     }
+
+
+                    //加载link的模型
+                    const libconfig::Setting& link_model_list = xgboost_model_list[i]["link_model_list"];
+                    //遍历当前版本所有node的model
+                    int link_model_count = link_model_list.getLength();
+                    this->xgboost_link_model.resize(link_model_count);
+                    for(int j = 0; j< link_model_count; ++j){
+                        this->xgboost_link_model[j].mid = link_model_list[j]["link_id"];
+                        this->xgboost_link_model[j].model_file = link_model_list[j]["model_file"].c_str(); //这里使用c_str是因为setting 到 string的转换会出现多个重载可选的情况
+                    }
+                    
                 }
 
             }
