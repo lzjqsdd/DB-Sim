@@ -4,6 +4,7 @@
 
 #include "bfete.h"
 #include "config.h"
+#include "../model/model.h"
 
 #include <map>
 #include <set>
@@ -17,7 +18,7 @@ class DBFETE: public FETEIf {
         
         void loadNetwork(); //从xml中加载路网
         void init(); //初始化需求
-		void generate(); //从场景里放人
+		void generate(); //从场景里放车(agent)
         void doUpdate(); //迭代
         void start(); //启动模拟
         void check(); //检查限制条件
@@ -37,7 +38,9 @@ class DBFETE: public FETEIf {
         double genAgentNumMax;
         double genCount;
         int car_num;
-        
+
+        map<int, shared_ptr<Model>> node_models; //加载的模型，每个node对应一个
+        map<int, shared_ptr<Model>> link_models; //加载的模型，每个link对应一个
 
 };
 
