@@ -51,10 +51,10 @@ shared_ptr<Model> ModelManager::getXGBoostModelByNode(const int& node_id){
         }
     }
     if(!found){ 
-        LOG_FATAL(my2string("modelmanager can't init node",node_id, " model!!!"));
+        LOG_FATAL(my2string("modelmanager can't init node ",node_id, " model!!!"));
         exit(-1);
     }
-    LOG_DEBUG(my2string("\n\tusing xgboost model. \n\tversion:", _config.xgboost_version, "\n\t", _config.xgboost_desc));
+    LOG_DEBUG(my2string("\n\tUsing xgboost model for node ",node_id ,".\n\tversion:", _config.xgboost_version, "\n\t", _config.xgboost_desc));
 
     return xgboost_model;
 }
@@ -62,10 +62,10 @@ shared_ptr<Model> ModelManager::getXGBoostModelByNode(const int& node_id){
 shared_ptr<Model> ModelManager::getXGBoostModelByLink(const int& link_id){ 
     
     shared_ptr<Model> xgboost_model = shared_ptr<Model>(new XGBoostModel()); 
-    size_t node_num = _config.xgboost_link_model.size();
-    cout << "node_num :" << node_num << endl;
+    size_t link_num = _config.xgboost_link_model.size();
+    cout << "link_num :" << link_num << endl;
     bool found = false;
-    for(int i=0; i< node_num; ++i){
+    for(int i=0; i< link_num; ++i){
         if(link_id == _config.xgboost_link_model[i].mid){
             xgboost_model->init(_config.xgboost_link_model[i].model_file);
             found = true;
@@ -73,10 +73,10 @@ shared_ptr<Model> ModelManager::getXGBoostModelByLink(const int& link_id){
         }
     }
     if(!found){ 
-        LOG_FATAL(my2string("modelmanager can't init node",link_id, " model!!!"));
+        LOG_FATAL(my2string("modelmanager can't init link ",link_id, " model!!!"));
         exit(-1);
     }
-    LOG_DEBUG(my2string("\n\tusing xgboost model. \n\tversion:", _config.xgboost_version, "\n\t", _config.xgboost_desc));
+    LOG_DEBUG(my2string("\n\tUsing xgboost model for link " , link_id , ".\n\tversion: ", _config.xgboost_version, "\n\t", _config.xgboost_desc));
 
     return xgboost_model;
 }
