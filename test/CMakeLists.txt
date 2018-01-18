@@ -70,3 +70,22 @@ target_link_libraries(svm_train
     svm
 )
 
+
+#build log test
+add_executable(log log.cpp)
+target_link_libraries(log
+    boost_system
+    boost_log
+    boost_log_setup
+    boost_thread
+)
+
+#build log test2
+add_executable(log2 log2.cpp)
+target_link_libraries(log2
+    boost_system
+    boost_log
+    boost_log_setup
+    boost_thread
+)
+
