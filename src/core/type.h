@@ -31,12 +31,21 @@ extern enum logging::trivial::severity_level str2enum(const std::string& logleve
 extern void initlog(logging::trivial::severity_level severity);
 
 //macro for log
-#define LOG_TRACE(msg) BOOST_LOG_TRIVIAL(trace) << msg;
-#define LOG_DEBUG(msg) BOOST_LOG_TRIVIAL(debug) << msg;
-#define LOG_INFO(msg) BOOST_LOG_TRIVIAL(info) << msg;
-#define LOG_WARNING(msg) BOOST_LOG_TRIVIAL(warning) << msg;
-#define LOG_ERROR(msg) BOOST_LOG_TRIVIAL(error) << msg;
-#define LOG_FATAL(msg) BOOST_LOG_TRIVIAL(fatal) << msg;
+#define LOG_TRACE(msg)  BOOST_LOG_TRIVIAL(trace) << msg;
+#define LOG_DEBUG(msg)  BOOST_LOG_TRIVIAL(debug) << msg;
+#define LOG_INFO(msg)   BOOST_LOG_TRIVIAL(info) << msg;
+#define LOG_WARNING(msg){\
+    BOOST_LOG_FUNCTION();\
+    BOOST_LOG_TRIVIAL(warning) <<msg;\
+}
+#define LOG_ERROR(msg){\
+    BOOST_LOG_FUNCTION();\
+    BOOST_LOG_TRIVIAL(error) <<msg;\
+}
+#define LOG_FATAL(msg){\
+    BOOST_LOG_FUNCTION();\
+    BOOST_LOG_TRIVIAL(fatal) << msg;\
+}
 
 //macro for car
 #define CARLEN 7.5
