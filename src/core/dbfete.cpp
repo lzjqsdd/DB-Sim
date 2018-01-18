@@ -68,6 +68,7 @@ void DBFETE::init(){
 
     //get modelmanager
     shared_ptr<ModelManager> model_manager = ModelManager::getModelManager();
+    model_manager->init(_config);
 
     //load model for each node and link
     for(auto mnode : nodes){

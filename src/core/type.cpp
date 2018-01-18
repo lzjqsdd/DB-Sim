@@ -44,8 +44,6 @@ void initlog(logging::trivial::severity_level severity)
     logging::add_common_attributes();
     logging::core::get()->add_global_attribute("Scope", attrs::named_scope());
 
-
-    BOOST_LOG_TRIVIAL(fatal) << "ceshiceshi";
 }
 
 
