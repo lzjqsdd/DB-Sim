@@ -54,8 +54,7 @@ void sample(const Config& config, bool sample_node, bool sample_link)
     manager->init(config);
 
     //创建推演对象
-    TFETE tfete(config); //主要处理类
-	FETEIf &f = tfete;
+    TFETE f(config); //主要处理类
 	f.init();
     PProcess processor(config.data_path, config.data_prefix, config.timestep,config.sample_outpath,f.paths, f.nodes, f.links);
     if(config.cleanall)
