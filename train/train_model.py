@@ -15,7 +15,7 @@ def train_for_node1949():
         origin_data = pickle.load(open(st.data_pkl_filename,'rb'))
         print("[INFO] load data from : " , st.data_pkl_filename)
     else:
-        load_origin_data(st.origin_data_path, [1949,1951,2077], origin_data)
+        load_origin_data(st.origin_data_path, [1949,1951,2077,102076], origin_data)
         pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
     df_train_1949 = origin_data[0]
 
@@ -41,7 +41,7 @@ def train_for_node1951():
         origin_data = pickle.load(open(st.data_pkl_filename,'rb'))
         print("[INFO] load data from : " , st.data_pkl_filename)
     else:
-        load_origin_data(st.origin_data_path, [1949,1951,2077], origin_data)
+        load_origin_data(st.origin_data_path, [1949,1951,2077,102076], origin_data)
         pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
     df_train_1951 = origin_data[1]
 
@@ -68,7 +68,7 @@ def train_for_node2077():
         origin_data = pickle.load(open(st.data_pkl_filename,'rb'))
         print("load data from : " , st.data_pkl_filename)
     else:
-        load_origin_data(st.origin_data_path, [1949,1951,2077], origin_data)
+        load_origin_data(st.origin_data_path, [1949,1951,2077,102076], origin_data)
         pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
     df_train_2077 = origin_data[2]
 
@@ -87,6 +87,34 @@ def train_for_node2077():
 
 
 
+def train_for_node102076():
+    #step1 load data
+    origin_data = []
+    #try loading dump data
+    if(os.path.exists(st.data_pkl_filename) and not(st.override_pkl)):
+        origin_data = pickle.load(open(st.data_pkl_filename,'rb'))
+        print("load data from : " , st.data_pkl_filename)
+    else:
+        load_origin_data(st.origin_data_path, [1949,1951,2077,102076], origin_data)
+        pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
+    df_train_102076= origin_data[3]
+
+    #step2: gen_feature
+    df_train_102076 = filter_cut(df_train_102076,2760,13500)
+    df_train_102076= reindex(df_train_102076, 102076)
+    df_train_102076 = group_frame(df_train_102076)
+    df_train_102076 = drop_feature(df_train_102076) #剔除某些特征
+    df_train_102076 = gen_label(df_train_102076,node_id=102076)
+
+    #step3: train
+    param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':6}
+    model_102076 = XGBModel(mid=102076,train_data = df_train_102076, test_data=df_train_102076)
+    model_102076.train(model_path = st.xgboost_node_model_path, param = param)
+    model_102076.loadModel(model_path = st.xgboost_node_model_path)
+    model_102076.test()
+
+
+
 def train_for_link1949():
     #step1 load data
     origin_data = []
@@ -95,7 +123,7 @@ def train_for_link1949():
         origin_data = pickle.load(open(st.data_pkl_filename,'rb'))
         print("[INFO] load data from : " , st.data_pkl_filename)
     else:
-        load_origin_data(st.origin_data_path, [1949,1951,2077], origin_data)
+        load_origin_data(st.origin_data_path, [1949,1951,2077,102076], origin_data)
         pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
     df_train_1949 = origin_data[0]
 
@@ -121,7 +149,7 @@ def train_for_link1951():
         origin_data = pickle.load(open(st.data_pkl_filename,'rb'))
         print("[INFO] load data from : " , st.data_pkl_filename)
     else:
-        load_origin_data(st.origin_data_path, [1949,1951,2077], origin_data)
+        load_origin_data(st.origin_data_path, [1949,1951,2077,102076], origin_data)
         pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
     df_train_1951 = origin_data[1]
 
@@ -148,7 +176,7 @@ def train_for_link2077():
         origin_data = pickle.load(open(st.data_pkl_filename,'rb'))
         print("load data from : " , st.data_pkl_filename)
     else:
-        load_origin_data(st.origin_data_path, [1949,1951,2077], origin_data)
+        load_origin_data(st.origin_data_path, [1949,1951,2077,102076], origin_data)
         pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
     df_train_2077 = origin_data[2]
 

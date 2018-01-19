@@ -143,15 +143,41 @@ def gen_label(df, node_id = None, link_id = None):
         if node_id == 1949:
             df = df.rename(columns={"1949_inflow":"label"}) #1949作为发车点，不使用model
         elif node_id == 1951:
-            df = df.rename(columns={"1951_inflow":"label"}) #1949作为发车点，不使用model
+            df = df.rename(columns={"1951_inflow":"label"})
         elif node_id == 2077:
-            df = df.rename(columns={"2077_inflow":"label"}) #1949作为发车点，不使用model
+            df = df.rename(columns={"2077_inflow":"label"})
+        elif node_id == 102076:
+            df = df.rename(columns={"2077_outflow":"label"}) #最后一个节点连接的是link2077的出量
 
 
     if link_id is not None:
         df = df.rename(columns={"pool2buffer":"label"}) #1949作为发车点，不使用model
 
     return df
+
+
+#丢弃一些无关特征
+def drop_feature(df, node_id = None, link_id = None):
+    if node_id is not None:
+        if node_id == 1949:
+            pass
+        elif node_id == 1951:
+            pass
+        elif node_id == 2077:
+            pass
+        elif node_id == 102076:
+            df = df.drop(['2077_poolnum'])
+
+    if link_id is not None:
+        if link_id == 1949:
+            pass
+        elif link_id == 1951:
+            pass
+        elif link_id == 2077:
+            pass
+
+    return df
+
 
 #TODO 扩充数据
 def expand(df):

@@ -20,7 +20,7 @@ test_data_path = os.path.join(data_sample_root,'sample/test')
 # dump path
 pkl_path = os.path.join(train_root,'pkl/')
 # 是否覆盖序列化数据
-override_pkl = False
+override_pkl = True
 data_pkl_filename = os.path.join(pkl_path,'data.pkl')
 
 # 是否进行预处理
