@@ -30,6 +30,8 @@ class DBFETE: public FETEIf {
 
     private:
         int generatePerFrame();
+        vector<float> gen_node_feature(int node_id); //构造特征输入
+        vector<float> gen_link_feature(int node_id);
 
     private:
         double min_num;

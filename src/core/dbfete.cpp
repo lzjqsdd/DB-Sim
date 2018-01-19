@@ -203,3 +203,26 @@ bool DBFETE::isClean(){
     }
     return false;
 }
+
+
+vector<float> DBFETE::gen_node_feature(int node_id){
+    float period = curtime / 600 % 10;
+    switch(node_id){
+        case 1949: return {period, links[1949]->poolnum, links[1949]->buffernum};
+        case 1951: return {period, links[1949]->poolnum , links[1949]->buffernum, links[1951]->poolnum , links[1951]->buffernum};
+        case 2077: return {period, links[1951]->poolnum , links[1951]->buffernum, links[2077]->poolnum , links[2077]->buffernum};
+        case 102076: return {period, links[2077]->buffernum};
+    }
+    
+}
+
+
+vector<float> DBFETE::gen_link_feature(int link_id){
+    float period = curtime / 600 % 10;
+    switch(link_id){
+        case 1949: return {period, links[1949]->poolnum, links[1949]->buffernum};
+        case 1951: return {period, links[1949]->poolnum , links[1949]->buffernum, links[1951]->poolnum , links[1951]->buffernum};
+        case 2077: return {period, links[1951]->poolnum , links[1951]->buffernum, links[2077]->poolnum , links[2077]->buffernum};
+        case 102076: return {period, links[2077]->buffernum};
+    }
+}
