@@ -54,7 +54,7 @@ shared_ptr<Model> ModelManager::getXGBoostModelByNode(const int& node_id){
         LOG_FATAL(my2string("modelmanager can't init node ",node_id, " model!!!"));
         exit(-1);
     }
-    LOG_DEBUG(my2string("\n\tUsing xgboost model for node ",node_id ,".\n\tversion:", _config.xgboost_version, "\n\t", _config.xgboost_desc));
+    LOG_DEBUG(my2string("\n\tUsing xgboost model for node : ",node_id ,".\n\tversion : ", _config.xgboost_version, "\n\tdescription : ", _config.xgboost_desc));
 
     return xgboost_model;
 }

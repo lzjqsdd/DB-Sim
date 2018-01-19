@@ -65,5 +65,6 @@ void XGBoostModel::free(){
 }
 
 XGBoostModel::~XGBoostModel() { 
+    free();
     LOG_TRACE("dstor XGBoostModel"); 
 }
