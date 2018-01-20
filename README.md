@@ -29,7 +29,7 @@ calculate evacuation time faster and  more accurately
 - [x] refacting config manage 
 
 ## Model
-- [ ] poolnum -> buffernum
+- [x] poolnum -> buffernum
 - [x] buffernum -> outflow
 - [x] sample for every link and node
 - [x] add pool and buffer sample
