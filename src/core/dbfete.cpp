@@ -5,6 +5,7 @@
 
 #include <set>
 #include <algorithm>
+#include <sstream>
 
 DBFETE::DBFETE(){
     Finished = false;
@@ -55,7 +56,7 @@ void DBFETE::init(){
     //TODO params for generate source inflow, add to config later.
     curtime = 0;
     curnum = 0;
-    car_num = 0;
+    car_num = 0; //当前已经生成的车辆数目
 
     total_num = 500;
     min_num = 60;
@@ -73,7 +74,8 @@ void DBFETE::init(){
     //load model for each node and link
     for(auto mnode : nodes){
         int node_id = mnode.first;
-        node_models[node_id] = model_manager->getXGBoostModelByNode(node_id);
+        if(node_id != 1949)
+            node_models[node_id] = model_manager->getXGBoostModelByNode(node_id);
     }
 
     for(auto mlink : links){
@@ -92,6 +94,10 @@ vector<vector<int>> DBFETE::getPaths(){
 }
 
 void DBFETE::generate(){
+
+}
+
+void DBFETE::generate(float &node_inflow){
     int frames = _config.timestep;
     int gentime = curtime;
     int tmp = 0;
@@ -105,6 +111,7 @@ void DBFETE::generate(){
     
     car_num += tmp;
 
+    node_inflow = tmp;
     LOG_DEBUG(my2string("generate num is ", tmp , ", time is ", gentime));
 }
 
@@ -138,23 +145,26 @@ int DBFETE::generatePerFrame(){
 }
 
 void DBFETE::doUpdate(){ 
-    generate(); //TODO 默认先改为StaticData
+    map<int,float> node_inflows;
+    map<int,float> link_inflows; //pool2buffer
+
+    generate(node_inflows[1949]);  //生成node1949的inflow
     //通过generate生成系统的入量(特殊的Node模型)
     
-    map<int,float> node_inflows;
-    map<int,float> link_inflows;
-
     //根据node model产生增量(根据t-1)
     for(auto &mnode : nodes){
         int node_id = mnode.first;
-        vector<float> input; //TODO 构造input,注意特征的顺序
-        node_models[node_id]->predict(input,node_inflows[node_id]);
+        if(node_id != 1949)
+        {
+            vector<float> input = gen_node_feature(node_id);
+            node_models[node_id]->predict(input,node_inflows[node_id]);
+        }
     }
 
     //根据link model产生pool->buffer的(根据t-1)
     for(auto &mlink:links){
         int link_id = mlink.first;
-        vector<float> input; //TODO 构造input
+        vector<float> input = gen_link_feature(link_id);
         link_models[link_id]->predict(input,link_inflows[link_id]);
     }
 
@@ -163,9 +173,12 @@ void DBFETE::doUpdate(){
         int node_id = mnode.first;
 		for(auto linkid : mnode.second->flinks){
 			//更新flink的出量
-            links[linkid]->buffernum -= node_inflows[node_id];
+            if(node_inflows[node_id] > links[linkid]->buffernum)
+                node_inflows[node_id] = links[linkid]->buffernum;
 
+            links[linkid]->buffernum =  node_inflows[node_id];
 		}
+
 		for(auto linkid: mnode.second->tlinks){
 			//更新tlink的入量
             links[linkid]->poolnum += node_inflows[node_id];
@@ -175,6 +188,9 @@ void DBFETE::doUpdate(){
     //计算完毕之后，统一更新pool和buffer数据
     for(auto &mlink : links){
         int link_id = mlink.first;
+        if(link_inflows[link_id] > links[link_id]->poolnum)
+            link_inflows[link_id] = links[link_id]->poolnum;
+
         links[link_id]->poolnum -= link_inflows[link_id];
         links[link_id]->buffernum += link_inflows[link_id];
     }
@@ -183,35 +199,41 @@ void DBFETE::doUpdate(){
 
 void DBFETE::start(){
     while(!Finished){
-        if(Finished) return;
+        showStatus();
         doUpdate();
         isClean(); //每次判断是否为空了
     }
 }
 
 void DBFETE::check(){
-    
+   //合理性检测 
 }
 
 bool DBFETE::isClean(){
     for(auto &mlink : links){
-       if(mlink.second->poolnum !=0 ||mlink.second->buffernum !=0)
-       {
-           Finished = true;
-           return true;
-       }
+        if(mlink.second->poolnum !=0 ||mlink.second->buffernum !=0)
+        {
+            Finished = false;
+            return false;
+        }
     }
-    return false;
+
+    //都为0 ,但是目标需求暂未达到
+    if(car_num < total_num){
+        Finished = false;
+        return false;
+    }
+    return true;
 }
 
 
 vector<float> DBFETE::gen_node_feature(int node_id){
     float period = curtime / 600 % 10;
     switch(node_id){
-        case 1949: return {period, links[1949]->poolnum, links[1949]->buffernum};
-        case 1951: return {period, links[1949]->poolnum , links[1949]->buffernum, links[1951]->poolnum , links[1951]->buffernum};
-        case 2077: return {period, links[1951]->poolnum , links[1951]->buffernum, links[2077]->poolnum , links[2077]->buffernum};
-        case 102076: return {period, links[2077]->buffernum};
+        //case 1949: return {period, links[1949]->poolnum, links[1949]->buffernum};
+        case 1951: return {links[1949]->buffernum, links[1951]->poolnum , period};
+        case 2077: return {links[1951]->buffernum, links[2077]->poolnum , period};
+        case 102076: return {links[2077]->buffernum, period};
     }
     
 }
@@ -220,9 +242,20 @@ vector<float> DBFETE::gen_node_feature(int node_id){
 vector<float> DBFETE::gen_link_feature(int link_id){
     float period = curtime / 600 % 10;
     switch(link_id){
-        case 1949: return {period, links[1949]->poolnum, links[1949]->buffernum};
-        case 1951: return {period, links[1949]->poolnum , links[1949]->buffernum, links[1951]->poolnum , links[1951]->buffernum};
-        case 2077: return {period, links[1951]->poolnum , links[1951]->buffernum, links[2077]->poolnum , links[2077]->buffernum};
-        case 102076: return {period, links[2077]->buffernum};
+        case 1949: return {links[1949]->buffernum, links[1949]->poolnum, period};
+        case 1951: return {links[1951]->buffernum, links[1951]->poolnum, period};
+        case 2077: return {links[2077]->buffernum, links[2077]->poolnum, period};
+        //case 102076: return {period, links[2077]->buffernum};
     }
 }
+
+void DBFETE::showStatus(){
+    std::stringstream os;
+    os << "["  << setw(7) << curtime << "] ";
+    for(auto mlink : links)
+    {
+        os << *(mlink.second);
+    }
+    LOG_INFO(os.str());
+}
+

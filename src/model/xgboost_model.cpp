@@ -38,7 +38,6 @@ void XGBoostModel::predict(const vector<float> &input, vector<float> &output) {
 
 
 void XGBoostModel::predict(const vector<float> &input, float &output) {
-   LOG_TRACE("predict XGBoostModel"); 
 
    vector<vector<float>> test_data = {input};
    DMatrixHandle h_test = NULL;
@@ -66,5 +65,4 @@ void XGBoostModel::free(){
 
 XGBoostModel::~XGBoostModel() { 
     free();
-    LOG_TRACE("dstor XGBoostModel"); 
 }

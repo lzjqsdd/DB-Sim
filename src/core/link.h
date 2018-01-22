@@ -4,9 +4,11 @@
 #include "agent.h"
 
 #include <stdint.h>
+#include <iostream>
 #include <queue>
 #include <set>
 #include <memory>
+#include <iomanip>
 using namespace std;
 
 
@@ -24,6 +26,7 @@ public:
     Link(const Link& link);
     Link(int32_t id , double length , double maxspeed, int totalnum,double pool_zh, double buffer_zh);
     Link& operator=(const Link& link);
+    friend ostream& operator<<(ostream& os, const Link& link);
 
     ~Link();
 

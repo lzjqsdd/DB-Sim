@@ -162,19 +162,19 @@ def drop_feature(df, node_id = None, link_id = None):
         if node_id == 1949:
             pass
         elif node_id == 1951:
-            pass
+            df = df.drop(['1949_inflow','1949_poolnum','1951_outflow','1951_buffernum'], axis = 1)
         elif node_id == 2077:
-            pass
+            df = df.drop(['1951_inflow','1951_poolnum','2077_outflow','2077_buffernum'], axis = 1)
         elif node_id == 102076:
-            df = df.drop(['2077_poolnum'])
+            df = df.drop(['2077_inflow','2077_poolnum'], axis = 1)
 
     if link_id is not None:
         if link_id == 1949:
-            pass
+            df = df.drop(['1949_inflow','1949_outflow'], axis = 1)
         elif link_id == 1951:
-            pass
+            df = df.drop(['1949_inflow','1949_buffernum','1949_poolnum','1951_inflow','1951_outflow'], axis = 1)
         elif link_id == 2077:
-            pass
+            df = df.drop(['1951_inflow','1951_buffernum','1951_poolnum','2077_inflow','2077_outflow'], axis = 1)
 
     return df
 

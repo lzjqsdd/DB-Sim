@@ -77,7 +77,7 @@ link_directories(
 )
 
 #设置编译选项
-set(CMAKE_C_FLAGS_DEBUG "-g -Wall -o0")
+set(CMAKE_C_FLAGS_DEBUG "-g -w -o0")
 set(CMAKE_C_FLAGS_RELEASE "-Wall -02")
 
 #添加编译子目录
