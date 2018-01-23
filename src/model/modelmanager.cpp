@@ -41,7 +41,6 @@ shared_ptr<Model> ModelManager::getXGBoostModelByNode(const int& node_id){
     
     shared_ptr<Model> xgboost_model = shared_ptr<Model>(new XGBoostModel()); 
     size_t node_num = _config.xgboost_node_model.size();
-    cout << "node_num :" << node_num << endl;
     bool found = false;
     for(int i=0; i< node_num; ++i){
         if(node_id == _config.xgboost_node_model[i].mid){
@@ -63,7 +62,6 @@ shared_ptr<Model> ModelManager::getXGBoostModelByLink(const int& link_id){
     
     shared_ptr<Model> xgboost_model = shared_ptr<Model>(new XGBoostModel()); 
     size_t link_num = _config.xgboost_link_model.size();
-    cout << "link_num :" << link_num << endl;
     bool found = false;
     for(int i=0; i< link_num; ++i){
         if(link_id == _config.xgboost_link_model[i].mid){

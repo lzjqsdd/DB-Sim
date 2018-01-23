@@ -6,6 +6,10 @@
 #include <set>
 #include <algorithm>
 #include <sstream>
+#include <unistd.h>
+
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/thread/thread.hpp>
 
 DBFETE::DBFETE(){
     Finished = false;
@@ -202,6 +206,7 @@ void DBFETE::start(){
         showStatus();
         doUpdate();
         isClean(); //每次判断是否为空了
+        boost::thread::sleep(boost::get_system_time()+boost::posix_time::milliseconds(_config.pausetime));
     }
 }
 
@@ -231,9 +236,9 @@ vector<float> DBFETE::gen_node_feature(int node_id){
     float period = curtime / 600 % 10;
     switch(node_id){
         //case 1949: return {period, links[1949]->poolnum, links[1949]->buffernum};
-        case 1951: return {links[1949]->buffernum, links[1951]->poolnum , period};
-        case 2077: return {links[1951]->buffernum, links[2077]->poolnum , period};
-        case 102076: return {links[2077]->buffernum, period};
+        case 1951:      return {(float)links[1949]->buffernum, (float)links[1951]->poolnum ,(float) period};
+        case 2077:      return {(float)links[1951]->buffernum, (float)links[2077]->poolnum ,(float) period};
+        case 102076:    return {(float)links[2077]->buffernum, (float)period};
     }
     
 }
@@ -242,9 +247,9 @@ vector<float> DBFETE::gen_node_feature(int node_id){
 vector<float> DBFETE::gen_link_feature(int link_id){
     float period = curtime / 600 % 10;
     switch(link_id){
-        case 1949: return {links[1949]->buffernum, links[1949]->poolnum, period};
-        case 1951: return {links[1951]->buffernum, links[1951]->poolnum, period};
-        case 2077: return {links[2077]->buffernum, links[2077]->poolnum, period};
+        case 1949: return {(float)links[1949]->buffernum, (float)links[1949]->poolnum, (float)period};
+        case 1951: return {(float)links[1951]->buffernum, (float)links[1951]->poolnum, (float)period};
+        case 2077: return {(float)links[2077]->buffernum, (float)links[2077]->poolnum, (float)period};
         //case 102076: return {period, links[2077]->buffernum};
     }
 }

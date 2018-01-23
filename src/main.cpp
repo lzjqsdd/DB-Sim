@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <sstream>
 #include <chrono>
+#include <signal.h>
 
 #include <boost/program_options.hpp>
 
@@ -112,6 +113,13 @@ void simulation(const Config& config, model_type type)
     auto duration = chrono::duration_cast<chrono::milliseconds>(etime-stime);
 
     LOG_DEBUG(my2string("Total Time is : ", duration.count()," ms"));
+}
+
+
+void stop()
+{
+    std::cout << "Force stop fete!" << std::endl;
+    exit(-1);
 }
 
 

@@ -40,6 +40,7 @@ class Config{
         string pathdir;
         string nodedir;
         logging::trivial::severity_level log_level;
+        int pausetime;
 
         //demands config
         map<int,int> demands;

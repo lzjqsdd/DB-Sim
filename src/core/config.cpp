@@ -2,8 +2,9 @@
 
 Config::Config():
 	config_path("../config"),
-	log_level(logging::trivial::trace),
 	sample(false),
+	log_level(logging::trivial::trace),
+    pausetime(0),
 	data_path("../data"),
     data_prefix("car"),
 	sample_outpath("../data/sample"),
@@ -15,8 +16,9 @@ Config::Config():
 
 Config::Config(const string& config_path):
 	config_path(config_path),
-	log_level(logging::trivial::trace),
 	sample(false),
+	log_level(logging::trivial::trace),
+    pausetime(0),
 	data_path("../data"),
     data_prefix("car"),
 	sample_outpath("../data/sample"),
@@ -34,6 +36,7 @@ Config::Config(const Config& config):
     pathdir(config.pathdir),
     nodedir(config.nodedir),
     log_level(config.log_level),
+    pausetime(config.pausetime),
     demands(config.demands),
 	data_path(config.data_path),
     data_prefix(config.data_prefix),
@@ -57,6 +60,7 @@ Config& Config::operator=(const Config& config){
         this->pathdir = config.pathdir;
         this->nodedir = config.nodedir;
         this->log_level = config.log_level;
+        this->pausetime = config.pausetime;
         for(auto demand : config.demands){
             this->demands[demand.first] = demand.second;
         }
@@ -83,6 +87,7 @@ ostream& operator<<(ostream& os, const Config& config){
         << "{ " << endl
 		<< "\tSample is " << config.sample << endl
         << "\tTimestep is " << config.timestep << endl
+        << "\tPausetime is " << config.pausetime<< endl
         << "\tDataPath is " << config.data_path<< endl
         << "}";
     os << std::endl << "demand : "<< endl << "{" << endl;
@@ -126,6 +131,7 @@ void Config::init(const string& config_path)
         string pathdir;
         string nodedir;
         string loglevel;
+        int pausetime;
 		string data_path;
 		string sample_outpath;
         double poolsize,buffersize;
@@ -145,6 +151,9 @@ void Config::init(const string& config_path)
         }
         if(mconfig.lookupValue("global.loglevel",loglevel)){
             this->log_level = str2enum(loglevel);
+        }
+        if(mconfig.lookupValue("global.pausetime",pausetime)){
+            this->pausetime = pausetime;
         }
 
 

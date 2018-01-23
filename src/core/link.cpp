@@ -73,8 +73,8 @@ Link& Link::operator=(const Link& link){
     return *this;
 }
 ostream& operator<<(ostream& os, const Link& link){
-    os << RED << "(@)" << GREEN << "[" <<  std::right<< setw(4) << std::setfill('_') << link.poolnum <<  "|" 
-        << std::left<< setw(4) << std::setfill('_') << link.buffernum <<"]" << RESET;
+    os << RED << "(@)" << GREEN << "[" <<  std::right<< setw(4) << std::setfill(' ') << link.poolnum <<  "|" 
+        << std::left<< setw(4) << std::setfill(' ') << link.buffernum <<"]" << RESET;
     return os;
 
 }
