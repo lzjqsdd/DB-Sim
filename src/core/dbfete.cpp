@@ -269,7 +269,7 @@ void DBFETE::showStatus(){
     os << "[frame "  << setw(6) << curtime << "] ";
 
     //输出源点demand
-    os << "{" << BOLDRED << setw(4) << origin_num << RESET << "}";
+    os << "(" << BOLDRED << setw(4) << origin_num << RESET << ")" << BOLDRED << "⇶ " << RESET ;
 
     auto it_node = nodes.begin();
     auto it_link = links.begin();
@@ -285,7 +285,7 @@ void DBFETE::showStatus(){
     }
 
     //输出超级终点汇入量
-    os << "{ " << BOLDGREEN<< setw(4) << dest_num << RESET << "}";
+    os << BOLDGREEN << "⇶ " << RESET << "("<< BOLDGREEN << setw(4) << dest_num << RESET << ")";
     LOG_INFO(os.str());
 }
 
