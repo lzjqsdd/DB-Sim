@@ -13,6 +13,7 @@
 
 DBFETE::DBFETE(){
     Finished = false;
+    dest_num = 0;
 }
 
 DBFETE::DBFETE(const Config &config){ 
@@ -86,6 +87,9 @@ void DBFETE::init(){
         int link_id = mlink.first;
         link_models[link_id] = model_manager->getXGBoostModelByLink(link_id);
     }
+
+
+    dest_num = 0;
     
 }
 
@@ -165,9 +169,15 @@ void DBFETE::doUpdate(){
         }
     }
 
-    //根据link model产生pool->buffer的(根据t-1)
+    //更新link路段的inflow字段 [for debug]
     for(auto &mlink:links){
         int link_id = mlink.first;
+        links[link_id]->inflow = node_inflows[link_id]; //这里Linkid和nodeid是对应的。源自于路网设计时的对应关系
+    }
+
+    //根据link model产生pool->buffer的(根据t-1)
+    for(auto &mlink:links){
+        const int& link_id = mlink.first;
         vector<float> input = gen_link_feature(link_id);
         link_models[link_id]->predict(input,link_inflows[link_id]);
     }
@@ -188,6 +198,9 @@ void DBFETE::doUpdate(){
             links[linkid]->poolnum += node_inflows[node_id];
 		}
 	}
+    //计算系统输出
+    int endId = *endIds.begin();
+    dest_num += node_inflows[*endIds.begin()];
     
     //计算完毕之后，统一更新pool和buffer数据
     for(auto &mlink : links){
@@ -255,12 +268,15 @@ vector<float> DBFETE::gen_link_feature(int link_id){
 }
 
 void DBFETE::showStatus(){
+
+    //for single path, just one end point.
     std::stringstream os;
-    os << "["  << setw(7) << curtime << "] ";
+    os << "[frame "  << setw(6) << curtime << "] ";
     for(auto mlink : links)
     {
         os << *(mlink.second);
     }
+    os << "{ " << RED << dest_num << RESET << "}";
     LOG_INFO(os.str());
 }
 
