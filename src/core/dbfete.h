@@ -46,6 +46,7 @@ class DBFETE: public FETEIf {
         map<int, shared_ptr<Model>> node_models; //加载的模型，每个node对应一个
         map<int, shared_ptr<Model>> link_models; //加载的模型，每个link对应一个
 
+        double origin_num; //起始点的数量
         double dest_num; //超级终点，统计系统输出
 
 };

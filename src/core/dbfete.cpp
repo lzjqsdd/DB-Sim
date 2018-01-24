@@ -14,6 +14,7 @@
 DBFETE::DBFETE(){
     Finished = false;
     dest_num = 0;
+    origin_num = 0;
 }
 
 DBFETE::DBFETE(const Config &config){ 
@@ -89,6 +90,7 @@ void DBFETE::init(){
     }
 
 
+    origin_num = total_num;
     dest_num = 0;
     
 }
@@ -153,10 +155,8 @@ int DBFETE::generatePerFrame(){
 }
 
 void DBFETE::doUpdate(){ 
-    map<int,float> node_inflows;
-    map<int,float> link_inflows; //pool2buffer
 
-    generate(node_inflows[1949]);  //生成node1949的inflow
+    generate(nodes[1949]->inflow);
     //通过generate生成系统的入量(特殊的Node模型)
     
     //根据node model产生增量(根据t-1)
@@ -165,21 +165,15 @@ void DBFETE::doUpdate(){
         if(node_id != 1949)
         {
             vector<float> input = gen_node_feature(node_id);
-            node_models[node_id]->predict(input,node_inflows[node_id]);
+            node_models[node_id]->predict(input,nodes[node_id]->inflow);
         }
-    }
-
-    //更新link路段的inflow字段 [for debug]
-    for(auto &mlink:links){
-        int link_id = mlink.first;
-        links[link_id]->inflow = node_inflows[link_id]; //这里Linkid和nodeid是对应的。源自于路网设计时的对应关系
     }
 
     //根据link model产生pool->buffer的(根据t-1)
     for(auto &mlink:links){
         const int& link_id = mlink.first;
         vector<float> input = gen_link_feature(link_id);
-        link_models[link_id]->predict(input,link_inflows[link_id]);
+        link_models[link_id]->predict(input,links[link_id]->pool2buffer);
     }
 
     //上述的数据均为tmp数据，在使用模型的时候不能更新任何一个数据
@@ -187,29 +181,30 @@ void DBFETE::doUpdate(){
         int node_id = mnode.first;
 		for(auto linkid : mnode.second->flinks){
 			//更新flink的出量
-            if(node_inflows[node_id] > links[linkid]->buffernum)
-                node_inflows[node_id] = links[linkid]->buffernum;
+            if(nodes[node_id]->inflow > links[linkid]->buffernum)
+                nodes[node_id]->inflow = links[linkid]->buffernum;
 
-            links[linkid]->buffernum =  node_inflows[node_id];
+            links[linkid]->buffernum =  nodes[node_id]->inflow;
 		}
 
 		for(auto linkid: mnode.second->tlinks){
 			//更新tlink的入量
-            links[linkid]->poolnum += node_inflows[node_id];
+            links[linkid]->poolnum += nodes[node_id]->inflow;
 		}
 	}
-    //计算系统输出
+    //计算系统输入输出
     int endId = *endIds.begin();
-    dest_num += node_inflows[*endIds.begin()];
+    dest_num += nodes[*endIds.begin()]->inflow;
+    origin_num -= nodes[*startIds.begin()]->inflow;
     
     //计算完毕之后，统一更新pool和buffer数据
     for(auto &mlink : links){
         int link_id = mlink.first;
-        if(link_inflows[link_id] > links[link_id]->poolnum)
-            link_inflows[link_id] = links[link_id]->poolnum;
+        if(links[link_id]->pool2buffer > links[link_id]->poolnum)
+            links[link_id]->pool2buffer = links[link_id]->poolnum;
 
-        links[link_id]->poolnum -= link_inflows[link_id];
-        links[link_id]->buffernum += link_inflows[link_id];
+        links[link_id]->poolnum -= links[link_id]->pool2buffer;
+        links[link_id]->buffernum += links[link_id]->pool2buffer;
     }
 }
 
@@ -272,11 +267,25 @@ void DBFETE::showStatus(){
     //for single path, just one end point.
     std::stringstream os;
     os << "[frame "  << setw(6) << curtime << "] ";
-    for(auto mlink : links)
-    {
-        os << *(mlink.second);
+
+    //输出源点demand
+    os << "{" << BOLDRED << setw(4) << origin_num << RESET << "}";
+
+    auto it_node = nodes.begin();
+    auto it_link = links.begin();
+
+    //交替输出
+    for(auto &path : paths){
+        for(auto id : path){
+            if(nodes.find(id) != nodes.end())
+                os << *(nodes[id]);
+            if(links.find(id) != links.end())
+                os << *(links[id]);
+        }
     }
-    os << "{ " << RED << dest_num << RESET << "}";
+
+    //输出超级终点汇入量
+    os << "{ " << BOLDGREEN<< setw(4) << dest_num << RESET << "}";
     LOG_INFO(os.str());
 }
 

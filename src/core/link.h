@@ -51,6 +51,9 @@ public:
     double avg_speed;
     double pool_zh; //pool endzh
     double buffer_zh; //buffer startzh
+
+    //for simulation
+    float pool2buffer; //记录每次迭代pool到buffer的流量
 };
 
 #endif 
