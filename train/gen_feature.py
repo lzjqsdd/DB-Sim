@@ -160,7 +160,7 @@ def gen_label(df, node_id = None, link_id = None):
 def drop_feature(df, node_id = None, link_id = None):
     if node_id is not None:
         if node_id == 1949:
-            pass
+            df = df.drop(['1949_buffernum','1949_outflow'], axis = 1)
         elif node_id == 1951:
             df = df.drop(['1949_inflow','1949_poolnum','1951_outflow','1951_buffernum'], axis = 1)
         elif node_id == 2077:

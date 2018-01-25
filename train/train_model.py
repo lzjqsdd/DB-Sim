@@ -20,7 +20,7 @@ def train_for_node1949():
     df_train_1949 = origin_data[0]
 
     #step2: gen_feature
-    df_train_1949 = filter_cut(df_train_1949,2760,13500)
+    #df_train_1949 = filter_cut(df_train_1949,3000,13500)
     df_train_1949 = reindex(df_train_1949,1949)
     df_train_1949 = group_frame(df_train_1949)
     df_train_1949 = drop_feature(df_train_1949, node_id = 1949)
