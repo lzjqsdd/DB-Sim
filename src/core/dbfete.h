@@ -29,7 +29,6 @@ class DBFETE: public FETEIf {
         vector<vector<int>> getPaths();
 
     private:
-        void generate(float &node_inflow); //生成入量
         int generatePerFrame();
         vector<float> gen_node_feature(int node_id); //构造特征输入
         vector<float> gen_link_feature(int node_id);
@@ -42,6 +41,7 @@ class DBFETE: public FETEIf {
         double genAgentNumMax;
         double genCount;
         int car_num; //当前生成的车辆数
+        double readygo_num; //即将出发的车辆数，已生成但是还未发车的
 
         map<int, shared_ptr<Model>> node_models; //加载的模型，每个node对应一个
         map<int, shared_ptr<Model>> link_models; //加载的模型，每个link对应一个
