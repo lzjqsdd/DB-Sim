@@ -37,11 +37,13 @@ void TestModel(const Config& config)
     //shared_ptr<Model> model = modelManager->getRandomForestModel();
     //model->init(config);
 
-    shared_ptr<Model> model = modelManager->getXGBoostModelByNode(1951);
-    vector<float> test_data = {4,8,12};
-    float output;
-    model->predict(test_data, output );
-    cout << "predict value : " << output<< endl;
+    shared_ptr<Model> model = modelManager->getXGBoostModelByNode(1949);
+    for(int period = 0; period < 10; ++period){
+        vector<float> test_data = {0,period};
+        float output;
+        model->predict(test_data, output );
+        cout << "period " << period << " , output is : " << output<< endl;
+    }
 
     //model = modelManager->getSVMModel();
     //model->init(config);
