@@ -174,16 +174,30 @@ void DBFETE::doUpdate(){
     //inflow同时受 poolnum 和 buffer的大小的限制
 	for(auto &mnode : nodes){
         int node_id = mnode.first;
+        if(startIds.find(node_id) != startIds.end()) nodes[node_id]->inflow = min(readygo_num, (double)nodes[node_id]->inflow); //发车限制
+        //处理条件约束
+        nodes[node_id]->inflow = min(nodes[node_id]->capacity, nodes[node_id]->inflow); //容量限制
 		for(auto linkid : mnode.second->flinks){
-			//更新flink的出量
-            nodes[node_id]->inflow = min(links[linkid]->poolnum
+            nodes[node_id]->inflow = min(links[linkid]->buffernum, (double)nodes[node_id]->inflow); //存量限制
+		}
+		for(auto linkid: mnode.second->tlinks){
+            nodes[node_id]->inflow = min(links[linkid]->maxpoolnum - links[linkid]->poolnum, (double)nodes[node_id]->inflow);// 空间限制
 		}
 
-		for(auto linkid: mnode.second->tlinks){
-			//更新tlink的入量
-            links[linkid]->poolnum += nodes[node_id]->inflow;
+
+        //更新
+        
+        if(startIds.find(node_id) != startIds.end()) readygo_num -= nodes[node_id]->inflow; //更新origin
+		for(auto linkid : mnode.second->flinks){
+            links[linkid]->buffernum -= nodes[node_id]->inflow; //更新前向link的buffernum
 		}
+		for(auto linkid: mnode.second->tlinks){
+            links[linkid]->poolnum += nodes[node_id]->inflow; //更新后向link的poolnum
+        }
 	}
+
+
+
     //计算系统输入输出
     int endId = *endIds.begin();
     dest_num += nodes[*endIds.begin()]->inflow;
@@ -192,8 +206,10 @@ void DBFETE::doUpdate(){
     //计算完毕之后，统一更新pool和buffer数据
     for(auto &mlink : links){
         int link_id = mlink.first;
-        if(links[link_id]->pool2buffer > links[link_id]->poolnum)
-            links[link_id]->pool2buffer = links[link_id]->poolnum;
+
+        links[link_id]->pool2buffer = min(
+                min(links[link_id]->poolnum, (double)links[link_id]->pool2buffer),
+                links[link_id]->maxbuffernum - links[link_id]->buffernum);
 
         links[link_id]->poolnum -= links[link_id]->pool2buffer;
         links[link_id]->buffernum += links[link_id]->pool2buffer;
@@ -245,7 +261,7 @@ vector<float> DBFETE::gen_node_feature(int node_id){
 
 
 vector<float> DBFETE::gen_link_feature(int link_id){
-    float period = curtime / 600 % 10; //TODO hard code
+    float period = curtime % 600 / 10; //TODO hard code
     switch(link_id){
         case 1949: return {(float)links[1949]->buffernum, (float)links[1949]->poolnum, (float)period};
         case 1951: return {(float)links[1951]->buffernum, (float)links[1951]->poolnum, (float)period};

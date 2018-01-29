@@ -24,7 +24,7 @@ class Link{
 public:
     Link();
     Link(const Link& link);
-    Link(int32_t id , double length , double maxspeed, int totalnum,double pool_zh, double buffer_zh);
+    Link(int32_t id , double length , double maxspeed, double maxpool, double  maxbuffernum,  double pool_zh, double buffer_zh);
     Link& operator=(const Link& link);
     friend ostream& operator<<(ostream& os, const Link& link);
 
@@ -40,6 +40,8 @@ public:
     double poolnum;
     double totalnum; //总可以容纳的车辆数
     double buffernum;
+    double maxpoolnum;
+    double maxbuffernum;
     priority_queue<shared_ptr<Agent>, vector<shared_ptr<Agent>>,  cmp> wait_queue;
 
 

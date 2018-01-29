@@ -41,19 +41,25 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
         XMLElement *linkElement = pathElement->FirstChildElement("link");
         vector<int> path;
         while(linkElement){
-            int id,totalnum;
-            double length,maxspeed;
+            int id;
+            double length,maxspeed,maxpoolnum,maxbuffernum;
             double pool_zh, buffer_zh; //pool endzh, buffer startzh
 
             linkElement->QueryAttribute("id",&id);
             XMLElement *speedElement = linkElement->FirstChildElement("maxspeed");
             XMLElement *lengthElement = linkElement->FirstChildElement("length");
+            XMLElement *maxpoolnumElement = linkElement->FirstChildElement("maxpoolnum");
+            XMLElement *maxbuffernumElement = linkElement->FirstChildElement("maxbuffernum");
             XMLText* speedNode = speedElement->FirstChild()->ToText();
             XMLText* lengthNode = lengthElement->FirstChild()->ToText();
+            XMLText* maxpoolnumNode = maxpoolnumElement->FirstChild()->ToText();
+            XMLText* maxbuffernumNode = maxbuffernumElement->FirstChild()->ToText();
 
             length = atof(lengthNode->Value());
             maxspeed = atof(speedNode->Value());
-            totalnum = length * 1 / CARLEN; //每个车7.5米,默认都是１个lane
+            maxpoolnum = atof(maxpoolnumNode->Value());
+            maxbuffernum = atof(maxbuffernumNode->Value());
+            //totalnum = length * 1 / CARLEN; //每个车7.5米,默认都是１个lane
 
             if(length > _config.buffersize) 
             {
@@ -77,9 +83,10 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
             //assert((pool_zh >=0) && (buffer_zh >= 0));
 
             LOG_DEBUG(my2string("linkid is :" ,id , "\tlength is : " , lengthNode->Value() , "\tmaxspeed is: " , speedNode->Value() ,
-                    "\ttotalnum is: " , totalnum , "\tpool_zh is :", pool_zh , "\tbuffer_zh is: " , buffer_zh));
+                    "\tmaxpoolnum is: " , maxpoolnum , "\tmaxbuffernum is: " , maxbuffernum ,
+                    "\tpool_zh is :", pool_zh , "\tbuffer_zh is: " , buffer_zh));
 
-            shared_ptr<Link> mlink = shared_ptr<Link>(new Link(id,length,maxspeed,totalnum,pool_zh,buffer_zh));
+            shared_ptr<Link> mlink = shared_ptr<Link>(new Link(id,length,maxspeed,maxpoolnum, maxbuffernum,pool_zh,buffer_zh));
             links[id] = mlink;
             path.push_back(id);
 

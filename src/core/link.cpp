@@ -10,6 +10,8 @@ Link::Link():
     capacity(0),
     poolnum (0),
     buffernum(0),
+    maxpoolnum(0),
+    maxbuffernum(0),
     inflow(0),
     outflow(0),
     sum_frame(0),
@@ -21,10 +23,10 @@ Link::Link():
 }
 
 
-Link::Link(int32_t id , double length , double maxspeed, int totalnum,
+Link::Link(int32_t id , double length , double maxspeed, double maxpoolnum, double maxbuffernum,
         double pool_zh , double buffer_zh):
 	id(id),length(length),maxspeed(maxspeed),lane_num(1),
-	capacity(100),totalnum(totalnum),poolnum(0),buffernum(0),
+	capacity(100),poolnum(0),buffernum(0),maxpoolnum(0),maxbuffernum(0),
 	inflow(0),outflow(0),
     sum_frame(0),sum_zh(0), avg_speed(0),
     pool_zh(pool_zh), buffer_zh(buffer_zh),
@@ -42,6 +44,8 @@ Link::Link(const Link& link){
     this->poolnum = link.poolnum;
     this->buffernum= link.buffernum;
     this->totalnum = link.totalnum;
+    this->maxpoolnum = link.maxpoolnum;
+    this->maxbuffernum = link.maxbuffernum;
     
     this->sum_frame = link.sum_frame;
     this->sum_zh = link.sum_zh;
@@ -63,6 +67,8 @@ Link& Link::operator=(const Link& link){
         this->poolnum = link.poolnum;
         this->buffernum= link.buffernum;
         this->totalnum = link.totalnum;
+        this->maxpoolnum = link.maxpoolnum;
+        this->maxbuffernum = link.maxbuffernum;
 
         this->sum_frame = link.sum_frame;
         this->sum_zh = link.sum_zh;
