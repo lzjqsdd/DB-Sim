@@ -26,7 +26,7 @@ Link::Link():
 Link::Link(int32_t id , double length , double maxspeed, double maxpoolnum, double maxbuffernum,
         double pool_zh , double buffer_zh):
 	id(id),length(length),maxspeed(maxspeed),lane_num(1),
-	capacity(100),poolnum(0),buffernum(0),maxpoolnum(0),maxbuffernum(0),
+	capacity(100),poolnum(0),buffernum(0),maxpoolnum(maxpoolnum),maxbuffernum(maxbuffernum),
 	inflow(0),outflow(0),
     sum_frame(0),sum_zh(0), avg_speed(0),
     pool_zh(pool_zh), buffer_zh(buffer_zh),

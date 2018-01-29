@@ -24,7 +24,7 @@ class Link{
 public:
     Link();
     Link(const Link& link);
-    Link(int32_t id , double length , double maxspeed, double maxpool, double  maxbuffernum,  double pool_zh, double buffer_zh);
+    Link(int32_t id , double length , double maxspeed, double maxpoolnum, double  maxbuffernum,  double pool_zh, double buffer_zh);
     Link& operator=(const Link& link);
     friend ostream& operator<<(ostream& os, const Link& link);
 

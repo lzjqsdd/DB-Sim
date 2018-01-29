@@ -132,6 +132,11 @@ void FETEIf::loadNodes(map<int, shared_ptr<Node>>& nodes){
 
 
         float capacity = capacityElement->FloatText();
+        LOG_DEBUG(my2string(
+                    "nodeid is : ", id,
+                    ",flink is : ", flinks_s,
+                    ",tlink is : ", tlinks_s,
+                    ",capacity : " ,capacity));
 
         shared_ptr<Node> pnode = shared_ptr<Node>(new Node(id, flinks_id, tlinks_id,capacity));
         nodes[id] = pnode;
