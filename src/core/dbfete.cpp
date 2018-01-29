@@ -11,10 +11,12 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
 
-DBFETE::DBFETE(){
+DBFETE::DBFETE():
+    dest_num(0),
+    origin_num(0),
+    readygo_num(0){
+
     Finished = false;
-    dest_num = 0;
-    origin_num = 0;
 }
 
 DBFETE::DBFETE(const Config &config){ 
@@ -63,6 +65,7 @@ void DBFETE::init(){
     curtime = 0;
     curnum = 0;
     car_num = 0; //当前已经生成的车辆数目
+    readygo_num = 0;
 
     total_num = 500;
     min_num = 60;
@@ -80,8 +83,7 @@ void DBFETE::init(){
     //load model for each node and link
     for(auto mnode : nodes){
         int node_id = mnode.first;
-        if(node_id != 1949)
-            node_models[node_id] = model_manager->getXGBoostModelByNode(node_id);
+        node_models[node_id] = model_manager->getXGBoostModelByNode(node_id);
     }
 
     for(auto mlink : links){
@@ -119,7 +121,7 @@ void DBFETE::generate(){
     car_num += tmp;
     readygo_num += tmp;
 
-    LOG_DEBUG(my2string("generate num is ", tmp , ", time is ", gentime));
+    //LOG_DEBUG(my2string("generate num is ", tmp , ", time is ", gentime));
 }
 
 int DBFETE::generatePerFrame(){
@@ -277,7 +279,7 @@ void DBFETE::showStatus(){
     os << "[frame "  << setw(6) << curtime << "] ";
 
     //输出源点demand
-    os << "(" << BOLDRED << setw(4) << origin_num << RESET << ")" << BOLDRED << "⇶ " << RESET ;
+    os << "(" << BOLDRED << setw(4) << origin_num << "|" << setw(4) << readygo_num << RESET << ")" << BOLDRED << "⇶ " << RESET ;
 
     auto it_node = nodes.begin();
     auto it_link = links.begin();
