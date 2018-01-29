@@ -110,6 +110,7 @@ void FETEIf::loadNodes(map<int, shared_ptr<Node>>& nodes){
         nodeElement->QueryAttribute("id", &id);
         XMLElement * flinksElement = nodeElement->FirstChildElement("flinks");
         XMLElement * tlinksElement = nodeElement->FirstChildElement("tlinks");
+        XMLElement * capacityElement = nodeElement->FirstChildElement("capacity");
         
         string flinks_s,tlinks_s;
         if(!flinksElement->NoChildren()) flinks_s = flinksElement->GetText();
@@ -122,7 +123,10 @@ void FETEIf::loadNodes(map<int, shared_ptr<Node>>& nodes){
         for(vector<string>::iterator it = flinks_v.begin();it!=flinks_v.end();++it) flinks_id.push_back(boost::lexical_cast<int>(*it));
         for(vector<string>::iterator it = tlinks_v.begin();it!=tlinks_v.end();++it) tlinks_id.push_back(boost::lexical_cast<int>(*it));
 
-        shared_ptr<Node> pnode = shared_ptr<Node>(new Node(id, flinks_id, tlinks_id));
+
+        float capacity = capacityElement->FloatText();
+
+        shared_ptr<Node> pnode = shared_ptr<Node>(new Node(id, flinks_id, tlinks_id,capacity));
         nodes[id] = pnode;
 
         nodeElement = nodeElement->NextSiblingElement();

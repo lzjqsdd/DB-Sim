@@ -27,7 +27,7 @@ void initlog(logging::trivial::severity_level severity)
 		keywords::rotation_size=10*1024*1024,
         keywords::format = expr::format("[%1%] [%2%] [%3%] %4%") 
             % expr::attr< boost::log::trivial::severity_level>("Severity")
-            % expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f") 
+            % expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S") 
             % expr::format_named_scope("Scope", keywords::format = "%n (%f:%l)") 
             % expr::message 
     );
@@ -36,7 +36,7 @@ void initlog(logging::trivial::severity_level severity)
         std::cout,
         keywords::format = expr::format("[%1%] [%2%] [%3%] %4%") 
             % expr::attr< boost::log::trivial::severity_level>("Severity")
-            % expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f") 
+            % expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S") 
             % expr::format_named_scope("Scope", keywords::format = "%n (%f:%l)") 
             % expr::message 
     );
