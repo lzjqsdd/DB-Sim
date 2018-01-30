@@ -297,7 +297,7 @@ void DBFETE::showStatus(){
     }
 
     //输出超级终点汇入量
-    os << BOLDGREEN << "⇶ " << RESET << "("<< BOLDGREEN << setw(4) << dest_num << RESET << ")" << "car_num : " << car_num << ", total_num : " << total_num;
+    os << BOLDGREEN << "⇶ " << RESET << "("<< BOLDGREEN << setw(4) << dest_num << RESET << ")";
     LOG_INFO(os.str());
 }
 

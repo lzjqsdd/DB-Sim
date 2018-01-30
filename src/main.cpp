@@ -124,7 +124,7 @@ void simulation(const Config& config, model_type type)
     auto etime = chrono::system_clock::now();
     auto duration = chrono::duration_cast<chrono::milliseconds>(etime-stime);
 
-    LOG_DEBUG(my2string("Total Time is : ", duration.count()," ms"));
+    LOG_INFO(my2string("Total Time is : ", duration.count()," ms"));
 }
 
 
