@@ -246,6 +246,8 @@ bool DBFETE::isClean(){
         Finished = false;
         return false;
     }
+
+    Finished = true;
     return true;
 }
 
@@ -295,7 +297,7 @@ void DBFETE::showStatus(){
     }
 
     //输出超级终点汇入量
-    os << BOLDGREEN << "⇶ " << RESET << "("<< BOLDGREEN << setw(4) << dest_num << RESET << ")";
+    os << BOLDGREEN << "⇶ " << RESET << "("<< BOLDGREEN << setw(4) << dest_num << RESET << ")" << "car_num : " << car_num << ", total_num : " << total_num;
     LOG_INFO(os.str());
 }
 
