@@ -39,14 +39,13 @@ calculate evacuation time faster and  more accurately
 
 ## Plans
 ### V0.1.3
-- [ ] add cross-validation
 - [ ] add param configure for better tune.
-- [ ] add super-dest-point process
+- [x] add super-dest-point process
 
 
 ### V0.1.4
-- [ ] add [poolnum -> buffernum] Model
-- [ ] finished basic iteration for simulation.
+- [x] add [poolnum -> buffernum] Model
+- [x] finished basic iteration for simulation.
 
 
 ### V0.1.5
