@@ -263,7 +263,7 @@ vector<float> DBFETE::gen_node_feature(int node_id){
 
 
 vector<float> DBFETE::gen_link_feature(int link_id){
-    float period = curtime % 600 / 10; //TODO hard code
+    float period = curtime % 600 / 60; //TODO hard code
     switch(link_id){
         case 1949: return {(float)links[1949]->buffernum, (float)links[1949]->poolnum, (float)period};
         case 1951: return {(float)links[1951]->buffernum, (float)links[1951]->poolnum, (float)period};

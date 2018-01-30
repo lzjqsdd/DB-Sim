@@ -160,7 +160,7 @@ def train_for_link1951():
     df_train_1951 = origin_data[1]
 
     #step2: gen_feature
-    df_train_1951 = filter_cut(df_train_1951,2760,13500)
+    #df_train_1951 = filter_cut(df_train_1951,2760,13500)
     df_train_1951 = reindex(df_train_1951,1951)
     df_train_1951 = group_frame(df_train_1951)
     df_train_1951 = gen_pool2buffer(df_train_1951, 1951)

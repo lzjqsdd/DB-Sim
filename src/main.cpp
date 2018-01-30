@@ -34,19 +34,29 @@ void TestModel(const Config& config)
     shared_ptr<ModelManager> modelManager = ModelManager::getModelManager();
     modelManager->init(config);
 
-    //shared_ptr<Model> model = modelManager->getRandomForestModel();
-    //model->init(config);
+    int type = 0, id = 1949; //0 node, 1 link
+    cout << "input model type [0-node/1-link] and id:" << endl;
+    cin >> type >> id;
 
-    shared_ptr<Model> model = modelManager->getXGBoostModelByNode(1949);
-    for(int period = 0; period < 10; ++period){
-        vector<float> test_data = {0,period};
+    vector<float> feature;
+    int fnum;
+    cout << "input feature num and feature value:" << endl;
+    cin >> fnum;
+    feature.resize(fnum);
+    for(int i=0;i<fnum;++i) cin >> feature[i];
+
+    if(type == 0){
+        shared_ptr<Model> model = modelManager->getXGBoostModelByNode(id);
         float output;
-        model->predict(test_data, output );
-        cout << "period " << period << " , output is : " << output<< endl;
+        model->predict(feature, output);
+        cout << "value is " << output << endl;
     }
-
-    //model = modelManager->getSVMModel();
-    //model->init(config);
+    else{
+        shared_ptr<Model> model = modelManager->getXGBoostModelByLink(id);
+        float output;
+        model->predict(feature, output);
+        cout << "value is " << output << endl;
+    }
 }
 
 
