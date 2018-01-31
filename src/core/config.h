@@ -37,6 +37,7 @@ class Config{
         //global config
 		bool sample; //是否采样
         int timestep; //example 30seconds per iteration
+        int period_dur; //每个周期持续的长度
         string pathdir;
         string nodedir;
         logging::trivial::severity_level log_level;
@@ -45,6 +46,9 @@ class Config{
         //demands config
         map<int,int> demands;
 
+        //generate
+        int gen_min_frame;
+        int gen_max_frame;
 
         //sample config
 		string data_path; //原始数据所在位置
@@ -61,6 +65,7 @@ class Config{
         vector<ModelConfig> xgboost_link_model; //xgboost的模型文件目录
         string xgboost_version; //xgboost当前使用的模型
         string xgboost_desc; //当前xgboost的一些描述信息
+
 
 };
 

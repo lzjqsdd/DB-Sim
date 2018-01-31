@@ -66,10 +66,10 @@ void DBFETE::init(){
     curnum = 0;
     car_num = 0; //当前已经生成的车辆数目
     readygo_num = 0;
+    total_num = _config.demands[1949];
+    min_num = _config.gen_min_frame;
+    max_num = _config.gen_max_frame;
 
-    total_num = 500;
-    min_num = 60;
-    max_num = 1800;
     mean_num = max_num/3.0 + 2.0 * min_num / 3.0; //640
     genAgentNumMax = 2.0 * total_num / (max_num - min_num); //14.367816
 
@@ -106,7 +106,6 @@ vector<vector<int>> DBFETE::getPaths(){
 }
 
 void DBFETE::generate(){
-    //TODO 需要累计存储，而不是全部发车出去。
     int frames = _config.timestep;
     int gentime = curtime;
     int tmp = 0;
@@ -253,7 +252,7 @@ bool DBFETE::isClean(){
 
 
 vector<float> DBFETE::gen_node_feature(int node_id){
-    float period = curtime % 600 / 60;
+    float period = curtime % _config.period_dur/ _config.timestep; //TODO hard code
     switch(node_id){
         case 1949:  return {(float)links[1949]->poolnum, (float)period};
         case 1951:  return {(float)links[1949]->buffernum, (float)links[1951]->poolnum ,(float) period};
@@ -265,7 +264,7 @@ vector<float> DBFETE::gen_node_feature(int node_id){
 
 
 vector<float> DBFETE::gen_link_feature(int link_id){
-    float period = curtime % 600 / 60; //TODO hard code
+    float period = curtime % _config.period_dur/ _config.timestep; //TODO hard code
     switch(link_id){
         case 1949: return {(float)links[1949]->buffernum, (float)links[1949]->poolnum, (float)period};
         case 1951: return {(float)links[1951]->buffernum, (float)links[1951]->poolnum, (float)period};

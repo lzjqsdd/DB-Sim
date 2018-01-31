@@ -50,9 +50,10 @@ calculate evacuation time faster and  more accurately
 
 ### V0.1.5
 - [ ] add 2out->1in intersection analysis
+- [ ] add rotary island intersection analysis
 
 ### V0.1.6
-- [ ] add rotary island intersection analysis
+- [x] add different type modules for node 
 
 ### To Be Continue~
 

@@ -3,8 +3,12 @@
 Config::Config():
 	config_path("../config"),
 	sample(false),
+    timestep(60),
+    period_dur(600),
 	log_level(logging::trivial::trace),
     pausetime(0),
+    gen_min_frame(60),
+    gen_max_frame(1800),
 	data_path("../data"),
     data_prefix("car"),
 	sample_outpath("../data/sample"),
@@ -17,8 +21,12 @@ Config::Config():
 Config::Config(const string& config_path):
 	config_path(config_path),
 	sample(false),
+    timestep(60),
+    period_dur(600),
 	log_level(logging::trivial::trace),
     pausetime(0),
+    gen_min_frame(60),
+    gen_max_frame(1800),
 	data_path("../data"),
     data_prefix("car"),
 	sample_outpath("../data/sample"),
@@ -33,11 +41,14 @@ Config::Config(const Config& config):
     config_path(config.config_path),
     sample(config.sample),
     timestep(config.timestep),
+    period_dur(config.period_dur),
     pathdir(config.pathdir),
     nodedir(config.nodedir),
     log_level(config.log_level),
     pausetime(config.pausetime),
     demands(config.demands),
+    gen_min_frame(config.gen_min_frame),
+    gen_max_frame(config.gen_max_frame),
 	data_path(config.data_path),
     data_prefix(config.data_prefix),
 	sample_linkids(config.sample_linkids),
@@ -56,6 +67,7 @@ Config::Config(const Config& config):
 Config& Config::operator=(const Config& config){
     if(this!=&config){
         this->timestep = config.timestep;
+        this->period_dur = config.period_dur;
         this->config_path = config.config_path;
         this->pathdir = config.pathdir;
         this->nodedir = config.nodedir;
@@ -64,6 +76,8 @@ Config& Config::operator=(const Config& config){
         for(auto demand : config.demands){
             this->demands[demand.first] = demand.second;
         }
+        this->gen_min_frame = config.gen_min_frame;
+        this->gen_max_frame = config.gen_max_frame;
 		this->sample = config.sample;
 		this->data_path = config.data_path;
         this->data_prefix = config.data_prefix;
@@ -87,6 +101,7 @@ ostream& operator<<(ostream& os, const Config& config){
         << "{ " << endl
 		<< "\tSample is " << config.sample << endl
         << "\tTimestep is " << config.timestep << endl
+        << "\tPeriodDuration is " << config.period_dur<< endl
         << "\tPausetime is " << config.pausetime<< endl
         << "\tDataPath is " << config.data_path<< endl
         << "}";
@@ -126,7 +141,8 @@ void Config::init(const string& config_path)
     try{
         mconfig.readFile(config_path.c_str());
 
-        double timestep = 3.0F;
+        int timestep = 60;
+        int period_dur = 600;
 		bool sample = false;
         string pathdir;
         string nodedir;
@@ -139,6 +155,9 @@ void Config::init(const string& config_path)
 
         if(mconfig.lookupValue("global.timestep",timestep)){
             this->timestep = timestep;
+        }
+        if(mconfig.lookupValue("global.period_dur",period_dur)){
+            this->period_dur = period_dur;
         }
         if(mconfig.lookupValue("global.sample",sample)){
             this->sample= sample;
