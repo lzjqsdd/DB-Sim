@@ -1,19 +1,18 @@
-                         +------------------------------------------------+
-                         |       ______           __  __________________  |
-                         |      / ____/___ ______/ /_/ ____/_  __/ ____/  |
-                         |     / /_  / __ `/ ___/ __/ __/   / / / __/     |
-                         |    / __/ / /_/ (__  ) /_/ /___  / / / /___     |
-                         |   /_/    \__,_/____/\__/_____/ /_/ /_____/     |
-                         +------------------------------------------------+
+						  	  _____  ____        _____ _            
+						  	 |  __ \|  _ \      / ____(_)           
+						  	 | |  | | |_) |____| (___  _ _ __ ___   
+						  	 | |  | |  _ <______\___ \| | '_ ` _ \  
+						  	 | |__| | |_) |     ____) | | | | | | | 
+						  	 |_____/|____/     |_____/|_|_| |_| |_| 
 
-# FETE
-A data driven and  queue-based simulation tool for FastETE 
+# DB-Sim
+A data driven and  queue-based simulation tool for ETE 
 
 # Goals
 calculate evacuation time faster and  more accurately
 
 # Methods
--  build basic iterator model[FETE Framework]
+-  build basic iterator model[db-sim Framework]
 -  build ml model
 -  data driven model integration
 -  Experiment
@@ -25,7 +24,7 @@ calculate evacuation time faster and  more accurately
 - [x] logging support
 - [x] basic iterator develop
 - [x] xgboost,randomforest c++ support
-- [x] refacting fete manage
+- [x] refacting db-sim manage
 - [x] refacting config manage 
 
 ## Model
