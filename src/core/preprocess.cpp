@@ -23,6 +23,7 @@ PProcess::PProcess(const string& inpath, const string& pattern,
     paths(paths),
 	nodes(nodes),
     links(links){ 
+        if(!bf::exists(outpath)) bf::create_directory(outpath);
 }
 
 vector<string> PProcess::getFilelist(const string& dirpath,const string& pattern){
