@@ -56,7 +56,8 @@ class XGBModel:
         train_y = self.train_data['label']
         train_x = self.train_data.drop(['label'],axis=1)
         print("[INFO] using features: ", train_x.columns.values)
-        print("[INFO] data size is: ", train_x.shape);
+        print("[INFO] train data size is: ", train_x.shape);
+        print("[INFO] test  data size is: ", self.test_data.shape);
         dtrain = xgb.DMatrix(data = train_x, label=train_y)
         # specify parameters via map
         if param is None:
@@ -139,18 +140,23 @@ class XGBModel:
             print("[FATAL] You need load Model before test!")
             return
 
+        train_x = self.train_data.drop(['label'], axis=1)
+        dtrain = xgb.DMatrix(train_x)
+        res = self.clf.predict(dtrain).astype('int64')
+        train_error = self.score_misclass(res, self.train_data.label.values)
+        print("[INFO] misclass train error is : ", train_error)
+
         test_x = self.test_data.drop(['label'], axis=1)
         dtest = xgb.DMatrix(test_x)
         res = self.clf.predict(dtest).astype('int64')
-
-        self.score_misclass(res, self.test_data.label.values)
+        test_error = self.score_misclass(res, self.test_data.label.values)
+        print("[INFO] misclass test error is : ", test_error)
 
     def score_misclass(self, pred, origin):
 
         err = abs(pred != origin)
         train_error = np.array(err).sum() / len(err)
-        print("[INFO] misclass train error is : ", train_error)
-        pass
+        return train_error
 
     def score_mape(self, pred, origin):
 

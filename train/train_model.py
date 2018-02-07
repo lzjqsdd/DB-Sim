@@ -5,9 +5,10 @@ from xgboost_model import XGBModel
 from dae import *
 from gen_feature import *
 import pandas as pd
+from sklearn.utils import shuffle
 
 
-def train_for_node1949():
+def train_for_node1949(train_size = 1):
     #step1 load data
     origin_data = []
     #try loading dump data
@@ -20,7 +21,7 @@ def train_for_node1949():
         df_train_1949 = origin_data[0]
 
         #step2: gen_feature
-        df_train_1949 = filter_cut(df_train_1949,3000,13500)
+        #df_train_1949 = filter_cut(df_train_1949,3000,13500)
         df_train_1949 = reindex(df_train_1949,1949)
         df_train_1949 = group_frame(df_train_1949)
         df_train_1949 = drop_feature(df_train_1949, node_id = 1949)
@@ -28,16 +29,21 @@ def train_for_node1949():
 
         df_train_1949_all = df_train_1949_all.append(df_train_1949)
 
+    df_train_1949_all = shuffle(df_train_1949_all)
+    print("max label : ",df_train_1949_all.label.max())
+    split_index = int(df_train_1949_all.shape[0] * train_size)
+    train_data = df_train_1949_all[:split_index]
+    test_data = df_train_1949_all[split_index:]
+
     #step3: train
-    print(df_train_1949_all.columns)
-    model_1949 = XGBModel(mid=1949,train_data = df_train_1949_all, test_data=df_train_1949_all)
+    model_1949 = XGBModel(mid=1949,train_data = train_data, test_data=test_data)
     param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
     model_1949.train(model_path = st.xgboost_node_model_path, param = param)
     model_1949.loadModel(model_path = st.xgboost_node_model_path)
     model_1949.test()
 
 
-def train_for_node1951():
+def train_for_node1951(train_size = 1):
     #step1 load data
     origin_data = []
     #try loading dump data
@@ -56,8 +62,14 @@ def train_for_node1951():
 
         df_train_1951_all = df_train_1951_all.append(df_train_1951)
 
+    df_train_1951_all = shuffle(df_train_1951_all)
+    print("max label : ",df_train_1951_all.label.max())
+    split_index = int(df_train_1951_all.shape[0] * train_size)
+    train_data = df_train_1951_all[:split_index]
+    test_data = df_train_1951_all[split_index:]
+
     #step3: train
-    model_1951 = XGBModel(mid=1951,train_data = df_train_1951_all, test_data=df_train_1951_all)
+    model_1951 = XGBModel(mid=1951,train_data = train_data , test_data = test_data)
     param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
     model_1951.train(model_path = st.xgboost_node_model_path, param = param)
     model_1951.loadModel(model_path = st.xgboost_node_model_path)
@@ -65,7 +77,7 @@ def train_for_node1951():
 
 
 
-def train_for_node2077():
+def train_for_node2077(train_size = 1):
     #step1 load data
     origin_data = []
     #try loading dump data
@@ -84,16 +96,23 @@ def train_for_node2077():
 
         df_train_2077_all = df_train_2077_all.append(df_train_2077)
 
+    df_train_2077_all = shuffle(df_train_2077_all)
+    print("max label : ",df_train_2077_all.label.max())
+    split_index = int(df_train_2077_all.shape[0] * train_size)
+    train_data = df_train_2077_all[:split_index]
+    test_data = df_train_2077_all[split_index:]
+
+
     #step3: train
     param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
-    model_2077 = XGBModel(mid=2077,train_data = df_train_2077_all, test_data=df_train_2077_all)
+    model_2077 = XGBModel(mid=2077,train_data = train_data, test_data= test_data)
     model_2077.train(model_path = st.xgboost_node_model_path, param = param)
     model_2077.loadModel(model_path = st.xgboost_node_model_path)
     model_2077.test()
 
 
 
-def train_for_node102076():
+def train_for_node102076(train_size = 1):
     #step1 load data
     origin_data = []
     #try loading dump data
@@ -112,16 +131,22 @@ def train_for_node102076():
 
         df_train_102076_all = df_train_102076_all.append(df_train_102076)
 
+    df_train_102076_all = shuffle(df_train_102076_all)
+    print("max label : ",df_train_102076_all.label.max())
+    split_index = int(df_train_102076_all.shape[0] * train_size)
+    train_data = df_train_102076_all[:split_index]
+    test_data = df_train_102076_all[split_index:]
+
     #step3: train
     param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':6}
-    model_102076 = XGBModel(mid=102076,train_data = df_train_102076_all, test_data=df_train_102076_all)
+    model_102076 = XGBModel(mid=102076,train_data = train_data , test_data= test_data)
     model_102076.train(model_path = st.xgboost_node_model_path, param = param)
     model_102076.loadModel(model_path = st.xgboost_node_model_path)
     model_102076.test()
 
 
 
-def train_for_link1949():
+def train_for_link1949(train_size = 1):
     #step1 load data
     origin_data = []
     #try loading dump data
@@ -142,16 +167,21 @@ def train_for_link1949():
 
         df_train_1949_all = df_train_1949_all.append(df_train_1949)
 
+    df_train_1949_all = shuffle(df_train_1949_all)
     print("max label : ",df_train_1949_all.label.max())
+    split_index = int(df_train_1949_all.shape[0] * train_size)
+    train_data = df_train_1949_all[:split_index]
+    test_data = df_train_1949_all[split_index:]
+
 
     #step3: train
-    model_1949 = XGBModel(mid=1949,train_data = df_train_1949_all, test_data=df_train_1949_all)
+    model_1949 = XGBModel(mid=1949,train_data = train_data, test_data= test_data)
     param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':7}
     model_1949.train(model_path = st.xgboost_link_model_path, param = param)
     model_1949.loadModel(model_path = st.xgboost_link_model_path)
     model_1949.test()
 
-def train_for_link1951():
+def train_for_link1951(train_size = 1):
     #step1 load data
     origin_data = []
     #try loading dump data
@@ -171,10 +201,14 @@ def train_for_link1951():
 
         df_train_1951_all = df_train_1951_all.append(df_train_1951)
 
+    df_train_1951_all = shuffle(df_train_1951_all)
     print("max label : ", df_train_1951_all.label.max())
+    split_index = int(df_train_1951_all.shape[0] * train_size)
+    train_data = df_train_1951_all[:split_index]
+    test_data = df_train_1951_all[split_index:]
 
     #step3: train
-    model_1951 = XGBModel(mid=1951,train_data = df_train_1951_all, test_data=df_train_1951_all)
+    model_1951 = XGBModel(mid=1951,train_data = train_data , test_data= test_data)
     param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':6}
     model_1951.train(model_path = st.xgboost_link_model_path, param = param)
     model_1951.loadModel(model_path = st.xgboost_link_model_path)
@@ -182,7 +216,7 @@ def train_for_link1951():
 
 
 
-def train_for_link2077():
+def train_for_link2077(train_size = 1):
     #step1 load data
     origin_data = []
     #try loading dump data
@@ -202,10 +236,15 @@ def train_for_link2077():
 
         df_train_2077_all = df_train_2077_all.append(df_train_2077)
 
+    df_train_2077_all_all = shuffle(df_train_2077_all)
     print("max label : ", df_train_2077.label.max())
+    split_index = int(df_train_2077_all.shape[0] * train_size)
+    train_data = df_train_2077_all[:split_index]
+    test_data = df_train_2077_all[split_index:]
+
     #step3: train
     param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':6}
-    model_2077 = XGBModel(mid=2077,train_data = df_train_2077_all, test_data=df_train_2077_all)
+    model_2077 = XGBModel(mid=2077,train_data = train_data, test_data= test_data)
     model_2077.train(model_path = st.xgboost_link_model_path, param = param)
     model_2077.loadModel(model_path = st.xgboost_link_model_path)
     model_2077.test()
