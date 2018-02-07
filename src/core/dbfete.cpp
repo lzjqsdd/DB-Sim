@@ -43,7 +43,7 @@ void DBFETE::loadNetwork(){
     //处理起终点
     for(auto path:paths){
         startIds.insert(path.front());
-        endIds.insert(path.back());
+        endIds.insert(path.back() + 99999);
     }
 
 	//测试信息
@@ -293,6 +293,7 @@ void DBFETE::showStatus(){
             if(links.find(id) != links.end())
                 os << *(links[id]);
         }
+        os << *(nodes[path.back() + 99999]);
     }
 
     //输出超级终点汇入量

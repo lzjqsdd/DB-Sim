@@ -146,7 +146,7 @@ def train_for_link1949():
 
     #step3: train
     model_1949 = XGBModel(mid=1949,train_data = df_train_1949_all, test_data=df_train_1949_all)
-    param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':16}
+    param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':7}
     model_1949.train(model_path = st.xgboost_link_model_path, param = param)
     model_1949.loadModel(model_path = st.xgboost_link_model_path)
     model_1949.test()
@@ -204,7 +204,7 @@ def train_for_link2077():
 
     print("max label : ", df_train_2077.label.max())
     #step3: train
-    param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':11}
+    param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':6}
     model_2077 = XGBModel(mid=2077,train_data = df_train_2077_all, test_data=df_train_2077_all)
     model_2077.train(model_path = st.xgboost_link_model_path, param = param)
     model_2077.loadModel(model_path = st.xgboost_link_model_path)
