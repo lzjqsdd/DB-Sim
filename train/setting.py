@@ -9,10 +9,12 @@ DEBUG = False
 data_root = '../data/one-short-nolight/'
 data_sample_root = '../data/one-short-nolight/one-short-500car-nolight'
 data_sample_root_list = [
+#          '../data/one-short-nolight/one-short-300car-nolight',
+#         '../data/one-short-nolight/one-short-400car-nolight',
 #         '../data/one-short-nolight/one-short-500car-nolight',
 #         '../data/one-short-nolight/one-short-750car-nolight',
-#         '../data/one-short-nolight/one-short-1000car-nolight',
-         '../data/one-short-nolight/one-short-1250car-nolight',
+         '../data/one-short-nolight/one-short-1000car-nolight',
+#         '../data/one-short-nolight/one-short-1250car-nolight',
 #         '../data/one-short-nolight/one-short-1500car-nolight'
         ]
 #data_sample_root_list = [
@@ -52,3 +54,6 @@ model_version = '20180209'
 xgboost_node_model_path = os.path.join(model_root,'xgboost/'+model_version+'/node/')
 xgboost_link_model_path = os.path.join(model_root,'xgboost/'+model_version+'/link/')
 svm_model_path = os.path.join(model_root,'svm')
+
+sim_root = os.path.join(data_root,"sim")
+print(sim_root)
