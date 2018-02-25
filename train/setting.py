@@ -54,3 +54,6 @@ model_version = '20180219'
 xgboost_node_model_path = os.path.join(model_root,'xgboost/'+model_version+'/node/')
 xgboost_link_model_path = os.path.join(model_root,'xgboost/'+model_version+'/link/')
 svm_model_path = os.path.join(model_root,'svm')
+
+sim_root = os.path.join(data_root,"sim")
+print(sim_root)
