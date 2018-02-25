@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <sstream>
 #include <unistd.h>
+#include <fstream>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
@@ -221,6 +222,7 @@ void DBFETE::doUpdate(){
 void DBFETE::start(){
     while(!Finished){
         showStatus();
+        writeStatus();
         doUpdate();
         isClean(); //每次判断是否为空了
         boost::thread::sleep(boost::get_system_time()+boost::posix_time::milliseconds(_config.pausetime));
@@ -299,5 +301,27 @@ void DBFETE::showStatus(){
     //输出超级终点汇入量
     os << BOLDGREEN << "⇶ " << RESET << "("<< BOLDGREEN << setw(4) << dest_num << RESET << ")";
     LOG_INFO(os.str());
+}
+
+void DBFETE::writeStatus(){
+
+    //for single path, just one end point.
+    auto it_node = nodes.begin();
+    auto it_link = links.begin();
+
+    //交替输出
+    for(auto &path : paths){
+        for(auto id : path){
+            if(links.find(id) != links.end())
+            {
+                ofstream os;
+                string filename = to_string(id);
+                os.open(filename, std::ofstream::app);
+                os  << curtime << "," << links[id]->poolnum <<  "," << links[id]->buffernum << ","
+                    << links[id]->poolnum + links[id]->buffernum << endl;
+                os.close();
+            }
+        }
+    }
 }
 

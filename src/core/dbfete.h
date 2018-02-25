@@ -33,6 +33,7 @@ class DBFETE: public FETEIf {
         vector<float> gen_node_feature(int node_id); //构造特征输入
         vector<float> gen_link_feature(int node_id);
         void showStatus(); //显示当前道路状态
+        void writeStatus();
 
     private:
         double min_num;
