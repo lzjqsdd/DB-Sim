@@ -9,13 +9,13 @@ DEBUG = False
 data_root = '../data/one-short-nolight/'
 data_sample_root = '../data/one-short-nolight/one-short-500car-nolight'
 data_sample_root_list = [
-#         '../data/one-short-nolight/one-short-300car-nolight',
-          '../data/one-short-nolight/one-short-400car-nolight',
-#         '../data/one-short-nolight/one-short-500car-nolight',
-#         '../data/one-short-nolight/one-short-750car-nolight',
-#         '../data/one-short-nolight/one-short-1000car-nolight',
-#         '../data/one-short-nolight/one-short-1250car-nolight',
-#         '../data/one-short-nolight/one-short-1500car-nolight'
+#        '../data/one-short-nolight/one-short-300car-nolight',
+#        '../data/one-short-nolight/one-short-400car-nolight',
+        '../data/one-short-nolight/one-short-500car-nolight',
+        '../data/one-short-nolight/one-short-750car-nolight',
+        '../data/one-short-nolight/one-short-1000car-nolight',
+#        '../data/one-short-nolight/one-short-1250car-nolight',
+#        '../data/one-short-nolight/one-short-1500car-nolight'
         ]
 #data_sample_root_list = [
 #         '../data/one-short-nolight/one-short-500car-nolight',
@@ -50,7 +50,7 @@ pathxml = os.path.join(data_root,"network/path.xml")
 nodexml = os.path.join(data_root,"network/node.xml")
 
 #model path
-model_version = '20180219'
+model_version = '20180226'
 xgboost_node_model_path = os.path.join(model_root,'xgboost/'+model_version+'/node/')
 xgboost_link_model_path = os.path.join(model_root,'xgboost/'+model_version+'/link/')
 svm_model_path = os.path.join(model_root,'svm')
