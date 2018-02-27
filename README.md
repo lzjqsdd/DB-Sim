@@ -38,7 +38,7 @@ calculate evacuation time faster and  more accurately
 
 ## Plans
 ### V0.1.3
-- [ ] add param configure for better tune.
+- [x] add param configure for better tune.
 - [x] add super-dest-point process
 
 
@@ -48,11 +48,15 @@ calculate evacuation time faster and  more accurately
 
 
 ### V0.1.5
-- [ ] add 2out->1in intersection analysis
-- [ ] add rotary island intersection analysis
+- [x] add 2out->1in intersection analyais(discard)
+- [x] add rotary island intersection analysis(discard)
 
 ### V0.1.6
-- [x] add different type modules for node 
+- [ ] add long path analysis
+- [ ] add circle module
+- [ ] precise link desc with buffersize
+- [ ] update vehicle generator
+- [ ] add simulation display, finished format translator
 
 ### To Be Continue~
 
