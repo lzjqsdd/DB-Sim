@@ -44,42 +44,39 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
             int id;
             double length,maxspeed,maxpoolnum,maxbuffernum;
             double pool_zh, buffer_zh; //pool endzh, buffer startzh
+            double buffersize; //从path.xml获得的，不再使用config中的buffer的设置
 
             linkElement->QueryAttribute("id",&id);
             XMLElement *speedElement = linkElement->FirstChildElement("maxspeed");
             XMLElement *lengthElement = linkElement->FirstChildElement("length");
+            XMLElement *buffersizeElement = linkElement->FirstChildElement("buffersize");
             XMLElement *maxpoolnumElement = linkElement->FirstChildElement("maxpoolnum");
             XMLElement *maxbuffernumElement = linkElement->FirstChildElement("maxbuffernum");
             XMLText* speedNode = speedElement->FirstChild()->ToText();
             XMLText* lengthNode = lengthElement->FirstChild()->ToText();
+            XMLText* buffersizeNode = lengthElement->FirstChild()->ToText();
             XMLText* maxpoolnumNode = maxpoolnumElement->FirstChild()->ToText();
             XMLText* maxbuffernumNode = maxbuffernumElement->FirstChild()->ToText();
 
             length = atof(lengthNode->Value());
+            buffersize = atof(buffersizeNode->Value());
             maxspeed = atof(speedNode->Value());
             maxpoolnum = atof(maxpoolnumNode->Value());
             maxbuffernum = atof(maxbuffernumNode->Value());
             //totalnum = length * 1 / CARLEN; //每个车7.5米,默认都是１个lane
 
-            if(length > _config.buffersize) 
+            if(length > buffersize) 
             {
-                if(_config.poolsize != 0) 
-                    pool_zh = _config.poolsize; //如果配置了,则按照配置处理
-                else
-                    pool_zh = length - _config.buffersize; //未配置则按照两段切分方法
-                buffer_zh = length - _config.buffersize;
+                pool_zh = length - buffersize; //按照两段切分方法
+                buffer_zh = length - buffersize;
             }
             else{ //buffersize too large,set buffersize to 1/3 length
+                LOG_WARNING(my2string("using default buffersize for link ",id));
                 double buffer_size = length / 3.0;
-                if(_config.poolsize != 0) 
-                    pool_zh = _config.poolsize; //如果配置了,则按照配置处理
-                else
-                    pool_zh = length - buffer_size; //未配置则按照两段切分方法
+                pool_zh = length - buffer_size; //未配置则按照两段切分方法
                 buffer_zh = length - buffer_size;
             }
             
-
-
             //assert((pool_zh >=0) && (buffer_zh >= 0));
 
             LOG_DEBUG(my2string("linkid is :" ,id , "\tlength is : " , lengthNode->Value() , "\tmaxspeed is: " , speedNode->Value() ,

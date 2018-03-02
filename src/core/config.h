@@ -60,6 +60,12 @@ class Config{
         double buffersize; //buffer length before node
         bool cleanall; //clean all sample file
 
+
+        //simulation config
+        bool sim_write;
+        string sim_prefix;
+        string sim_path;
+
         //train and model config
         vector<ModelConfig> xgboost_node_model; //xgboost的模型文件目录
         vector<ModelConfig> xgboost_link_model; //xgboost的模型文件目录

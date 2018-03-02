@@ -14,7 +14,8 @@ Config::Config():
 	sample_outpath("../data/sample"),
     poolsize(0.0F),
     buffersize(100.0F),
-    cleanall(false)
+    cleanall(false),
+    sim_write(false)
 {
 }
 
@@ -32,7 +33,8 @@ Config::Config(const string& config_path):
 	sample_outpath("../data/sample"),
     poolsize(0.0F),
     buffersize(100.0F),
-    cleanall(false)
+    cleanall(false),
+    sim_write(false)
 {
     init(config_path);
 }
@@ -57,6 +59,9 @@ Config::Config(const Config& config):
     poolsize(config.poolsize),
     buffersize(config.buffersize),
     cleanall(config.cleanall),
+    sim_write(config.sim_write),
+    sim_prefix(config.sim_prefix),
+    sim_path(config.sim_path),
     xgboost_node_model(config.xgboost_node_model),
     xgboost_link_model(config.xgboost_link_model),
     xgboost_version(config.xgboost_version),
@@ -87,6 +92,9 @@ Config& Config::operator=(const Config& config){
         this->poolsize = config.poolsize;
         this->buffersize = config.buffersize;
         this->cleanall = config.cleanall;
+        this->sim_write = config.sim_write;
+        this->sim_prefix = config.sim_prefix;
+        this->sim_path = config.sim_path;
         this->xgboost_node_model = config.xgboost_node_model;
         this->xgboost_link_model = config.xgboost_link_model;
         this->xgboost_version = config.xgboost_version;
@@ -105,6 +113,7 @@ ostream& operator<<(ostream& os, const Config& config){
         << "\tPausetime is " << config.pausetime<< endl
         << "\tDataPath is " << config.data_path<< endl
         << "}";
+
     os << std::endl << "demand : "<< endl << "{" << endl;
     for(auto demand: config.demands){
         os << "\t" << demand.first << ":" << demand.second << endl;
@@ -127,6 +136,14 @@ ostream& operator<<(ostream& os, const Config& config){
         os << endl << "\tcleanAll: " << config.cleanall;
 		os << endl << "}";
 	}
+
+    if(config.sim_write){
+       os << std::endl << "simulation :" << std::endl
+           << "{ " << endl
+           << "\tsim_prefix is " << config.sim_prefix << endl
+           << "\tsim_path is " << config.sim_path << endl
+           << "}";
+    }
     return os;
 }
 
@@ -141,6 +158,7 @@ void Config::init(const string& config_path)
     try{
         mconfig.readFile(config_path.c_str());
 
+        //global
         int timestep = 60;
         int period_dur = 600;
 		bool sample = false;
@@ -148,10 +166,6 @@ void Config::init(const string& config_path)
         string nodedir;
         string loglevel;
         int pausetime;
-		string data_path;
-		string sample_outpath;
-        double poolsize,buffersize;
-        bool cleanall;
 
         if(mconfig.lookupValue("global.timestep",timestep)){
             this->timestep = timestep;
@@ -176,6 +190,7 @@ void Config::init(const string& config_path)
         }
 
 
+        //demands
         const libconfig::Setting &demands = mconfig.lookup("demands");
         int count = demands.getLength();
 
@@ -190,6 +205,11 @@ void Config::init(const string& config_path)
 
         }
 
+        //sample
+		string data_path;
+		string sample_outpath;
+        double poolsize,buffersize;
+        bool cleanall;
 		const libconfig::Setting& linkids = mconfig.lookup("sample.linkids");
 		for(int i=0; i < linkids.getLength(); ++i){
 			this->sample_linkids.push_back(linkids[i]);
@@ -223,6 +243,18 @@ void Config::init(const string& config_path)
             this->cleanall = cleanall;
         }
 
+        //simulation
+        bool sim_write;
+        string sim_prefix, sim_path;
+        if(mconfig.lookupValue("simulation.sim_write", sim_write)){
+            this->sim_write = sim_write;
+        }
+        if(mconfig.lookupValue("simulation.sim_prefix", sim_prefix)){
+            this->sim_prefix = sim_prefix;
+        }
+        if(mconfig.lookupValue("simulation.sim_path",sim_path)){
+            this->sim_path=sim_path;
+        }
 
         //model config
         string xgboost_version;
