@@ -23,10 +23,17 @@ else:
 #analysis_data_heatmap(df_train_1949,'pool2buffer',10)
 
 
-df_train_1951 = origin_data[1]
-plt.plot(df_train_1951['frame'], df_train_1951['1951_poolnum'] + df_train_1951['1951_buffernum'])
+#df_train_1951 = origin_data[1]
+#plt.plot(df_train_1951['frame'], df_train_1951['1951_poolnum'] + df_train_1951['1951_buffernum'])
 
-df_sim = pd.read_csv(st.sim_root+'/db1000/1951')
+#df_sim = pd.read_csv(st.sim_root+'/db1000/1951')
+#plt.plot(df_sim['frame'],df_sim['totalnum'])
+#plt.show()
+
+df_train_1949 = origin_data[0]
+plt.plot(df_train_1949['frame'], df_train_1949['1949_poolnum'] + df_train_1949['1949_buffernum'])
+
+df_sim = pd.read_csv(st.sim_root+'/db1000/1949')
 plt.plot(df_sim['frame'],df_sim['totalnum'])
 plt.show()
 
