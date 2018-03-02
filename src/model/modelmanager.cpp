@@ -5,8 +5,6 @@ shared_ptr<ModelManager> ModelManager::_modelManager = shared_ptr<ModelManager>(
 ModelManager::ModelManager(){
     char name[20];
     strcpy(name, "FeteModel");
-    Py_SetProgramName(name);
-    Py_Initialize();
 }
 
 shared_ptr<ModelManager> ModelManager::getModelManager(){
@@ -14,7 +12,6 @@ shared_ptr<ModelManager> ModelManager::getModelManager(){
 }
 
 ModelManager::~ModelManager(){
-   Py_Finalize(); 
 }
 
 void ModelManager::init(const Config& config){
@@ -24,7 +21,6 @@ void ModelManager::init(const Config& config){
 
 void ModelManager::Test()
 {
-    PyRun_SimpleString("print 'hello fete' \n");
 }
 
 shared_ptr<Model> ModelManager::getRandomForestModel(){

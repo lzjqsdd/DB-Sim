@@ -3,7 +3,6 @@
 #define __MODEL_MANAGER_H__
 
 #include <memory>
-#include <Python.h>
 
 #include "../core/config.h"
 #include "rf_model.h"
