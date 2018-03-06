@@ -31,9 +31,10 @@ else:
 #plt.show()
 
 df_train_1949 = origin_data[0]
+#print(df_train_1949.describe())
 plt.plot(df_train_1949['frame'], df_train_1949['1949_poolnum'] + df_train_1949['1949_buffernum'])
 
-df_sim = pd.read_csv(st.sim_root+'/db1000/1949')
+df_sim = pd.read_csv(os.path.join(st.sim_root,'1949'))
 plt.plot(df_sim['frame'],df_sim['totalnum'])
 plt.show()
 

@@ -34,6 +34,7 @@ class DBFETE: public FETEIf {
         vector<float> gen_link_feature(int node_id);
         void showStatus(); //显示当前道路状态
         void writeStatus();
+        void initSimFiles();//初始化格式化输出文件,csv 格式
 
     private:
         double min_num;

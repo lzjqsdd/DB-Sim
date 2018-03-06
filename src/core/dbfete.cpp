@@ -11,6 +11,9 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/filesystem.hpp>
+
+namespace bf = boost::filesystem;
 
 DBFETE::DBFETE():
     dest_num(0),
@@ -92,10 +95,12 @@ void DBFETE::init(){
         link_models[link_id] = model_manager->getXGBoostModelByLink(link_id);
     }
 
-
-    origin_num = total_num;
+    origin_num = total_num / 25;
     dest_num = 0;
-    
+
+    initSimFiles();
+
+
 }
 
 Config DBFETE::getConfig(){
@@ -115,9 +120,11 @@ void DBFETE::generate(){
         tmp += agentCount;
         curtime++;
     }
-    if(car_num + tmp > total_num) //最后一帧已经超过了
-        tmp = total_num - car_num;
-    
+    //if(car_num + tmp > total_num) //最后一帧已经超过了
+    //    tmp = total_num - car_num;
+    if((car_num + tmp)* 25  > total_num) //最后一帧已经超过了
+        tmp = (total_num -  car_num * 25) / 25;
+
     car_num += tmp;
     readygo_num += tmp;
 
@@ -144,9 +151,9 @@ int DBFETE::generatePerFrame(){
     {
         genCount += genAgentNumMax;
     }
-    while(genCount >= 1){
+    while(genCount >= 25){
         agentCount ++;
-        genCount --;
+        genCount -= 25;
     }
 
     return agentCount;
@@ -243,7 +250,7 @@ bool DBFETE::isClean(){
     }
 
     //都为0 ,但是目标需求暂未达到
-    if(car_num < total_num){
+    if(car_num < total_num / 25){
         Finished = false;
         return false;
     }
@@ -302,6 +309,30 @@ void DBFETE::showStatus(){
     os << BOLDGREEN << "⇶ " << RESET << "("<< BOLDGREEN << setw(4) << dest_num << RESET << ")";
     LOG_INFO(os.str());
 }
+void DBFETE::initSimFiles(){
+    //创建写入文件夹
+    if(_config.sim_write){
+        if(bf::exists(_config.sim_path)){
+            uint32_t delete_num = bf::remove_all(_config.sim_path);
+            LOG_DEBUG("remove format sim files");
+        }
+        bf::create_directory(_config.sim_path);
+    }
+
+    //addHeaders
+    for(auto &path : paths){
+        for(auto id : path){
+            if(links.find(id) != links.end())
+            {
+                ofstream os;
+                string filename = _config.sim_path + "/" +  _config.sim_prefix + to_string(id);
+                os.open(filename, std::ofstream::app);
+                os  << "frame,poolnum,buffernum,totalnum"<< endl;
+                os.close();
+            }
+        }
+    }
+}
 
 void DBFETE::writeStatus(){
 
@@ -315,7 +346,7 @@ void DBFETE::writeStatus(){
             if(links.find(id) != links.end())
             {
                 ofstream os;
-                string filename = _config.sim_path + _config.sim_prefix + to_string(id);
+                string filename = _config.sim_path + "/" +  _config.sim_prefix + to_string(id);
                 os.open(filename, std::ofstream::app);
                 os  << curtime << "," << links[id]->poolnum <<  "," << links[id]->buffernum << ","
                     << links[id]->poolnum + links[id]->buffernum << endl;

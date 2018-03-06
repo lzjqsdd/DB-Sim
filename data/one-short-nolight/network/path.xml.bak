@@ -4,19 +4,19 @@
     <link id="1949">
       <maxspeed>129.599996566772</maxspeed>
       <length>1450.99589481418</length>
-      <maxpoolnum>43</maxpoolnum>
-      <maxbuffernum>12</maxbuffernum>
+      <maxpoolnum>31</maxpoolnum>
+      <maxbuffernum>11</maxbuffernum>
     </link>
     <link id="1951">
       <maxspeed>129.599996566772</maxspeed>
       <length>1360.85399405278</length>
-      <maxpoolnum>25</maxpoolnum>
+      <maxpoolnum>24</maxpoolnum>
       <maxbuffernum>8</maxbuffernum>
     </link>
     <link id="2077">
       <maxspeed>129.599996566772</maxspeed>
       <length>1696.38974069737</length>
-      <maxpoolnum>33</maxpoolnum>
+      <maxpoolnum>31</maxpoolnum>
       <maxbuffernum>6</maxbuffernum>
     </link>
   </path>

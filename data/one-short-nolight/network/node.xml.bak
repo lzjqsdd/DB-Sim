@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<nodes>
+  <node id="1949">
+    <flinks></flinks>
+    <tlinks>1949</tlinks>
+    <capacity>7</capacity>
+  </node>
+  <node id="1951">
+    <flinks>1949</flinks>
+    <tlinks>1951</tlinks>
+    <capacity>5</capacity>
+  </node>
+  <node id="2077">
+    <flinks>1951</flinks>
+    <tlinks>2077</tlinks>
+    <capacity>5</capacity>
+  </node>
+  <node id="102076">
+    <flinks>2077</flinks>
+    <tlinks></tlinks>
+    <capacity>5</capacity>
+  </node>
+</nodes>
