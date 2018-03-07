@@ -297,7 +297,8 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
 
 void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfile){
 
-    addHeader(node_ids);
+    //addHeader(node_ids);
+    addCommonHeader(node_ids);
 	try{
 		fstream fin(path.c_str(),std::ifstream::in);
 		string line;
@@ -593,6 +594,28 @@ void PProcess::addHeader(const vector<int>& node_ids){
                     << "\t" << prefix + "inflow" << "\t"  << prefix + "outflow"
                     << "\t" << prefix + "speed";
             }
+            ofile << endl;
+            ofile.flush();
+            ofile.close();
+        } 
+    }
+}
+
+//通用的header，只适用于单条路线（有并道的不行)
+void PProcess::addCommonHeader(const vector<int>& node_ids){
+    for(auto node_id : node_ids){
+        ofstream ofile;
+        string outfile = outpath + "/" + std::to_string(node_id) + "_node_sample.txt";
+
+        if(!bf::exists(outfile)){
+            ofile.open(outfile.c_str(),std::ios::app);
+
+            ofile << "frame";
+            if(nodes[node_id]->flinks.size())
+                ofile << "\tpre_poolnum\tpre_buffernum\tpre_inflow\tpre_outflow\tpre_speed";
+            if(nodes[node_id]->tlinks.size())
+                ofile << "\tcur_poolnum\tcur_buffernum\tcur_inflow\tcur_outflow\tcur_speed";
+
             ofile << endl;
             ofile.flush();
             ofile.close();

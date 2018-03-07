@@ -39,6 +39,7 @@ class PProcess{
 		void sampleByNode(const string& path,vector<int> node_ids, bool lastfile);
     private:
         void addHeader(const vector<int>& node_ids);
+        void addCommonHeader(const vector<int>& node_ids);
 	private:
 		string inpath; //output_path
 		string pattern; //查找通配置文件
