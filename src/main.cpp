@@ -138,12 +138,12 @@ void stop()
 int main(int argc, char *argv[])
 {
     namespace po = boost::program_options;
-    po::options_description desc("\nfete [options] [ceil|test|gawron|fete] ");
+    po::options_description desc("\ndbsim [options] [ceil|test|gawron|fete] ");
     desc.add_options()
         ("help,h","show help")
         ("config,c",po::value<string>() , "user defined config file")
         ("sample,s", po::value<vector<string> >() ,"sample for node and link")
-        ("simulation,S", po::value< vector<string> > (),"simulation for fete")
+        ("simulation,S", po::value< vector<string> > (),"simulation for fast ete")
         ("test,t","Test each model")
         ;
 

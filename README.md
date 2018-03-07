@@ -69,6 +69,17 @@ calculate evacuation time faster and  more accurately
 - `test` some test case for this project
 - `data` train and test data
 
+```bash
+
+dbsim [options] [ceil|test|gawron|fete] :
+  -h [ --help ]           show help
+  -c [ --config ] arg     user defined config file
+  -s [ --sample ] arg     sample for node and link
+  -S [ --simulation ] arg simulation for fast ete
+  -t [ --test ]           Test each model
+
+```
+
 ## build
 ```bash
 cd ${PROJECT_DIR}
