@@ -168,14 +168,19 @@ void DBFETE::doUpdate(){
     //根据node model产生增量(根据t-1)
     for(auto &mnode : nodes){
         int node_id = mnode.first;
-        vector<float> input = gen_node_feature(node_id);
+        vector<float> input;
+
+        if(startIds.find(node_id) != startIds.end()) input = gen_node_feature(node_id, 0);
+        else if(endIds.find(node_id) != endIds.end()) input = gen_node_feature(node_id,2);
+        else  input = gen_node_feature(node_id, 1);
+
         node_models[node_id]->predict(input,nodes[node_id]->inflow);
     }
 
     //根据link model产生pool->buffer的(根据t-1)
     for(auto &mlink:links){
         const int& link_id = mlink.first;
-        vector<float> input = gen_link_feature(link_id);
+        vector<float> input = gen_link_feature(link_id,0);
         link_models[link_id]->predict(input,links[link_id]->pool2buffer);
     }
 
@@ -257,6 +262,26 @@ bool DBFETE::isClean(){
 
     Finished = true;
     return true;
+}
+
+//for common node feature generate
+vector<float> DBFETE::gen_node_feature(int node_id, int nodetype){
+    float period = curtime % _config.period_dur/ _config.timestep; //TODO hard code
+    switch(nodetype){
+        case 0:  return {(float)links[node_id]->poolnum, (float)period};
+        case 1:  return {(float)links[*(links[node_id]->pids.begin())]->buffernum,
+                     (float)links[node_id]->poolnum ,(float) period};
+        case 2:  return {(float)links[node_id - 99999]->buffernum, (float)period};
+    }
+    
+}
+
+//for common link feature generate
+vector<float> DBFETE::gen_link_feature(int link_id, int linktype){
+    float period = curtime % _config.period_dur/ _config.timestep; //TODO hard code
+    switch(linktype){
+        case 0: return {(float)links[link_id]->buffernum, (float)links[link_id]->poolnum, (float)period};
+    }
 }
 
 

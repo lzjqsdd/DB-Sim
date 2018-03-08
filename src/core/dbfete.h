@@ -31,7 +31,9 @@ class DBFETE: public FETEIf {
     private:
         int generatePerFrame();
         vector<float> gen_node_feature(int node_id); //构造特征输入
+        vector<float> gen_node_feature(int node_id,int nodetype); //构造特征输入
         vector<float> gen_link_feature(int node_id);
+        vector<float> gen_link_feature(int node_id,int linktype);
         void showStatus(); //显示当前道路状态
         void writeStatus();
         void initSimFiles();//初始化格式化输出文件,csv 格式
