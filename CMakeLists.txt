@@ -98,10 +98,10 @@ add_subdirectory(./src/utils)
 add_subdirectorY(./test)
 
 #生成可执行文件
-add_executable(fete ${SRC_LIST})
+add_executable(dbsim ${SRC_LIST})
 
 #链接第三方库
-target_link_libraries(fete
+target_link_libraries(dbsim
     ${LIBCONFIG_MODULE_LIB}
     stdc++
     boost_system
