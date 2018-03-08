@@ -1,3 +1,34 @@
+#                            _ooOoo_
+#                           o8888888o
+#                           88" . "88
+#                           (| -_- |)
+#                            O\ = /O
+#                        ____/`---'\____
+#                      .   ' \\| |// `.
+#                       / \\||| : |||// \
+#                     / _||||| -:- |||||- \
+#                       | | \\\ - /// | |
+#                     | \_| ''\---/'' | |
+#                      \ .-\__ `-` ___/-. /
+#                   ___`. .' /--.--\ `. . __
+#                ."" '< `.___\_<|>_/___.' >'"".
+#               | | : `- \`.;`\ _ /`;.`/ - ` : | |
+#                 \ \ `-. \_ __\ /__ _/ .-` / /
+#         ======`-.____`-.___\_____/___.-`____.-'======
+#                            `=---='
+#
+#         .............................................
+#                  佛祖镇楼                  BUG辟易
+#          佛曰:
+#                  写字楼里写字间，写字间里程序员；
+#                  程序人员写程序，又拿程序换酒钱。
+#                  酒醒只在网上坐，酒醉还来网下眠；
+#                  酒醉酒醒日复日，网上网下年复年。
+#                  但愿老死电脑间，不愿鞠躬老板前；
+#                  奔驰宝马贵者趣，公交自行程序员。
+#                  别人笑我忒疯癫，我笑自己命太贱；
+#                  不见满街漂亮妹，哪个归得程序员？
+
 # 为不同节点训练使用的模型，参数调节等功能,区别于基本的模型训练功能
 # 默认加载所有Node的数据(待优化)
 import setting  as st
@@ -8,243 +39,65 @@ import pandas as pd
 from sklearn.utils import shuffle
 
 
-def train_for_node1949(train_size = 1):
+#训练初始节点,每个node的类别多少不同,所有参数从外部传入
+def train_for_node(node_id , nodetype, train_size, param):
     #step1 load data
     origin_data = []
-    #try loading dump data
-    df_train_1949_all = pd.DataFrame()
-
+    df_train_all = pd.DataFrame()
     for data_filename in st.origin_data_path_list:
-        load_origin_data(data_filename, [1949,1951,2077,102076], origin_data)
-        #pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
+        load_origin_data(data_filename, [node_id], origin_data)
 
-        df_train_1949 = origin_data[0]
+        df_train = origin_data[0]
+        print(df_train.columns)
 
         #step2: gen_feature
-        #df_train_1949 = filter_cut(df_train_1949,3000,13500)
-        df_train_1949 = reindex(df_train_1949,1949)
-        df_train_1949 = group_frame(df_train_1949)
-        df_train_1949 = drop_feature(df_train_1949, node_id = 1949)
-        df_train_1949 = gen_label(df_train_1949,node_id = 1949)
+        df_train = filter_cut(df_train , 3000 , 13500)
+        df_train = reindex(df = df_train,nodetype = nodetype)
+        df_train = group_frame(df = df_train)
+        df_train = drop_feature_for_node(df = df_train, nodetype = nodetype)
+        df_train = gen_label_for_node(df = df_train , nodetype = nodetype)
 
-        df_train_1949_all = df_train_1949_all.append(df_train_1949)
+        df_train_all = df_train_all.append(df_train)
 
-    df_train_1949_all = shuffle(df_train_1949_all)
-    print("max label : ",df_train_1949_all.label.max())
-    split_index = int(df_train_1949_all.shape[0] * train_size)
-    train_data = df_train_1949_all[:split_index]
-    test_data = df_train_1949_all[split_index:]
+    df_train_all = shuffle(df_train_all)
+    print("max label : ",df_train_all.label.max())
+    split_index = int(df_train_all.shape[0] * train_size)
+    train_data = df_train_all[:split_index]
+    test_data = df_train_all[split_index:]
 
     #step3: train
-    model_1949 = XGBModel(mid=1949,train_data = train_data, test_data=test_data)
-    param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
-    model_1949.train(model_path = st.xgboost_node_model_path, param = param)
-    model_1949.loadModel(model_path = st.xgboost_node_model_path)
-    model_1949.test()
+    model = XGBModel(mid = node_id ,train_data = train_data, test_data=test_data)
+    model.train(model_path = st.xgboost_node_model_path, param = param)
+    model.loadModel(model_path = st.xgboost_node_model_path)
+    model.test()
 
 
-def train_for_node1951(train_size = 1):
+def train_for_pool2buffer(link_id, linktype, train_size, param):
     #step1 load data
     origin_data = []
-    #try loading dump data
-    df_train_1951_all = pd.DataFrame()
-
+    df_train_all = pd.DataFrame()
     for data_filename in st.origin_data_path_list:
-        load_origin_data(data_filename, [1949,1951,2077,102076], origin_data)
-        df_train_1951 = origin_data[1]
+        load_origin_data(data_filename, [link_id], origin_data)
+        df_train = origin_data[0]
 
         #step2: gen_feature
-        #df_train_1951 = filter_cut(df_train_1951,2760,13500)
-        df_train_1951 = reindex(df_train_1951,1951)
-        df_train_1951 = group_frame(df_train_1951)
-        df_train_1951 = drop_feature(df_train_1951,node_id = 1951)
-        df_train_1951 = gen_label(df_train_1951,node_id = 1951)
+        df_train = filter_cut(df_train,2760,13500)
+        df_train = reindex(df = df_train, nodetype = linktype)
+        df_train = group_frame(df = df_train)
+        df_train = gen_pool2buffer(df = df_train)
+        df_train = drop_feature_for_pool2buffer(df_train, linktype = linktype)
+        df_train = gen_label_for_pool2buffer(df_train)
 
-        df_train_1951_all = df_train_1951_all.append(df_train_1951)
+        df_train_all = df_train_all.append(df_train)
 
-    df_train_1951_all = shuffle(df_train_1951_all)
-    print("max label : ",df_train_1951_all.label.max())
-    split_index = int(df_train_1951_all.shape[0] * train_size)
-    train_data = df_train_1951_all[:split_index]
-    test_data = df_train_1951_all[split_index:]
-
-    #step3: train
-    model_1951 = XGBModel(mid=1951,train_data = train_data , test_data = test_data)
-    param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
-    model_1951.train(model_path = st.xgboost_node_model_path, param = param)
-    model_1951.loadModel(model_path = st.xgboost_node_model_path)
-    model_1951.test()
-
-
-
-def train_for_node2077(train_size = 1):
-    #step1 load data
-    origin_data = []
-    #try loading dump data
-    df_train_2077_all = pd.DataFrame()
-
-    for data_filename in st.origin_data_path_list:
-        load_origin_data(data_filename, [1949,1951,2077,102076], origin_data)
-        df_train_2077 = origin_data[2]
-
-        #step2: gen_feature
-        #df_train_2077= filter_cut(df_train_2077,2760,13500)
-        df_train_2077 = reindex(df_train_2077,2077)
-        df_train_2077 = group_frame(df_train_2077)
-        df_train_2077 = drop_feature(df_train_2077, node_id = 2077)
-        df_train_2077 = gen_label(df_train_2077,node_id = 2077)
-
-        df_train_2077_all = df_train_2077_all.append(df_train_2077)
-
-    df_train_2077_all = shuffle(df_train_2077_all)
-    print("max label : ",df_train_2077_all.label.max())
-    split_index = int(df_train_2077_all.shape[0] * train_size)
-    train_data = df_train_2077_all[:split_index]
-    test_data = df_train_2077_all[split_index:]
-
+    df_train_all = shuffle(df_train_all)
+    print("max label : ",df_train_all.label.max())
+    split_index = int(df_train_all.shape[0] * train_size)
+    train_data = df_train_all[:split_index]
+    test_data = df_train_all[split_index:]
 
     #step3: train
-    param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':8}
-    model_2077 = XGBModel(mid=2077,train_data = train_data, test_data= test_data)
-    model_2077.train(model_path = st.xgboost_node_model_path, param = param)
-    model_2077.loadModel(model_path = st.xgboost_node_model_path)
-    model_2077.test()
-
-
-
-def train_for_node102076(train_size = 1):
-    #step1 load data
-    origin_data = []
-    #try loading dump data
-    df_train_102076_all = pd.DataFrame()
-
-    for data_filename in st.origin_data_path_list:
-        load_origin_data(data_filename, [1949,1951,2077,102076], origin_data)
-        df_train_102076= origin_data[3]
-
-        #step2: gen_feature
-        #df_train_102076 = filter_cut(df_train_102076,2760,13500)
-        df_train_102076= reindex(df_train_102076, 102076)
-        df_train_102076 = group_frame(df_train_102076)
-        df_train_102076 = drop_feature(df_train_102076, node_id = 102076) #剔除某些特征
-        df_train_102076 = gen_label(df_train_102076,node_id=102076)
-
-        df_train_102076_all = df_train_102076_all.append(df_train_102076)
-
-    df_train_102076_all = shuffle(df_train_102076_all)
-    print("max label : ",df_train_102076_all.label.max())
-    split_index = int(df_train_102076_all.shape[0] * train_size)
-    train_data = df_train_102076_all[:split_index]
-    test_data = df_train_102076_all[split_index:]
-
-    #step3: train
-    param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':6}
-    model_102076 = XGBModel(mid=102076,train_data = train_data , test_data= test_data)
-    model_102076.train(model_path = st.xgboost_node_model_path, param = param)
-    model_102076.loadModel(model_path = st.xgboost_node_model_path)
-    model_102076.test()
-
-
-
-def train_for_link1949(train_size = 1):
-    #step1 load data
-    origin_data = []
-    #try loading dump data
-
-    df_train_1949_all = pd.DataFrame()
-
-    for data_filename in st.origin_data_path_list:
-        load_origin_data(data_filename, [1949,1951,2077,102076], origin_data)
-        df_train_1949 = origin_data[0]
-
-        #step2: gen_feature
-        #df_train_1949 = filter_cut(df_train_1949,2760,13500)
-        df_train_1949 = reindex(df_train_1949,1949)
-        df_train_1949 = group_frame(df_train_1949)
-        df_train_1949 = gen_pool2buffer(df_train_1949,1949)
-        df_train_1949 = drop_feature(df_train_1949, link_id = 1949)
-        df_train_1949 = gen_label(df_train_1949, link_id = 1949)
-
-        df_train_1949_all = df_train_1949_all.append(df_train_1949)
-
-    df_train_1949_all = shuffle(df_train_1949_all)
-    print("max label : ",df_train_1949_all.label.max())
-    split_index = int(df_train_1949_all.shape[0] * train_size)
-    train_data = df_train_1949_all[:split_index]
-    test_data = df_train_1949_all[split_index:]
-
-
-    #step3: train
-    model_1949 = XGBModel(mid=1949,train_data = train_data, test_data= test_data)
-    param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':7}
-    model_1949.train(model_path = st.xgboost_link_model_path, param = param)
-    model_1949.loadModel(model_path = st.xgboost_link_model_path)
-    model_1949.test()
-
-def train_for_link1951(train_size = 1):
-    #step1 load data
-    origin_data = []
-    #try loading dump data
-    df_train_1951_all = pd.DataFrame()
-
-    for data_filename in st.origin_data_path_list:
-        load_origin_data(data_filename, [1949,1951,2077,102076], origin_data)
-        df_train_1951 = origin_data[1]
-
-        #step2: gen_feature
-        #df_train_1951 = filter_cut(df_train_1951,2760,13500)
-        df_train_1951 = reindex(df_train_1951,1951)
-        df_train_1951 = group_frame(df_train_1951)
-        df_train_1951 = gen_pool2buffer(df_train_1951, 1951)
-        df_train_1951 = drop_feature(df_train_1951, link_id = 1951)
-        df_train_1951 = gen_label(df_train_1951,link_id = 1951)
-
-        df_train_1951_all = df_train_1951_all.append(df_train_1951)
-
-    df_train_1951_all = shuffle(df_train_1951_all)
-    print("max label : ", df_train_1951_all.label.max())
-    split_index = int(df_train_1951_all.shape[0] * train_size)
-    train_data = df_train_1951_all[:split_index]
-    test_data = df_train_1951_all[split_index:]
-
-    #step3: train
-    model_1951 = XGBModel(mid=1951,train_data = train_data , test_data= test_data)
-    param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':6}
-    model_1951.train(model_path = st.xgboost_link_model_path, param = param)
-    model_1951.loadModel(model_path = st.xgboost_link_model_path)
-    model_1951.test()
-
-
-
-def train_for_link2077(train_size = 1):
-    #step1 load data
-    origin_data = []
-    #try loading dump data
-    df_train_2077_all = pd.DataFrame()
-
-    for data_filename in st.origin_data_path_list:
-        load_origin_data(data_filename, [1949,1951,2077,102076], origin_data)
-        df_train_2077 = origin_data[2]
-
-        #step2: gen_feature
-        #df_train_2077= filter_cut(df_train_2077,2760,13500)
-        df_train_2077 = reindex(df_train_2077,2077)
-        df_train_2077 = group_frame(df_train_2077)
-        df_train_2077 = gen_pool2buffer(df_train_2077, 2077)
-        df_train_2077 = drop_feature(df_train_2077, link_id = 2077)
-        df_train_2077 = gen_label(df_train_2077,link_id = 2077)
-
-        df_train_2077_all = df_train_2077_all.append(df_train_2077)
-
-    df_train_2077_all_all = shuffle(df_train_2077_all)
-    print("max label : ", df_train_2077.label.max())
-    split_index = int(df_train_2077_all.shape[0] * train_size)
-    train_data = df_train_2077_all[:split_index]
-    test_data = df_train_2077_all[split_index:]
-
-    #step3: train
-    param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':6}
-    model_2077 = XGBModel(mid=2077,train_data = train_data, test_data= test_data)
-    model_2077.train(model_path = st.xgboost_link_model_path, param = param)
-    model_2077.loadModel(model_path = st.xgboost_link_model_path)
-    model_2077.test()
+    model = XGBModel(mid = link_id, train_data = train_data, test_data= test_data)
+    model.train(model_path = st.xgboost_link_model_path, param = param)
+    model.loadModel(model_path = st.xgboost_link_model_path)
+    model.test()

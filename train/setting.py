@@ -6,20 +6,17 @@ import os
 DEBUG = False
 
 # root path
-data_root = '../data/one-short-nolight/'
-data_sample_root = '../data/one-short-nolight/one-short-400car-nolight'
+data_root = '../data/one-long-nolight/'
+data_sample_root = '../data/one-long-nolight/one-long-500car-nolight'
 data_sample_root_list = [
-#        '../data/one-short-nolight/one-short-300car-nolight',
-         '../data/one-short-nolight/one-short-400car-nolight',
-         '../data/one-short-nolight/one-short-500car-nolight',
-#         '../data/one-short-nolight/one-short-750car-nolight',
-#        '../data/one-short-nolight/one-short-1000car-nolight',
-#        '../data/one-short-nolight/one-short-1250car-nolight',
-#        '../data/one-short-nolight/one-short-1500car-nolight'
+#        '../data/one-long-nolight/one-long-300car-nolight',
+#        '../data/one-long-nolight/one-long-400car-nolight',
+         '../data/one-long-nolight/one-long-500car-nolight',
+#        '../data/one-long-nolight/one-long-750car-nolight',
+#        '../data/one-long-nolight/one-long-1000car-nolight',
+#        '../data/one-long-nolight/one-long-1250car-nolight',
+#        '../data/one-long-nolight/one-long-1500car-nolight'
         ]
-#data_sample_root_list = [
-#         '../data/one-short-nolight/one-short-500car-nolight',
-#        ]
 
 model_root='../model/'
 config_root = '../config'
@@ -50,9 +47,9 @@ need_preprocess = True
 #nodexml = os.path.join(data_root,"network/node.xml")
 
 #model path
-model_version = '20180306-400'
+model_version = '20180308-500'
 xgboost_node_model_path = os.path.join(model_root,'xgboost/'+model_version+'/node/')
 xgboost_link_model_path = os.path.join(model_root,'xgboost/'+model_version+'/link/')
 
-sim_root = '../data/one-short-nolight/one-short-400car-nolight/sim'
+sim_root = '../data/one-long-nolight/one-long-500car-nolight/sim'
 print(sim_root)
