@@ -2,6 +2,7 @@ import xgboost as xgb
 import os
 import pandas as pd
 import numpy as np
+import setting as st
 #从DataFrame中构造, 每次只构造一个node的一个period的df
 #最小设计
 
@@ -55,9 +56,10 @@ class XGBModel:
         # read in data
         train_y = self.train_data['label']
         train_x = self.train_data.drop(['label'],axis=1)
-        print("[INFO] using features: ", train_x.columns.values)
-        print("[INFO] train data size is: ", train_x.shape);
-        print("[INFO] test  data size is: ", self.test_data.shape);
+        if st.DEBUG:
+            print("[INFO] using features: ", train_x.columns.values)
+            print("[INFO] train data size is: ", train_x.shape);
+            print("[INFO] test  data size is: ", self.test_data.shape);
         dtrain = xgb.DMatrix(data = train_x, label=train_y)
         # specify parameters via map
         if param is None:
@@ -71,7 +73,8 @@ class XGBModel:
             model_file = str(self.mid)+'.model'
             full_filename = os.path.join(model_path,model_file)
             bst.save_model(full_filename)
-            print('[INFO] save model to ', full_filename)
+            if st.DEBUG:
+                print('[INFO] save model to ', full_filename)
 
     def train4period(self, period, param=None, model_path = None):
         train_period_group = self.train_data.groupby(['period'])
@@ -93,7 +96,8 @@ class XGBModel:
             model_file = str(self.mid)+ '_' + str(period) + '.model'
             full_filename = os.path.join(model_path,model_file)
             bst.save_model(full_filename)
-            print('[INFO] save model to ', full_filename)
+            if st.DEBUG:
+                print('[INFO] save model to ', full_filename)
 
 
     def loadModel(self, model_path) -> xgb.Booster:
@@ -114,7 +118,8 @@ class XGBModel:
         model_file = str(self.mid)+'.model'
         full_filename = os.path.join(model_path,model_file)
         if not os.path.exists(full_filename):
-            print('[INFO] ', full_filename + " not exits!")
+            if st.DEBUG:
+                print('[INFO] ', full_filename + " not exits!")
             return
 
         self.clf = xgb.Booster(model_file = full_filename)
@@ -124,7 +129,8 @@ class XGBModel:
         model_file = str(self.mid)+ '_' + str(period) + '.model'
         full_filename = os.path.join(model_path,model_file)
         if not os.path.exists(full_filename):
-            print('[INFO] ', full_filename + " not exits!")
+            if st.DEBUG:
+                print('[INFO] ', full_filename + " not exits!")
             return
 
         self.clf = xgb.Booster(model_file = full_filename)
@@ -163,5 +169,6 @@ class XGBModel:
         print(np.array([pred[0:20], origin[0:20]]))
         err = abs((pred - origin) / origin) # TODO if origin is 0
         train_error = np.array(err.sum()) * 1.0 / len(err)
-        print("[INFO] misclass train error is : ", train_error)
+        if st.DEBUG:
+            print("[INFO] misclass train error is : ", train_error)
         pass

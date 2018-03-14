@@ -48,10 +48,11 @@ def train_for_node(node_id , nodetype, train_size, param):
         load_origin_data(data_filename, [node_id], origin_data)
 
         df_train = origin_data[0]
-        print(df_train.columns)
+        if nodetype != 2:
+            print('node ' , node_id , ' maxpool is :' , df_train.cur_poolnum.max(), ' max buffernum is : ' ,df_train.cur_buffernum.max())
 
         #step2: gen_feature
-        df_train = filter_cut(df_train , 3000 , 13500)
+        #df_train = filter_cut(df_train , 3000 , 13500)
         df_train = reindex(df = df_train,nodetype = nodetype)
         df_train = group_frame(df = df_train)
         df_train = drop_feature_for_node(df = df_train, nodetype = nodetype)
@@ -59,7 +60,7 @@ def train_for_node(node_id , nodetype, train_size, param):
 
         df_train_all = df_train_all.append(df_train)
 
-    df_train_all = shuffle(df_train_all)
+    #df_train_all = shuffle(df_train_all)
     print("max label : ",df_train_all.label.max())
     split_index = int(df_train_all.shape[0] * train_size)
     train_data = df_train_all[:split_index]
@@ -79,9 +80,11 @@ def train_for_pool2buffer(link_id, linktype, train_size, param):
     for data_filename in st.origin_data_path_list:
         load_origin_data(data_filename, [link_id], origin_data)
         df_train = origin_data[0]
+        if linktype!= 2:
+            print('link ', link_id , ' maxpool is :' , df_train.cur_poolnum.max(), ' max buffernum is : ' ,df_train.cur_buffernum.max())
 
         #step2: gen_feature
-        df_train = filter_cut(df_train,2760,13500)
+        #df_train = filter_cut(df_train,2760,13500)
         df_train = reindex(df = df_train, nodetype = linktype)
         df_train = group_frame(df = df_train)
         df_train = gen_pool2buffer(df = df_train)
@@ -90,7 +93,7 @@ def train_for_pool2buffer(link_id, linktype, train_size, param):
 
         df_train_all = df_train_all.append(df_train)
 
-    df_train_all = shuffle(df_train_all)
+    #df_train_all = shuffle(df_train_all)
     print("max label : ",df_train_all.label.max())
     split_index = int(df_train_all.shape[0] * train_size)
     train_data = df_train_all[:split_index]

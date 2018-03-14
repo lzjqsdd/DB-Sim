@@ -75,7 +75,7 @@ def reindex(df, nodetype = 1):
 
 
 #根据frame分组
-def group_frame(df, period_dur = 600 , timestep = 60):
+def group_frame(df, period_dur = 600 , timestep = 10):
 
     df['period'] = (df['frame'] % period_dur / timestep).astype('int32')
     df = df.drop(['frame'],axis=1)
