@@ -170,9 +170,15 @@ void DBFETE::doUpdate(){
         int node_id = mnode.first;
         vector<float> input;
 
-        if(startIds.find(node_id) != startIds.end()) input = gen_node_feature(node_id, 0);
-        else if(endIds.find(node_id) != endIds.end()) input = gen_node_feature(node_id,2);
-        else  input = gen_node_feature(node_id, 1);
+        if(startIds.find(node_id) != startIds.end()) {
+            input = gen_node_feature(node_id, 0);
+        }
+        else if(endIds.find(node_id) != endIds.end()){
+            input = gen_node_feature(node_id,2);
+        }
+        else{
+            input = gen_node_feature(node_id, 1);
+        }
 
         node_models[node_id]->predict(input,nodes[node_id]->inflow);
     }
@@ -269,8 +275,7 @@ vector<float> DBFETE::gen_node_feature(int node_id, int nodetype){
     float period = curtime % _config.period_dur/ _config.timestep; //TODO hard code
     switch(nodetype){
         case 0:  return {(float)links[node_id]->poolnum, (float)period};
-        case 1:  return {(float)links[*(links[node_id]->pids.begin())]->buffernum,
-                     (float)links[node_id]->poolnum ,(float) period};
+        case 1:  return {(float)links[node_id]->poolnum ,(float)links[*(links[node_id]->pids.begin())]->buffernum, (float) period};
         case 2:  return {(float)links[node_id - 99999]->buffernum, (float)period};
     }
     

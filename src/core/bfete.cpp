@@ -54,7 +54,7 @@ void FETEIf::loadLinks(map<int, shared_ptr<Link>>& links, vector<vector<int>>& p
             XMLElement *maxbuffernumElement = linkElement->FirstChildElement("maxbuffernum");
             XMLText* speedNode = speedElement->FirstChild()->ToText();
             XMLText* lengthNode = lengthElement->FirstChild()->ToText();
-            XMLText* buffersizeNode = lengthElement->FirstChild()->ToText();
+            XMLText* buffersizeNode = buffersizeElement->FirstChild()->ToText();
             XMLText* maxpoolnumNode = maxpoolnumElement->FirstChild()->ToText();
             XMLText* maxbuffernumNode = maxbuffernumElement->FirstChild()->ToText();
 
