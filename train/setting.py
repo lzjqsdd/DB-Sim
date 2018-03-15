@@ -47,9 +47,9 @@ need_preprocess = True
 #nodexml = os.path.join(data_root,"network/node.xml")
 
 #model path
-model_version = '20180312-500'
+model_version = '20180315-500'
 xgboost_node_model_path = os.path.join(model_root,'xgboost/'+model_version+'/node/')
 xgboost_link_model_path = os.path.join(model_root,'xgboost/'+model_version+'/link/')
 
-sim_root = '../data/one-long-nolight/one-long-500car-nolight/sim'
+sim_root = '../data/one-long-nolight/one-long-500car-nolight/sim-0315'
 print(sim_root)
