@@ -53,6 +53,8 @@ class DBFETE: public FETEIf {
         double origin_num; //起始点的数量
         double dest_num; //超级终点，统计系统输出
 
+        double hasFlow; //判断当前是否存在流量
+
 };
 
 

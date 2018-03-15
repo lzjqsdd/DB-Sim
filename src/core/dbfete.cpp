@@ -252,6 +252,13 @@ void DBFETE::check(){
 }
 
 bool DBFETE::isClean(){
+
+    //强制退出条件
+    if(_config.sim_stopnum == dest_num){
+        Finished = true;
+        return true;
+    }
+
     for(auto &mlink : links){
         if(mlink.second->poolnum !=0 ||mlink.second->buffernum !=0)
         {

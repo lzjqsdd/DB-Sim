@@ -15,7 +15,8 @@ Config::Config():
     poolsize(0.0F),
     buffersize(100.0F),
     cleanall(false),
-    sim_write(false)
+    sim_write(false),
+    sim_stopnum(-1)
 {
 }
 
@@ -34,7 +35,8 @@ Config::Config(const string& config_path):
     poolsize(0.0F),
     buffersize(100.0F),
     cleanall(false),
-    sim_write(false)
+    sim_write(false),
+    sim_stopnum(-1)
 {
     init(config_path);
 }
@@ -62,6 +64,7 @@ Config::Config(const Config& config):
     sim_write(config.sim_write),
     sim_prefix(config.sim_prefix),
     sim_path(config.sim_path),
+    sim_stopnum(config.sim_stopnum),
     xgboost_node_model(config.xgboost_node_model),
     xgboost_link_model(config.xgboost_link_model),
     xgboost_version(config.xgboost_version),
@@ -95,6 +98,7 @@ Config& Config::operator=(const Config& config){
         this->sim_write = config.sim_write;
         this->sim_prefix = config.sim_prefix;
         this->sim_path = config.sim_path;
+        this->sim_stopnum = config.sim_stopnum;
         this->xgboost_node_model = config.xgboost_node_model;
         this->xgboost_link_model = config.xgboost_link_model;
         this->xgboost_version = config.xgboost_version;
@@ -142,6 +146,7 @@ ostream& operator<<(ostream& os, const Config& config){
            << "{ " << endl
            << "\tsim_prefix is " << config.sim_prefix << endl
            << "\tsim_path is " << config.sim_path << endl
+           << "\tsim_stopnum is " << config.sim_stopnum << endl
            << "}";
     }
     return os;
@@ -246,6 +251,7 @@ void Config::init(const string& config_path)
         //simulation
         bool sim_write;
         string sim_prefix, sim_path;
+        int sim_stopnum;
         if(mconfig.lookupValue("simulation.sim_write", sim_write)){
             this->sim_write = sim_write;
         }
@@ -254,6 +260,9 @@ void Config::init(const string& config_path)
         }
         if(mconfig.lookupValue("simulation.sim_path",sim_path)){
             this->sim_path=sim_path;
+        }
+        if(mconfig.lookupValue("simulation.sim_stopnum",sim_stopnum)){
+            this->sim_stopnum=sim_stopnum;
         }
 
         //model config
