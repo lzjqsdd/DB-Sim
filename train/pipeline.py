@@ -8,7 +8,6 @@ link_id = 1949
 
 origin_data = [] #data through pipeline,contains all node data
 load_origin_data(st.origin_data_path, [link_id], origin_data)
-pickle.dump(origin_data, open(st.data_pkl_filename,'wb'))
 df_train = origin_data[0]
 plt.plot(df_train['frame'], df_train['cur_poolnum'] + df_train['cur_buffernum'])
 #plt.scatter(df_train['frame'], df_train['cur_poolnum'] + df_train['cur_buffernum'])

@@ -98,6 +98,9 @@ void DBFETE::init(){
     origin_num = total_num / 25;
     dest_num = 0;
 
+
+    //初始化静态发车数据
+    initStaticData();
     initSimFiles();
 
 
@@ -162,7 +165,8 @@ int DBFETE::generatePerFrame(){
 
 void DBFETE::doUpdate(){ 
 
-    generate();
+    if(_config.sim_useCases) generateFromData();
+    else generate();
     //通过generate生成系统的入量(特殊的Node模型)
     
     //根据node model产生增量(根据t-1)
@@ -194,7 +198,13 @@ void DBFETE::doUpdate(){
     //inflow同时受 poolnum 和 buffer的大小的限制
 	for(auto &mnode : nodes){
         int node_id = mnode.first;
-        if(startIds.find(node_id) != startIds.end()) nodes[node_id]->inflow = min(readygo_num, (double)nodes[node_id]->inflow); //发车限制
+        if(startIds.find(node_id) != startIds.end()) {
+            if(_config.sim_useCases)
+                nodes[node_id]->inflow = readygo_num; //直接使用实例中的
+            else
+                nodes[node_id]->inflow = min(readygo_num, (double)nodes[node_id]->inflow); //发车限制
+        
+        }
         //处理条件约束
         nodes[node_id]->inflow = min(nodes[node_id]->capacity, nodes[node_id]->inflow); //容量限制
 		for(auto linkid : mnode.second->flinks){
@@ -233,6 +243,11 @@ void DBFETE::doUpdate(){
 
         links[link_id]->poolnum -= links[link_id]->pool2buffer;
         links[link_id]->buffernum += links[link_id]->pool2buffer;
+
+        if(links[link_id]->poolnum > links[link_id]->maxpoolnum)
+            LOG_WARNING(my2string(link_id," exceed maxpoolnum!!!"));
+        if(links[link_id]->buffernum > links[link_id]->maxbuffernum)
+            LOG_WARNING(my2string(link_id," exceed maxbuffernum!!!"));
     }
 }
 
@@ -346,6 +361,7 @@ void DBFETE::showStatus(){
     os << BOLDGREEN << "⇶ " << RESET << "("<< BOLDGREEN << setw(4) << dest_num << RESET << ")";
     LOG_INFO(os.str());
 }
+
 void DBFETE::initSimFiles(){
     //创建写入文件夹
     if(_config.sim_write){
@@ -391,5 +407,35 @@ void DBFETE::writeStatus(){
             }
         }
     }
+}
+
+void DBFETE::generateFromData(){
+    int tmp = static_data[curtime / _config.timestep];
+    car_num += tmp;
+    readygo_num = tmp;
+    curtime += _config.timestep; //时间自增
+}
+
+
+void DBFETE::initStaticData(){
+	for(auto mlink : links){
+		try{
+			string link_datapath = my2string(_config.sample_outpath,"/1949_node_sample.txt");
+            cout << link_datapath << endl;
+			fstream fin(link_datapath.c_str(), std::ifstream::in);
+			string line;
+			int frame,inflow,outflow,poolnum,buffernum,speed;
+            std::getline(fin,line); //skip header
+			while(std::getline(fin,line)){
+				istringstream is(line);
+				is >> frame >> poolnum >> buffernum >> inflow>> outflow >> speed;
+                static_data.push_back(inflow);
+			}
+			LOG_TRACE(my2string("load static data for generator : ",mlink.first, " done."));
+		}catch(...){
+			LOG_FATAL(my2string("read static data link",mlink.first,"error!"));
+			exit(1);
+		}
+	}
 }
 

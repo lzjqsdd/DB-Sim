@@ -6,7 +6,7 @@
       <length>1450.99589481418</length>
       <buffersize>300</buffersize>
       <maxpoolnum>31</maxpoolnum>
-      <maxbuffernum>11</maxbuffernum>
+      <maxbuffernum>4</maxbuffernum>
     </link>
     <link id="1951">
       <maxspeed>129.599996566772</maxspeed>
@@ -18,9 +18,9 @@
     <link id="2073">
       <maxspeed>129.599996566772</maxspeed>
       <length>974.640149453112</length>
-      <buffersize>600</buffersize>
-      <maxpoolnum>9</maxpoolnum>
-      <maxbuffernum>18</maxbuffernum>
+      <buffersize>300</buffersize>
+      <maxpoolnum>16</maxpoolnum>
+      <maxbuffernum>13</maxbuffernum>
     </link>
     <link id="2075">
       <maxspeed>129.599996566772</maxspeed>
@@ -60,9 +60,9 @@
     <link id="2562">
       <maxspeed>129.599996566772</maxspeed>
       <length>836.710578075916</length>
-      <buffersize>200</buffersize>
-      <maxpoolnum>12</maxpoolnum>
-      <maxbuffernum>4</maxbuffernum>
+      <buffersize>300</buffersize>
+      <maxpoolnum>10</maxpoolnum>
+      <maxbuffernum>6</maxbuffernum>
     </link>
     <link id="2621">
       <maxspeed>129.599996566772</maxspeed>

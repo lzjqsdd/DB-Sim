@@ -30,6 +30,7 @@ class DBFETE: public FETEIf {
 
     private:
         int generatePerFrame();
+        void generateFromData(); //从实例中发车
         vector<float> gen_node_feature(int node_id); //构造特征输入
         vector<float> gen_node_feature(int node_id,int nodetype); //构造特征输入
         vector<float> gen_link_feature(int node_id);
@@ -37,6 +38,7 @@ class DBFETE: public FETEIf {
         void showStatus(); //显示当前道路状态
         void writeStatus();
         void initSimFiles();//初始化格式化输出文件,csv 格式
+        void initStaticData(); //初始化静态发车数据
 
     private:
         double min_num;
@@ -54,6 +56,7 @@ class DBFETE: public FETEIf {
         double dest_num; //超级终点，统计系统输出
 
         double hasFlow; //判断当前是否存在流量
+        vector<int> static_data; //静态发车数据
 
 };
 

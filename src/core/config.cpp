@@ -16,7 +16,8 @@ Config::Config():
     buffersize(100.0F),
     cleanall(false),
     sim_write(false),
-    sim_stopnum(-1)
+    sim_stopnum(-1),
+    sim_useCases(false)
 {
 }
 
@@ -36,7 +37,8 @@ Config::Config(const string& config_path):
     buffersize(100.0F),
     cleanall(false),
     sim_write(false),
-    sim_stopnum(-1)
+    sim_stopnum(-1),
+    sim_useCases(false)
 {
     init(config_path);
 }
@@ -65,6 +67,7 @@ Config::Config(const Config& config):
     sim_prefix(config.sim_prefix),
     sim_path(config.sim_path),
     sim_stopnum(config.sim_stopnum),
+    sim_useCases(config.sim_useCases),
     xgboost_node_model(config.xgboost_node_model),
     xgboost_link_model(config.xgboost_link_model),
     xgboost_version(config.xgboost_version),
@@ -99,6 +102,7 @@ Config& Config::operator=(const Config& config){
         this->sim_prefix = config.sim_prefix;
         this->sim_path = config.sim_path;
         this->sim_stopnum = config.sim_stopnum;
+        this->sim_useCases = config.sim_useCases;
         this->xgboost_node_model = config.xgboost_node_model;
         this->xgboost_link_model = config.xgboost_link_model;
         this->xgboost_version = config.xgboost_version;
@@ -147,6 +151,7 @@ ostream& operator<<(ostream& os, const Config& config){
            << "\tsim_prefix is " << config.sim_prefix << endl
            << "\tsim_path is " << config.sim_path << endl
            << "\tsim_stopnum is " << config.sim_stopnum << endl
+           << "\tsim_useCases is " << config.sim_useCases << endl
            << "}";
     }
     return os;

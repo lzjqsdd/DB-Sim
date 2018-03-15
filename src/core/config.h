@@ -66,6 +66,7 @@ class Config{
         string sim_prefix;
         string sim_path;
         int sim_stopnum;
+        bool sim_useCases;
 
         //train and model config
         vector<ModelConfig> xgboost_node_model; //xgboost的模型文件目录
