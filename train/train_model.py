@@ -60,7 +60,7 @@ def train_for_node(node_id , nodetype, train_size, param):
 
         df_train_all = df_train_all.append(df_train)
 
-    #df_train_all = shuffle(df_train_all)
+    df_train_all = shuffle(df_train_all)
     print("max label : ",df_train_all.label.max())
     split_index = int(df_train_all.shape[0] * train_size)
     train_data = df_train_all[:split_index]
@@ -93,7 +93,7 @@ def train_for_pool2buffer(link_id, linktype, train_size, param):
 
         df_train_all = df_train_all.append(df_train)
 
-    #df_train_all = shuffle(df_train_all)
+    df_train_all = shuffle(df_train_all)
     print("max label : ",df_train_all.label.max())
     split_index = int(df_train_all.shape[0] * train_size)
     train_data = df_train_all[:split_index]

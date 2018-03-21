@@ -95,10 +95,13 @@ def gen_label_for_node(df, nodetype = 1):
         df = df.rename(columns={"cur_inflow":"label"})
     elif nodetype == 2:
         df = df.rename(columns={"pre_outflow":"label"})
+
+    df = df[df.label >= 0]
     return df
 
 def gen_label_for_pool2buffer(df):
     df = df.rename(columns={"pool2buffer":"label"})
+    df = df[df.label >= 0]
     return df
 
 

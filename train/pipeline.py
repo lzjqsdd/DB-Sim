@@ -3,8 +3,8 @@ from gen_feature import *
 
 #本文件主要用来做一些数据分析
 
-#1949,1951,2073,2017,2062,2066,2068,2075,2562,2571,2581,2584,2621,2637
-link_id = 1949
+#1949,1951,2073,2017,2062,2075,2066,2068,2562,2571,2581,2584,2621,2637
+link_id = 2068
 
 origin_data = [] #data through pipeline,contains all node data
 load_origin_data(st.origin_data_path, [link_id], origin_data)
