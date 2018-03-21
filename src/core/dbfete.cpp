@@ -100,7 +100,8 @@ void DBFETE::init(){
 
 
     //初始化静态发车数据
-    initStaticData();
+    if(_config.sim_useCases) initStaticData();
+
     initSimFiles();
 
 
