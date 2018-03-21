@@ -35,7 +35,7 @@ xgboost_node_model_path = os.path.join(model_root,'xgboost/'+model_version+'/nod
 xgboost_link_model_path = os.path.join(model_root,'xgboost/'+model_version+'/link/')
 
 #sim path
-sim_root = data_root + 'one-long-nolight/' + 'sim'
+sim_root = data_sample_root_list[0] + '/sim'
 
 print('model_version', model_version)
 print('sim_root', sim_root)
