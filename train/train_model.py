@@ -40,7 +40,7 @@ from sklearn.utils import shuffle
 
 
 #训练初始节点,每个node的类别多少不同,所有参数从外部传入
-def train_for_node(node_id , nodetype, train_size, param):
+def train_for_node(node_id , nodetype, train_size, param, cut_start = -1, cut_end  = -1):
     #step1 load data
     origin_data = []
     df_train_all = pd.DataFrame()
@@ -52,7 +52,7 @@ def train_for_node(node_id , nodetype, train_size, param):
             print('node ' , node_id , ' maxpool is :' , df_train.cur_poolnum.max(), ' max buffernum is : ' ,df_train.cur_buffernum.max())
 
         #step2: gen_feature
-        #df_train = filter_cut(df_train , 3000 , 13500)
+        df_train = filter_cut(df_train , cut_start , cut_end)
         df_train = reindex(df = df_train,nodetype = nodetype)
         df_train = group_frame(df = df_train)
         df_train = drop_feature_for_node(df = df_train, nodetype = nodetype)
@@ -73,7 +73,7 @@ def train_for_node(node_id , nodetype, train_size, param):
     model.test()
 
 
-def train_for_pool2buffer(link_id, linktype, train_size, param):
+def train_for_pool2buffer(link_id, linktype, train_size, param,  cut_start = -1, cut_end  = -1):
     #step1 load data
     origin_data = []
     df_train_all = pd.DataFrame()
@@ -87,6 +87,7 @@ def train_for_pool2buffer(link_id, linktype, train_size, param):
         df_train = reindex(df = df_train, nodetype = linktype)
         df_train = gen_pool2buffer(df = df_train)
         df_train = filter_cut(df_train, 1800, df_train.frame.max())
+        #df_train = filter_cut(df_train, cut_start, cut_end)
         df_train = group_frame(df = df_train)
         df_train = drop_feature_for_pool2buffer(df_train, linktype = linktype)
         df_train = gen_label_for_pool2buffer(df_train)

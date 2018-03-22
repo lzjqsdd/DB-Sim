@@ -381,7 +381,7 @@ void DBFETE::initSimFiles(){
                 ofstream os;
                 string filename = _config.sim_path + "/" +  _config.sim_prefix + to_string(id);
                 os.open(filename, std::ofstream::app);
-                os  << "frame,poolnum,buffernum,totalnum"<< endl;
+                os  << "frame,poolnum,buffernum,totalnum,inflow"<< endl;
                 os.close();
             }
         }
@@ -403,7 +403,7 @@ void DBFETE::writeStatus(){
                 string filename = _config.sim_path + "/" +  _config.sim_prefix + to_string(id);
                 os.open(filename, std::ofstream::app);
                 os  << curtime << "," << links[id]->poolnum <<  "," << links[id]->buffernum << ","
-                    << links[id]->poolnum + links[id]->buffernum << endl;
+                    << links[id]->poolnum + links[id]->buffernum << "," << nodes[id]->inflow << endl;
                 os.close();
             }
         }

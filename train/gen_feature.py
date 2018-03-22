@@ -7,6 +7,8 @@ import setting as st
 
 #截取一定范围内的数据
 def filter_cut(df, start, end):
+    if(start == -1 or end == -1):
+        return df
     df = df[(df.frame >= start) & (df.frame <= end)]
     return df
 
