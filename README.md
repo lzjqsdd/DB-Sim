@@ -93,7 +93,7 @@ make
 
 ## Result 
 ### link 2571 and 2581
-The DB mathod is closed with origin mathod ,but run much faster.
+The DB-Sim method is closed with origin mathod ,but run much faster.
 
 ![result](https://github.com/lzjqsdd/DB-Sim/blob/master/train/fig/compare.png)
 
