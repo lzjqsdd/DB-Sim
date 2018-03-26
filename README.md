@@ -52,11 +52,13 @@ calculate evacuation time faster and  more accurately
 - [x] add rotary island intersection analysis(discard)
 
 ### V0.1.6
-- [ ] add long path analysis
-- [ ] add circle module
-- [ ] precise link desc with buffersize
-- [ ] update vehicle generator
-- [ ] add simulation display, finished format translator
+- [x] add long path analysis
+- [x] add circle module
+- [x] precise link desc with buffersize
+- [x] update vehicle generator
+
+### V0.1.7
+- [ ] road condition display
 
 ### To Be Continue~
 
@@ -88,6 +90,13 @@ cd build
 cmake ..
 make
 ```
+
+## Result 
+### link 2571 and 2581
+The DB mathod is closed with origin mathod ,but run much faster.
+
+![result](https://github.com/lzjqsdd/DB-Sim/blob/master/train/fig/compare.png)
+
 
 # Reference
 - Papers To be add.
