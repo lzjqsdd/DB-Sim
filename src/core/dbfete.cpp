@@ -92,7 +92,7 @@ void DBFETE::init(){
 
     for(auto mlink : links){
         int link_id = mlink.first;
-        if(links[link_id]->maxpoolnum == 0) continue; //环岛短路段不用加载pool2buffer的模型
+        if(links[link_id]->maxbuffernum == 0) continue; //环岛短路段不用加载pool2buffer的模型
         link_models[link_id] = model_manager->getXGBoostModelByLink(link_id);
     }
 
@@ -193,6 +193,7 @@ void DBFETE::doUpdate(){
     for(auto &mlink:links){
         const int& link_id = mlink.first;
         vector<float> input = gen_link_feature(link_id,0);
+        if(links[link_id]->maxbuffernum == 0) continue;
         link_models[link_id]->predict(input,links[link_id]->pool2buffer);
     }
 

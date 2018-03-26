@@ -25,30 +25,30 @@
     <link id="2075">
       <maxspeed>129.599996566772</maxspeed>
       <length>34.7545218833306</length>
-      <buffersize>17</buffersize>
-      <maxpoolnum>1</maxpoolnum>
-      <maxbuffernum>1</maxbuffernum>
+      <buffersize>0</buffersize>
+      <maxpoolnum>4</maxpoolnum>
+      <maxbuffernum>0</maxbuffernum>
     </link>
     <link id="2066">
       <maxspeed>129.599996566772</maxspeed>
       <length>31.0281025495967</length>
-      <buffersize>15</buffersize>
-      <maxpoolnum>1</maxpoolnum>
-      <maxbuffernum>1</maxbuffernum>
+      <buffersize>0</buffersize>
+      <maxpoolnum>2</maxpoolnum>
+      <maxbuffernum>0</maxbuffernum>
     </link>
     <link id="2068">
       <maxspeed>129.599996566772</maxspeed>
       <length>12.3353330004357</length>
-      <buffersize>6</buffersize>
-      <maxpoolnum>1</maxpoolnum>
-      <maxbuffernum>1</maxbuffernum>
+      <buffersize>0</buffersize>
+      <maxpoolnum>2</maxpoolnum>
+      <maxbuffernum>0</maxbuffernum>
     </link>
     <link id="2062">
       <maxspeed>129.599996566772</maxspeed>
       <length>3129.8813848371</length>
       <buffersize>30</buffersize>
       <maxpoolnum>55</maxpoolnum>
-      <maxbuffernum>1</maxbuffernum>
+      <maxbuffernum>2</maxbuffernum>
     </link>
     <link id="2017">
       <maxspeed>129.599996566772</maxspeed>
@@ -82,7 +82,7 @@
       <maxspeed>129.599996566772</maxspeed>
       <length>4402.80719152585</length>
       <buffersize>30</buffersize>
-      <maxpoolnum>77</maxpoolnum>
+      <maxpoolnum>78</maxpoolnum>
       <maxbuffernum>1</maxbuffernum>
     </link>
     <link id="2571">
