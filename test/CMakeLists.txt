@@ -7,7 +7,7 @@ option(USE_SHARED FALSE)
 add_definitions(-std=c++11)
 
 
-find_package(Boost 1.58 COMPONENTS log log_setup system thread REQUIRED)
+find_package(Boost REQUIRED COMPONENTS log log_setup system thread REQUIRED)
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND OR OPENMP_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")

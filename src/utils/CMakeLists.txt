@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.0) 
+cmake_minimum_required(VERSION 3.0)
 project(simpleLogger)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 
-find_package(Boost 1.58 COMPONENTS log log_setup system thread REQUIRED)
+find_package(Boost REQUIRED COMPONENTS log log_setup system thread REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
