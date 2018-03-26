@@ -9,8 +9,8 @@ DEBUG = False
 #Global config
 #demands = ['300']
 #demands = ['400']
-#demands = ['500','300']
-demands = ['750']
+demands = ['500','400']
+#demands = ['750']
 #demands = ['1000']
 model_root='../model/'
 

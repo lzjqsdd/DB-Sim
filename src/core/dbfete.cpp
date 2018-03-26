@@ -92,6 +92,7 @@ void DBFETE::init(){
 
     for(auto mlink : links){
         int link_id = mlink.first;
+        if(links[link_id]->maxpoolnum == 0) continue; //环岛短路段不用加载pool2buffer的模型
         link_models[link_id] = model_manager->getXGBoostModelByLink(link_id);
     }
 
@@ -209,7 +210,10 @@ void DBFETE::doUpdate(){
         //处理条件约束
         nodes[node_id]->inflow = min(nodes[node_id]->capacity, nodes[node_id]->inflow); //容量限制
 		for(auto linkid : mnode.second->flinks){
-            nodes[node_id]->inflow = min(links[linkid]->buffernum, (double)nodes[node_id]->inflow); //存量限制
+            if(links[linkid]->maxbuffernum == 0)
+                nodes[node_id]->inflow = min(links[linkid]->poolnum, (double)nodes[node_id]->inflow); //存量限制
+            else
+                nodes[node_id]->inflow = min(links[linkid]->buffernum, (double)nodes[node_id]->inflow); //存量限制
 		}
 		for(auto linkid: mnode.second->tlinks){
             nodes[node_id]->inflow = min(links[linkid]->maxpoolnum - links[linkid]->poolnum, (double)nodes[node_id]->inflow);// 空间限制
@@ -220,7 +224,10 @@ void DBFETE::doUpdate(){
         
         if(startIds.find(node_id) != startIds.end()) readygo_num -= nodes[node_id]->inflow; //更新origin
 		for(auto linkid : mnode.second->flinks){
-            links[linkid]->buffernum -= nodes[node_id]->inflow; //更新前向link的buffernum
+            if(links[linkid]->maxbuffernum == 0)
+                links[linkid]->poolnum -= nodes[node_id]->inflow; //更新前向link的buffernum
+            else
+                links[linkid]->buffernum -= nodes[node_id]->inflow; //更新前向link的buffernum
 		}
 		for(auto linkid: mnode.second->tlinks){
             links[linkid]->poolnum += nodes[node_id]->inflow; //更新后向link的poolnum
@@ -237,6 +244,9 @@ void DBFETE::doUpdate(){
     //计算完毕之后，统一更新pool和buffer数据
     for(auto &mlink : links){
         int link_id = mlink.first;
+
+        //跳过没有pool2buffer的环岛路段,根据maxbuffer来判断（暂时）, pool和buffer个数置为相同，采取总和方式
+        if(links[link_id]->maxbuffernum == 0) continue;
 
         links[link_id]->pool2buffer = min(
                 min(links[link_id]->poolnum, (double)links[link_id]->pool2buffer),
@@ -298,7 +308,11 @@ vector<float> DBFETE::gen_node_feature(int node_id, int nodetype){
     float period = curtime % _config.period_dur/ _config.timestep; //TODO hard code
     switch(nodetype){
         case 0:  return {(float)links[node_id]->poolnum, (float)period};
-        case 1:  return {(float)links[node_id]->poolnum ,(float)links[*(links[node_id]->pids.begin())]->buffernum, (float) period};
+        case 1:  
+                 if(links[*(links[node_id]->pids.begin())]->maxbuffernum == 0) //buffer为0，处理的是环岛短路段
+                     return {(float)links[node_id]->poolnum, (float)links[*(links[node_id]->pids.begin())]->poolnum, (float) period};
+                 else
+                     return {(float)links[node_id]->poolnum, (float)links[*(links[node_id]->pids.begin())]->buffernum, (float) period};
         case 2:  return {(float)links[node_id - 99999]->buffernum, (float)period};
     }
     

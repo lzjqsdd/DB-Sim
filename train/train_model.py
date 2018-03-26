@@ -40,7 +40,7 @@ from sklearn.utils import shuffle
 
 
 #训练初始节点,每个node的类别多少不同,所有参数从外部传入
-def train_for_node(node_id , nodetype, train_size, param, cut_start = -1, cut_end  = -1):
+def train_for_node(node_id , nodetype, train_size, param, only_pool = False, cut_start = -1, cut_end  = -1):
     #step1 load data
     origin_data = []
     df_train_all = pd.DataFrame()
@@ -52,6 +52,7 @@ def train_for_node(node_id , nodetype, train_size, param, cut_start = -1, cut_en
             print('node ' , node_id , ' maxpool is :' , df_train.cur_poolnum.max(), ' max buffernum is : ' ,df_train.cur_buffernum.max())
 
         #step2: gen_feature
+        df_train = preprocess(df_train, node_id)
         df_train = filter_cut(df_train , cut_start , cut_end)
         df_train = reindex(df = df_train,nodetype = nodetype)
         df_train = group_frame(df = df_train)

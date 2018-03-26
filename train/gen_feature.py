@@ -125,3 +125,10 @@ def drop_feature_for_pool2buffer(df, linktype):
     elif linktype == 1:
         df = df.drop(['pre_inflow','pre_buffernum','pre_poolnum','cur_inflow','cur_outflow'], axis = 1)
     return df
+
+#hard code
+def preprocess(df, node_id):
+    if(node_id == 2066 or node_id == 2068 or node_id == 2062):
+        df['pre_buffernum'] = df['pre_poolnum']
+    return df
+
