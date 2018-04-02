@@ -37,7 +37,8 @@ def compare_totalnum(link_id):
         transparent=False, bbox_inches=None, pad_inches=0.1,
         frameon=None)
     '''
-    plt.savefig(fname = os.path.join(st.demands[0], str(link_id) + '.eps'), format = 'eps',dpi = 500)
+    #plt.savefig(fname = os.path.join(st.demands[0], str(link_id) + '.eps'), format = 'eps',dpi = 500)
+    plt.savefig(fname = os.path.join(st.demands[0], str(link_id) + '.png'), format = 'png',dpi = 600)
     plt.clf()
 
 

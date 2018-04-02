@@ -150,13 +150,13 @@ class XGBModel:
         dtrain = xgb.DMatrix(train_x)
         res = self.clf.predict(dtrain).astype('int64')
         train_error = self.score_misclass(res, self.train_data.label.values)
-        print("[INFO] misclass train error is : ", train_error)
+        print(self.mid, "[INFO] misclass train error is : ", train_error)
 
         test_x = self.test_data.drop(['label'], axis=1)
         dtest = xgb.DMatrix(test_x)
         res = self.clf.predict(dtest).astype('int64')
         test_error = self.score_misclass(res, self.test_data.label.values)
-        print("[INFO] misclass test error is : ", test_error)
+        print(self.mid, "[INFO] misclass test error is : ", test_error)
 
     def score_misclass(self, pred, origin):
 

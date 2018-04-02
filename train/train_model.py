@@ -48,7 +48,7 @@ def train_for_node(node_id , nodetype, train_size, param, only_pool = False, cut
         load_origin_data(data_filename, [node_id], origin_data)
 
         df_train = origin_data[0]
-        if nodetype != 2:
+        if nodetype != 2 and st.DEBUG:
             print('node ' , node_id , ' maxpool is :' , df_train.cur_poolnum.max(), ' max buffernum is : ' ,df_train.cur_buffernum.max())
 
         #step2: gen_feature
@@ -81,7 +81,7 @@ def train_for_pool2buffer(link_id, linktype, train_size, param,  cut_start = -1,
     for data_filename in st.origin_data_path_list:
         load_origin_data(data_filename, [link_id], origin_data)
         df_train = origin_data[0]
-        if linktype!= 2:
+        if linktype!= 2 and st.DEBUG:
             print('link ', link_id , ' maxpool is :' , df_train.cur_poolnum.max(), ' max buffernum is : ' ,df_train.cur_buffernum.max())
 
         #step2: gen_feature

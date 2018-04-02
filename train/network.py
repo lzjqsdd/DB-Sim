@@ -1,6 +1,8 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import xml.dom.minidom as dm
+import setting as st
+import os
 
 def loadEdges(node_file):
 
@@ -59,8 +61,10 @@ def showNetwork(node_file):
     nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'),node_size=500)
     nx.draw_networkx_labels(G, pos, font_size = 8)
     nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color='black', arrows=True)
-    plt.show()
+    #plt.show()
+    plt.savefig(fname = 'fig/network.png', format = 'png',dpi = 500)
 
 
 #loadNetwork("../data/data_qs/network/node.xml")
 #showNetwork("../data/data_qs/network/node.xml")
+showNetwork(os.path.join(st.data_root,"network/node.xml"))

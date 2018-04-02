@@ -8,10 +8,11 @@ DEBUG = False
 
 #Global config
 #demands = ['300']
+#demands = ['300','400','500','750','1000']
 #demands = ['400']
 #demands = ['500','400']
-demands = ['750']
-#demands = ['1000']
+#demands = ['750']
+demands = ['1000']
 model_root='../model/'
 
 # root path

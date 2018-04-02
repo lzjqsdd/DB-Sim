@@ -1,0 +1,80 @@
+model_version 20180330-300
+sim_root ../data/one-long-nolight/one-long-nolight-300/sim
+max label :  2
+1949 [INFO] misclass train error is :  0.0222855935784
+1949 [INFO] misclass test error is :  0.0228136882129
+max label :  1
+1951 [INFO] misclass train error is :  0.0
+1951 [INFO] misclass test error is :  0.0
+max label :  1
+2073 [INFO] misclass train error is :  0.0
+2073 [INFO] misclass test error is :  0.0
+max label :  1
+2075 [INFO] misclass train error is :  0.00443599493029
+2075 [INFO] misclass test error is :  0.00549218419941
+max label :  1
+2066 [INFO] misclass train error is :  0.0
+2066 [INFO] misclass test error is :  0.0
+max label :  1
+2068 [INFO] misclass train error is :  0.00306294888044
+2068 [INFO] misclass test error is :  0.00253485424588
+max label :  1
+2062 [INFO] misclass train error is :  0.00380228136882
+2062 [INFO] misclass test error is :  0.00380228136882
+max label :  1
+2017 [INFO] misclass train error is :  0.00443599493029
+2017 [INFO] misclass test error is :  0.00549218419941
+max label :  1
+2562 [INFO] misclass train error is :  0.00549218419941
+2562 [INFO] misclass test error is :  0.00337980566117
+max label :  1
+2621 [INFO] misclass train error is :  0.00221799746515
+2621 [INFO] misclass test error is :  0.00168990283059
+max label :  1
+2584 [INFO] misclass train error is :  0.0027460920997
+2584 [INFO] misclass test error is :  0.00380228136882
+max label :  1
+2581 [INFO] misclass train error is :  0.00464723278411
+2581 [INFO] misclass test error is :  0.00887198986058
+max label :  1
+2571 [INFO] misclass train error is :  0.00792141951838
+2571 [INFO] misclass test error is :  0.0126742712294
+max label :  1
+2637 [INFO] misclass train error is :  0.00697084917617
+2637 [INFO] misclass test error is :  0.0101394169835
+max label :  1
+102636 [INFO] misclass train error is :  0.0393958597381
+102636 [INFO] misclass test error is :  0.0367553865653
+max label :  1
+1949 [INFO] misclass train error is :  0.0
+1949 [INFO] misclass test error is :  0.0
+max label :  1
+1951 [INFO] misclass train error is :  0.0
+1951 [INFO] misclass test error is :  0.0
+max label :  1
+2073 [INFO] misclass train error is :  0.00114311842707
+2073 [INFO] misclass test error is :  0.00228623685414
+max label :  1
+2062 [INFO] misclass train error is :  0.00560128029264
+2062 [INFO] misclass test error is :  0.00731595793324
+max label :  1
+2017 [INFO] misclass train error is :  0.00251486053955
+2017 [INFO] misclass test error is :  0.00365797896662
+max label :  1
+2562 [INFO] misclass train error is :  0.000685871056241
+2562 [INFO] misclass test error is :  0.00182898948331
+max label :  1
+2621 [INFO] misclass train error is :  0.00320073159579
+2621 [INFO] misclass test error is :  0.00320073159579
+max label :  1
+2584 [INFO] misclass train error is :  0.00262917238226
+2584 [INFO] misclass test error is :  0.00320073159579
+max label :  1
+2581 [INFO] misclass train error is :  0.00628715134888
+2581 [INFO] misclass test error is :  0.0114311842707
+max label :  1
+2571 [INFO] misclass train error is :  0.00582990397805
+2571 [INFO] misclass test error is :  0.00640146319159
+max label :  1
+2637 [INFO] misclass train error is :  0.00571559213535
+2637 [INFO] misclass test error is :  0.00914494741655
