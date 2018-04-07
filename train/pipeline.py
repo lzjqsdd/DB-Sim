@@ -30,7 +30,6 @@ def compare_totalnum(link_id):
     plt.legend(loc = 'best')
     plt.xlabel('frame')
     plt.ylabel('totalnum')
-    #plt.show()
     '''
     savefig(fname, dpi=None, facecolor='w', edgecolor='w',
         orientation='portrait', papertype=None, format=None,
@@ -60,12 +59,15 @@ def compare_inflow(link_id):
     len2 = df_sim.shape[0]
     length = min(len1,len2)
     abs_err = df_train['cur_inflow'][:length] - df_sim['inflow'][:length]
-    plt.plot(df_sim['frame'][:length],abs_err,lw = 0.8, label = str(link_id) + '_error')
+
+    plt.plot(df_train['frame'], df_train['cur_inflow'],marker = 'o', ls='-.', lw = 0.8, label=str(link_id)+'_origin_inflow')
+    plt.plot(df_sim['frame'],df_sim['inflow'],lw = 0.8,marker = '^', label=str(link_id)+'_dbsim_inflow')
+
     plt.ylim(-2,20)
     plt.xlabel('frame')
     plt.ylabel('inflow')
     plt.legend(loc = 'upper right')
-    plt.savefig(fname = os.path.join(st.demands[0], str(link_id)), format = 'svg')
+    plt.savefig(fname = os.path.join(st.demands[0], str(link_id)), format = 'png')
     plt.clf()
 
 def compare_poolnum(link_id):
@@ -82,12 +84,13 @@ def compare_poolnum(link_id):
     abs_err = abs(df_train['cur_poolnum'][:length] - df_sim['poolnum'][:length])
 
 
-    plt.plot(df_train['frame'], df_train['cur_poolnum'],lw = 0.8, label=str(link_id)+'_origin_poolnum')
-    plt.plot(df_sim['frame'],df_sim['poolnum'],lw = 0.8, label=str(link_id)+'_dbsim_poolnum')
+    plt.plot(df_train['frame'], df_train['cur_poolnum'],ls='-.', lw = 0.8, label=str(link_id)+'_origin_poolnum')
+    plt.plot(df_sim['frame'],df_sim['poolnum'],lw = 0.8,label=str(link_id)+'_dbsim_poolnum')
+
     plt.legend(loc = 'upper right')
     plt.xlabel('frame')
     plt.ylabel('poolnum')
-    plt.savefig(fname = os.path.join(st.demands[0], str(link_id)), format = 'svg')
+    plt.savefig(fname = os.path.join(st.demands[0], str(link_id) + '.png'), format = 'png',dpi = 600)
     plt.clf()
 
 

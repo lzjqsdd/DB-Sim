@@ -138,13 +138,12 @@ def train(carnum):
         #train_for_pool2buffer(link_id = 2637, linktype = 1, train_size = 1, param = {'max_depth':12, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2})
 
     elif(carnum == 1000):
-        train_for_node(node_id = 1949, nodetype = 0, train_size = 0.8, param = {'max_depth':10, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':3},
-                cut_start = 1800, cut_end = 15000) #period600
+        train_for_node(node_id = 1949, nodetype = 0, train_size = 0.8, param = {'max_depth':10, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':3}) #period600
         train_for_node(node_id = 1951, nodetype = 1, train_size = 1, param = {'max_depth':5, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
         train_for_node(node_id = 2073, nodetype = 1, train_size = 1, param = {'max_depth':5, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
-        #train_for_node(node_id = 2075, nodetype = 1, train_size = 1, param = {'max_depth':12, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
-        #train_for_node(node_id = 2066, nodetype = 1, train_size = 1, param = {'max_depth':8, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
-        #train_for_node(node_id = 2068, nodetype = 1, train_size = 1, param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
+        train_for_node(node_id = 2075, nodetype = 1, train_size = 1, param = {'max_depth':12, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
+        train_for_node(node_id = 2066, nodetype = 1, train_size = 1, param = {'max_depth':8, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
+        train_for_node(node_id = 2068, nodetype = 1, train_size = 1, param = {'max_depth':3, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
         train_for_node(node_id = 2062, nodetype = 1, train_size = 1, param = {'max_depth':8, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
         train_for_node(node_id = 2017, nodetype = 1, train_size = 1, param = {'max_depth':12, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600
         train_for_node(node_id = 2562, nodetype = 1, train_size = 1, param = {'max_depth':7, 'eta':1, 'silent':1, 'objective':'multi:softmax', 'num_class':2}) #period600

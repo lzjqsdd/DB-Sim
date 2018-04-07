@@ -53,6 +53,7 @@ def compare_carnum():
     for length in links_len:
         sum_zh = sum_zh + length
         zh.append(sum_zh)
+    print(sum_zh)
 
     for xi in links:
         npess_y = []
@@ -72,5 +73,5 @@ def compare_carnum():
     plt.savefig(fname = os.path.join('links', str('l2') + '.png'), format = 'png',dpi = 600)
     plt.clf();
 
-#compare_len()
-compare_carnum()
+compare_len()
+#compare_carnum()

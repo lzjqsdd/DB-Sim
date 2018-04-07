@@ -426,7 +426,10 @@ void DBFETE::writeStatus(){
 }
 
 void DBFETE::generateFromData(){
-    int tmp = static_data[curtime / _config.timestep];
+    int tmp = 0;
+    if(curtime / _config.timestep + 1 < static_data.size())
+        tmp = static_data[curtime / _config.timestep + 1];
+    //cout << "frame " << curtime << ",inflow is : " << tmp << endl;
     car_num += tmp;
     readygo_num = tmp;
     curtime += _config.timestep; //时间自增
@@ -434,24 +437,22 @@ void DBFETE::generateFromData(){
 
 
 void DBFETE::initStaticData(){
-	for(auto mlink : links){
-		try{
-			string link_datapath = my2string(_config.sample_outpath,"/1949_node_sample.txt");
-            cout << link_datapath << endl;
-			fstream fin(link_datapath.c_str(), std::ifstream::in);
-			string line;
-			int frame,inflow,outflow,poolnum,buffernum,speed;
-            std::getline(fin,line); //skip header
-			while(std::getline(fin,line)){
-				istringstream is(line);
-				is >> frame >> poolnum >> buffernum >> inflow>> outflow >> speed;
-                static_data.push_back(inflow);
-			}
-			LOG_TRACE(my2string("load static data for generator : ",mlink.first, " done."));
-		}catch(...){
-			LOG_FATAL(my2string("read static data link",mlink.first,"error!"));
-			exit(1);
-		}
-	}
+    try{
+        string link_datapath = my2string(_config.sample_outpath,"/1949_node_sample.txt");
+        cout << link_datapath << endl;
+        fstream fin(link_datapath.c_str(), std::ifstream::in);
+        string line;
+        int frame,inflow,outflow,poolnum,buffernum,speed;
+        std::getline(fin,line); //skip header
+        int ccc = 0;
+        while(std::getline(fin,line)){
+            istringstream is(line);
+            is >> frame >> poolnum >> buffernum >> inflow>> outflow >> speed;
+            static_data.push_back(inflow);
+        }
+    }catch(...){
+        LOG_FATAL(my2string("read static data linki error!"));
+        exit(1);
+    }
 }
 

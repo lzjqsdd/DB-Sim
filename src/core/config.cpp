@@ -257,6 +257,7 @@ void Config::init(const string& config_path)
         bool sim_write;
         string sim_prefix, sim_path;
         int sim_stopnum;
+        bool sim_useCases;
         if(mconfig.lookupValue("simulation.sim_write", sim_write)){
             this->sim_write = sim_write;
         }
@@ -268,6 +269,9 @@ void Config::init(const string& config_path)
         }
         if(mconfig.lookupValue("simulation.sim_stopnum",sim_stopnum)){
             this->sim_stopnum=sim_stopnum;
+        }
+        if(mconfig.lookupValue("simulation.sim_useCases",sim_useCases)){
+            this->sim_useCases = sim_useCases;
         }
 
         //model config
