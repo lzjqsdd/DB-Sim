@@ -25,7 +25,7 @@ def compare_totalnum(link_id):
 
     plt.plot(df_train['frame'], df_train['totalnum'],lw = 0.8, label=str(link_id) + '_origin')
     plt.plot(df_sim['frame'],df_sim['totalnum'],lw = 0.8, label=str(link_id) + '_dbsim')
-    plt.plot(df_sim['frame'][:length], abs_err, lw = 0.5, label=str(link_id)+ '_abs_error')
+    #plt.plot(df_sim['frame'][:length], abs_err, lw = 0.5, label=str(link_id)+ '_abs_error')
     plt.legend(loc = 'upper right')
     plt.legend(loc = 'best')
     plt.xlabel('frame')

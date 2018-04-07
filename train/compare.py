@@ -74,4 +74,4 @@ def compare_carnum():
     plt.clf();
 
 compare_len()
-#compare_carnum()
+compare_carnum()
