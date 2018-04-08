@@ -89,7 +89,7 @@
       <maxspeed>129.599996566772</maxspeed>
       <length>3232.59298409232</length>
       <buffersize>30</buffersize>
-      <maxpoolnum>59</maxpoolnum>
+      <maxpoolnum>55</maxpoolnum>
       <maxbuffernum>2</maxbuffernum>
     </link>
     <link id="2637">

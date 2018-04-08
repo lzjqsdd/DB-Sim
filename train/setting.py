@@ -27,7 +27,8 @@ for each_sample_root in data_sample_root_list:
     origin_data_path_list.append(os.path.join(each_sample_root,'sample/'));
 
 #model path
-cur_date = time.strftime('%Y%m%d',time.localtime(time.time()))
+#cur_date = time.strftime('%Y%m%d',time.localtime(time.time()))
+cur_date = '20180407'
 
 model_version = cur_date + '-' + demands[0]
 #model_version = cur_date + '-'

@@ -8,6 +8,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <fstream>
+#include <ctime>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
@@ -189,13 +190,24 @@ void DBFETE::doUpdate(){
         node_models[node_id]->predict(input,nodes[node_id]->inflow);
     }
 
+    static bool xx = true;
+
     //根据link model产生pool->buffer的(根据t-1)
     for(auto &mlink:links){
         const int& link_id = mlink.first;
         vector<float> input = gen_link_feature(link_id,0);
         if(links[link_id]->maxbuffernum == 0) continue;
         link_models[link_id]->predict(input,links[link_id]->pool2buffer);
+
+        if(_config.sim_shuffle){
+            if(xx){
+                links[link_id]->pool2buffer++; //扰动流量，for test
+                xx = false;
+            }
+            else xx = true;
+        }
     }
+
 
     //上述的数据均为tmp数据，在使用模型的时候不能更新任何一个数据
     //inflow同时受 poolnum 和 buffer的大小的限制
@@ -206,7 +218,6 @@ void DBFETE::doUpdate(){
                 nodes[node_id]->inflow = readygo_num; //直接使用实例中的
             else
                 nodes[node_id]->inflow = min(readygo_num, (double)nodes[node_id]->inflow); //发车限制
-        
         }
         //处理条件约束
         nodes[node_id]->inflow = min(nodes[node_id]->capacity, nodes[node_id]->inflow); //容量限制
@@ -444,7 +455,6 @@ void DBFETE::initStaticData(){
         string line;
         int frame,inflow,outflow,poolnum,buffernum,speed;
         std::getline(fin,line); //skip header
-        int ccc = 0;
         while(std::getline(fin,line)){
             istringstream is(line);
             is >> frame >> poolnum >> buffernum >> inflow>> outflow >> speed;
