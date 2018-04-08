@@ -190,8 +190,9 @@ void DBFETE::doUpdate(){
         node_models[node_id]->predict(input,nodes[node_id]->inflow);
     }
 
-    static bool xx = true;
 
+    static int xx = 0;
+    
     //根据link model产生pool->buffer的(根据t-1)
     for(auto &mlink:links){
         const int& link_id = mlink.first;
@@ -199,14 +200,11 @@ void DBFETE::doUpdate(){
         if(links[link_id]->maxbuffernum == 0) continue;
         link_models[link_id]->predict(input,links[link_id]->pool2buffer);
 
-        if(_config.sim_shuffle){
-            if(xx){
-                links[link_id]->pool2buffer++; //扰动流量，for test
-                xx = false;
-            }
-            else xx = true;
+        if(_config.sim_shuffle && xx % 10 == 0){
+            links[link_id]->pool2buffer++;
         }
     }
+    if(_config.sim_shuffle) xx++;
 
 
     //上述的数据均为tmp数据，在使用模型的时候不能更新任何一个数据
