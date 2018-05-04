@@ -210,6 +210,7 @@ void PProcess::sampleByLink(const string& path,vector<int> link_ids, bool lastfi
                         {
                             mslink[linkid]->poolnum++;
                             mslink[linkid]->buffernum--;
+                            cout << "carid:" << carid << ",link_id:" << linkid << endl;
                         }
 
                         mslink[linkid]->sum_frame++;
@@ -370,6 +371,7 @@ void PProcess::sampleByNode(const string& path,vector<int> node_ids, bool lastfi
                         {
                             mslink[linkid]->poolnum++;
                             mslink[linkid]->buffernum--;
+                            cout << "carid:" << carid << ",link_id:" << linkid << endl;
                         }
 
 
