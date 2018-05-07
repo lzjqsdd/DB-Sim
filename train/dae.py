@@ -79,10 +79,11 @@ def analysis_data_heatmap(df_train, y_name, klargest):
     sns.set(font_scale=1.25)
     hm = sns.heatmap(cm, cbar=True, annot=True, square=True, fmt='.2f',annot_kws={'size':10}, yticklabels=cols.values, xticklabels=cols.values)
 
-    ax.set_xticklabels(ax.get_xticklabels(),rotation=90)
-    ax.set_yticklabels(ax.get_yticklabels(),rotation=0,fontsize=10)
+    ax.set_xticklabels(ax.get_xticklabels(),rotation=90,fontsize=15)
+    ax.set_yticklabels(ax.get_yticklabels(),rotation=0,fontsize=15)
 
-    plt.show()
+    #plt.show()
+    plt.savefig('heatmap.png', format='png')
 
 def jitter(series, factor):
     z = float(series.max()) - float(series.min())
