@@ -18,7 +18,8 @@ Config::Config():
     sim_write(false),
     sim_stopnum(-1),
     sim_useCases(false),
-    sim_shuffle(false)
+    sim_shuffle(false),
+    sim_shuffle_period(10)
 {
 }
 
@@ -40,7 +41,8 @@ Config::Config(const string& config_path):
     sim_write(false),
     sim_stopnum(-1),
     sim_useCases(false),
-    sim_shuffle(false)
+    sim_shuffle(false),
+    sim_shuffle_period(10)
 {
     init(config_path);
 }
@@ -71,6 +73,7 @@ Config::Config(const Config& config):
     sim_stopnum(config.sim_stopnum),
     sim_useCases(config.sim_useCases),
     sim_shuffle(config.sim_shuffle),
+    sim_shuffle_period(config.sim_shuffle_period),
     xgboost_node_model(config.xgboost_node_model),
     xgboost_link_model(config.xgboost_link_model),
     xgboost_version(config.xgboost_version),
@@ -107,6 +110,7 @@ Config& Config::operator=(const Config& config){
         this->sim_stopnum = config.sim_stopnum;
         this->sim_useCases = config.sim_useCases;
         this->sim_shuffle = config.sim_shuffle;
+        this->sim_shuffle_period = config.sim_shuffle_period;
         this->xgboost_node_model = config.xgboost_node_model;
         this->xgboost_link_model = config.xgboost_link_model;
         this->xgboost_version = config.xgboost_version;
@@ -263,6 +267,7 @@ void Config::init(const string& config_path)
         int sim_stopnum;
         bool sim_useCases;
         bool sim_shuffle;
+        int sim_shuffle_period;
         if(mconfig.lookupValue("simulation.sim_write", sim_write)){
             this->sim_write = sim_write;
         }
@@ -280,6 +285,9 @@ void Config::init(const string& config_path)
         }
         if(mconfig.lookupValue("simulation.sim_shuffle", sim_shuffle)){
             this->sim_shuffle = sim_shuffle;
+        }
+        if(mconfig.lookupValue("simulation.sim_shuffle_period",sim_shuffle_period)){
+            this->sim_shuffle_period = sim_shuffle_period;
         }
 
         //model config

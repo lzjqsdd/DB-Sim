@@ -68,6 +68,7 @@ class Config{
         int sim_stopnum;
         bool sim_useCases;
         bool sim_shuffle;
+        int sim_shuffle_period;
 
         //train and model config
         vector<ModelConfig> xgboost_node_model; //xgboost的模型文件目录

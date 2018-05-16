@@ -14,7 +14,7 @@ import numpy as np
 def compare_len():
     df_npess = pd.read_csv('npess.csv', header=0, index_col=0)
     df_dbsim = pd.read_csv('dbsim.csv', header=0, index_col=0)
-    carnum = ['300','400','500','750','1000','1250']
+    carnum = ['300','400','500','600','750','900','1000','1250']
     links = [1949,1951,2073,2075,2066,2068,2062,2017,2562,2621,2584,2581,2571,2637]
     links_len = [1450,1360,974,34,31,12,3129,1630,836,707,1528,4402,3232,844]
     zh = []
@@ -35,9 +35,9 @@ def compare_len():
 
         plt.xlabel('Link Order')
         plt.ylabel('Finished frame')
-        plt.ylim(0,30000)
+        plt.ylim(0,40000)
         plt.legend(loc = 'upper left')
-        plt.savefig(fname = os.path.join('carnum', str(cn) + '.png'), format = 'png',dpi = 600)
+        plt.savefig(fname = os.path.join('carnum','chap5_carnum' + str(cn) + '.png'), format = 'png',dpi = 600)
         plt.clf();
 
 def compare_carnum():
@@ -76,14 +76,14 @@ def compare_carnum():
 
 def compare_ete():
 
-    errlist = [0.0072,0.0014,0.0072,0.0490,0.0354,0.0274]
-    xxx = [300,400,500,750,1000,1250]
+    errlist = [0.0007,0.0014,0.0007,0.0039,0.0007,0.0178,0.0354,0.0274]
+    xxx = [300,400,500,600,750,900,1000,1250]
     plt.plot(xxx,errlist,marker='o')
     plt.hlines(0.0500,250,1300,colors='red',linestyles='dashed')
-    plt.annotate('max error', xy=(750, 0.05), xytext=(850, 0.1),arrowprops=dict(facecolor='red', shrink=0.05))
+    #plt.annotate('max error', xy=(900, 0.05), xytext=(850, 0.1),arrowprops=dict(facecolor='red', shrink=0.05))
     plt.xlabel('Car Num')
     plt.ylabel('Time Error Rate')
-    plt.ylim(0,0.5)
+    plt.ylim(0,0.8)
     plt.xlim(250,1300)
     plt.savefig(fname = 'chap5_ete_error.png', format = 'png',dpi = 600)
     plt.clf();
@@ -98,7 +98,7 @@ def compare_time():
     plt.ylim(0,400)
     plt.savefig(fname = 'chap5_calctime.png', format = 'png',dpi = 600)
     plt.clf();
-#compare_len()
+compare_len()
 #compare_carnum()
 #compare_ete()
-compare_time()
+#compare_time()

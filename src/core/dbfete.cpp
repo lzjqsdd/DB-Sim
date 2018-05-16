@@ -200,7 +200,7 @@ void DBFETE::doUpdate(){
         if(links[link_id]->maxbuffernum == 0) continue;
         link_models[link_id]->predict(input,links[link_id]->pool2buffer);
 
-        if(_config.sim_shuffle && xx % 10 == 0){
+        if(_config.sim_shuffle && xx % _config.sim_shuffle_period == 0){
             links[link_id]->pool2buffer++;
         }
     }
